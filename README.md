@@ -1,4 +1,4 @@
-HAL: ZF2 Module for Hypermedia Application Layer representations
+HAL: Laminas Module for Hypermedia Application Layer representations
 ================================================================
 
 This module provides data structures for Hypermedia Application Language, as
