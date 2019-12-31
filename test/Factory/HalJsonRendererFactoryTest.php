@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Factory;
+namespace LaminasTest\ApiTools\Hal\Factory;
 
+use Laminas\ApiTools\ApiProblem\Factory\ApiProblemRendererFactory;
+use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
+use Laminas\ApiTools\Hal\Factory\HalJsonRendererFactory;
+use Laminas\ApiTools\Hal\View\HalJsonRenderer;
+use Laminas\ServiceManager\ServiceManager;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\ServiceManager\ServiceManager;
-use ZF\ApiProblem\Factory\ApiProblemRendererFactory;
-use ZF\ApiProblem\View\ApiProblemRenderer;
-use ZF\Hal\Factory\HalJsonRendererFactory;
-use ZF\Hal\View\HalJsonRenderer;
 
 class HalJsonRendererFactoryTest extends TestCase
 {
@@ -19,7 +21,7 @@ class HalJsonRendererFactoryTest extends TestCase
     {
         $services = new ServiceManager();
 
-        $viewHelperManager = $this->getMockBuilder('Zend\View\HelperPluginManager')
+        $viewHelperManager = $this->getMockBuilder('Laminas\View\HelperPluginManager')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -28,8 +30,8 @@ class HalJsonRendererFactoryTest extends TestCase
         $services->setInvokableClass(ApiProblemRenderer::class, ApiProblemRenderer::class);
 
         $factory = new HalJsonRendererFactory();
-        $renderer = $factory($services,'ZF\Hal\JsonRenderer');
+        $renderer = $factory($services,'Laminas\ApiTools\Hal\JsonRenderer');
 
-        $this->assertInstanceOf('ZF\Hal\View\HalJsonRenderer', $renderer);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\View\HalJsonRenderer', $renderer);
     }
 }

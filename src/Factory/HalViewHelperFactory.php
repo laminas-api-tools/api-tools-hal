@@ -1,22 +1,24 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Factory;
+namespace Laminas\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\AbstractPluginManager;
-use ZF\Hal\Exception;
-use ZF\Hal\Extractor\LinkCollectionExtractor;
-use ZF\Hal\Link;
-use ZF\Hal\Plugin;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
+use Laminas\ApiTools\Hal\Link;
+use Laminas\ApiTools\Hal\Plugin;
+use Laminas\ServiceManager\AbstractPluginManager;
 
 class HalViewHelperFactory
 {
     /**
-     * @param  ContainerInterface|\Zend\ServiceManager\ServiceLocatorInterface $container
+     * @param  ContainerInterface|\Laminas\ServiceManager\ServiceLocatorInterface $container
      * @return Plugin\Hal
      */
     public function __invoke(ContainerInterface $container)
@@ -25,9 +27,9 @@ class HalViewHelperFactory
             ? $container->getServiceLocator()
             : $container;
 
-        /* @var $rendererOptions \ZF\Hal\RendererOptions */
-        $rendererOptions = $container->get('ZF\Hal\RendererOptions');
-        $metadataMap     = $container->get('ZF\Hal\MetadataMap');
+        /* @var $rendererOptions \Laminas\ApiTools\Hal\RendererOptions */
+        $rendererOptions = $container->get('Laminas\ApiTools\Hal\RendererOptions');
+        $metadataMap     = $container->get('Laminas\ApiTools\Hal\MetadataMap');
         $hydrators       = $metadataMap->getHydratorManager();
 
         $helper = new Plugin\Hal($hydrators);
@@ -67,7 +69,7 @@ class HalViewHelperFactory
      * Proxies to __invoke() to provide backwards compatibility.
      *
      * @deprecated since 1.4.0; use __invoke instead.
-     * @param  \Zend\ServiceManager\ServiceLocatorInterface $container
+     * @param  \Laminas\ServiceManager\ServiceLocatorInterface $container
      * @return Plugin\Hal
      */
     public function createService($container)

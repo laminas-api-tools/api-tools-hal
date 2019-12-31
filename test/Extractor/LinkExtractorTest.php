@@ -1,33 +1,35 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Extractor;
+namespace LaminasTest\ApiTools\Hal\Extractor;
 
+use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
+use Laminas\Http\Request;
+use Laminas\Mvc\Router\Http\TreeRouteStack as V2TreeRouteStack;
+use Laminas\Mvc\Router\RouteMatch as V2RouteMatch;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\Router\RouteMatch;
+use Laminas\View\Helper\Url as UrlHelper;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Http\Request;
-use Zend\Mvc\Router\Http\TreeRouteStack as V2TreeRouteStack;
-use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
-use Zend\Router\Http\TreeRouteStack;
-use Zend\Router\RouteMatch;
-use Zend\View\Helper\Url as UrlHelper;
-use ZF\Hal\Extractor\LinkExtractor;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Link\LinkUrlBuilder;
 
 class LinkExtractorTest extends TestCase
 {
     public function testExtractGivenIncompleteLinkShouldThrowException()
     {
-        $linkUrlBuilder = $this->getMockBuilder('ZF\Hal\Link\LinkUrlBuilder')
+        $linkUrlBuilder = $this->getMockBuilder('Laminas\ApiTools\Hal\Link\LinkUrlBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
         $linkExtractor = new LinkExtractor($linkUrlBuilder);
 
-        $link = $this->getMockBuilder('ZF\Hal\Link\Link')
+        $link = $this->getMockBuilder('Laminas\ApiTools\Hal\Link\Link')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -36,13 +38,13 @@ class LinkExtractorTest extends TestCase
             ->method('isComplete')
             ->will($this->returnValue(false));
 
-        $this->setExpectedException('ZF\ApiProblem\Exception\DomainException');
+        $this->setExpectedException('Laminas\ApiTools\ApiProblem\Exception\DomainException');
         $linkExtractor->extract($link);
     }
 
     public function testExtractGivenLinkWithUrlShouldReturnThisOne()
     {
-        $linkUrlBuilder = $this->getMockBuilder('ZF\Hal\Link\LinkUrlBuilder')
+        $linkUrlBuilder = $this->getMockBuilder('Laminas\ApiTools\Hal\Link\LinkUrlBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -61,7 +63,7 @@ class LinkExtractorTest extends TestCase
 
     public function testExtractShouldComposeAnyPropertiesInLink()
     {
-        $linkUrlBuilder = $this->getMockBuilder('ZF\Hal\Link\LinkUrlBuilder')
+        $linkUrlBuilder = $this->getMockBuilder('Laminas\ApiTools\Hal\Link\LinkUrlBuilder')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -90,7 +92,7 @@ class LinkExtractorTest extends TestCase
      */
     public function testPassingFalseReuseParamsOptionShouldOmitMatchedParametersInGeneratedLink()
     {
-        $serverUrlHelper = $this->getMockBuilder('Zend\View\Helper\ServerUrl')->getMock();
+        $serverUrlHelper = $this->getMockBuilder('Laminas\View\Helper\ServerUrl')->getMock();
         $urlHelper       = new UrlHelper;
 
         $linkUrlBuilder = new LinkUrlBuilder($serverUrlHelper, $urlHelper);

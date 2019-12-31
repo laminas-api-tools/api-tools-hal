@@ -1,20 +1,22 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Factory;
+namespace LaminasTest\ApiTools\Hal\Factory;
 
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
+use Laminas\ApiTools\Hal\Factory\HalViewHelperFactory;
+use Laminas\ApiTools\Hal\Link;
+use Laminas\ApiTools\Hal\RendererOptions;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\ServiceManager;
 use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionObject;
-use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Hydrator\HydratorPluginManager;
-use ZF\Hal\Extractor\LinkCollectionExtractor;
-use ZF\Hal\Link;
-use ZF\Hal\Factory\HalViewHelperFactory;
-use ZF\Hal\RendererOptions;
 
 class HalViewHelperFactoryTest extends TestCase
 {
@@ -25,7 +27,7 @@ class HalViewHelperFactoryTest extends TestCase
     {
         $services = new ServiceManager();
 
-        $services->setService('ZF\Hal\HalConfig', $config);
+        $services->setService('Laminas\ApiTools\Hal\HalConfig', $config);
 
         if (isset($config['renderer']) && is_array($config['renderer'])) {
             $rendererOptions = new RendererOptions($config['renderer']);
@@ -34,12 +36,12 @@ class HalViewHelperFactoryTest extends TestCase
         }
         $services->setService(RendererOptions::class, $rendererOptions);
 
-        $metadataMap = $this->getMockBuilder('ZF\Hal\Metadata\MetadataMap')->getMock();
+        $metadataMap = $this->getMockBuilder('Laminas\ApiTools\Hal\Metadata\MetadataMap')->getMock();
         $metadataMap
             ->expects($this->once())
             ->method('getHydratorManager')
             ->will($this->returnValue(new HydratorPluginManager($services)));
-        $services->setService('ZF\Hal\MetadataMap', $metadataMap);
+        $services->setService('Laminas\ApiTools\Hal\MetadataMap', $metadataMap);
 
         $linkUrlBuilder = $this->getMockBuilder(Link\LinkUrlBuilder::class)
             ->disableOriginalConstructor()
@@ -66,6 +68,6 @@ class HalViewHelperFactoryTest extends TestCase
         $factory = new HalViewHelperFactory();
         $plugin = $factory($this->services, 'Hal');
 
-        $this->assertInstanceOf('ZF\Hal\Plugin\Hal', $plugin);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Plugin\Hal', $plugin);
     }
 }
