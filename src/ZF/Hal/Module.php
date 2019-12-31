@@ -1,16 +1,18 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal;
+namespace Laminas\ApiTools\Hal;
 
-use Zend\Stdlib\Hydrator\HydratorInterface;
-use Zend\Stdlib\Hydrator\HydratorPluginManager;
+use Laminas\Stdlib\Hydrator\HydratorInterface;
+use Laminas\Stdlib\Hydrator\HydratorPluginManager;
 
 /**
- * ZF2 module
+ * Laminas module
  */
 class Module
 {
@@ -21,7 +23,7 @@ class Module
      */
     public function getAutoloaderConfig()
     {
-        return array('Zend\Loader\StandardAutoloader' => array('namespaces' => array(
+        return array('Laminas\Loader\StandardAutoloader' => array('namespaces' => array(
             __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
         )));
     }
@@ -39,14 +41,14 @@ class Module
     /**
      * Retrieve Service Manager configuration
      *
-     * Defines ZF\Hal\JsonStrategy service factory.
+     * Defines Laminas\ApiTools\Hal\JsonStrategy service factory.
      *
      * @return array
      */
     public function getServiceConfig()
     {
         return array('factories' => array(
-            'ZF\Hal\MetadataMap' => function ($services) {
+            'Laminas\ApiTools\Hal\MetadataMap' => function ($services) {
                 $config = array();
                 if ($services->has('config')) {
                     $config = $services->get('config');
@@ -59,18 +61,18 @@ class Module
                 }
 
                 $map = array();
-                if (isset($config['zf-hal'])
-                    && isset($config['zf-hal']['metadata_map'])
-                    && is_array($config['zf-hal']['metadata_map'])
+                if (isset($config['api-tools-hal'])
+                    && isset($config['api-tools-hal']['metadata_map'])
+                    && is_array($config['api-tools-hal']['metadata_map'])
                 ) {
-                    $map = $config['zf-hal']['metadata_map'];
+                    $map = $config['api-tools-hal']['metadata_map'];
                 }
 
                 return new Metadata\MetadataMap($map, $hydrators);
             },
-            'ZF\Hal\JsonRenderer' => function ($services) {
+            'Laminas\ApiTools\Hal\JsonRenderer' => function ($services) {
                 $helpers            = $services->get('ViewHelperManager');
-                $apiProblemRenderer = $services->get('ZF\ApiProblem\ApiProblemRenderer');
+                $apiProblemRenderer = $services->get('Laminas\ApiTools\ApiProblem\ApiProblemRenderer');
                 $config             = $services->get('Config');
 
                 $renderer = new View\HalJsonRenderer($apiProblemRenderer);
@@ -78,8 +80,8 @@ class Module
 
                 return $renderer;
             },
-            'ZF\Hal\JsonStrategy' => function ($services) {
-                $renderer = $services->get('ZF\Hal\JsonRenderer');
+            'Laminas\ApiTools\Hal\JsonStrategy' => function ($services) {
+                $renderer = $services->get('Laminas\ApiTools\Hal\JsonRenderer');
                 return new View\HalJsonStrategy($renderer);
             },
         ));
@@ -117,7 +119,7 @@ class Module
 
                 $services        = $helpers->getServiceLocator();
                 $config          = $services->get('Config');
-                $metadataMap     = $services->get('ZF\Hal\MetadataMap');
+                $metadataMap     = $services->get('Laminas\ApiTools\Hal\MetadataMap');
                 $hydrators       = $metadataMap->getHydratorManager();
 
                 $helper          = new Plugin\Hal($hydrators);
@@ -125,10 +127,10 @@ class Module
                 $helper->setServerUrlHelper($serverUrlHelper);
                 $helper->setUrlHelper($urlHelper);
 
-                if (isset($config['zf-hal'])
-                    && isset($config['zf-hal']['renderer'])
+                if (isset($config['api-tools-hal'])
+                    && isset($config['api-tools-hal']['renderer'])
                 ) {
-                    $config = $config['zf-hal']['renderer'];
+                    $config = $config['api-tools-hal']['renderer'];
 
                     if (isset($config['default_hydrator'])) {
                         $hydratorServiceName = $config['default_hydrator'];
@@ -172,7 +174,7 @@ class Module
      *
      * Attaches a render event.
      *
-     * @param  \Zend\Mvc\MvcEvent $e
+     * @param  \Laminas\Mvc\MvcEvent $e
      */
     public function onBootstrap($e)
     {
@@ -187,7 +189,7 @@ class Module
      *
      * Attaches a rendering/response strategy to the View.
      *
-     * @param  \Zend\Mvc\MvcEvent $e
+     * @param  \Laminas\Mvc\MvcEvent $e
      */
     public function onRender($e)
     {
@@ -203,6 +205,6 @@ class Module
 
         // register at high priority, to "beat" normal json strategy registered
         // via view manager
-        $events->attach($services->get('ZF\Hal\JsonStrategy'), 200);
+        $events->attach($services->get('Laminas\ApiTools\Hal\JsonStrategy'), 200);
     }
 }

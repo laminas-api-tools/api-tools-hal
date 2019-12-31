@@ -1,16 +1,18 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\View;
+namespace LaminasTest\ApiTools\Hal\View;
 
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Resource;
+use Laminas\ApiTools\Hal\View\HalJsonModel;
 use PHPUnit_Framework_TestCase as TestCase;
 use stdClass;
-use ZF\Hal\Collection;
-use ZF\Hal\Resource;
-use ZF\Hal\View\HalJsonModel;
 
 /**
  * @subpackage UnitTest

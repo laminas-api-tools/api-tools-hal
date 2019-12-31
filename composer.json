@@ -1,48 +1,52 @@
 {
-    "name": "zfcampus/zf-hal",
-    "description": "ZF2 Module providing Hypermedia Application Language assets and rendering",
-    "type": "library",
+    "name": "laminas-api-tools/api-tools-hal",
+    "description": "Laminas Module providing Hypermedia Application Language assets and rendering",
     "license": "BSD-3-Clause",
     "keywords": [
-        "zf2",
-        "zend",
+        "laminas",
+        "api-tools",
         "module",
         "rest",
         "hal"
     ],
-    "homepage": "http://apigility.org/",
+    "homepage": "https://api-tools.getlaminas.org",
     "support": {
-        "email": "apigility-users@zend.com",
-        "irc": "irc://irc.freenode.net/apigility",
-        "source": "https://github.com/zfcampus/zf-hal",
-        "issues": "https://github.com/zfcampus/zf-hal/issues"
+        "docs": "https://api-tools.getlaminas.org/documentation",
+        "issues": "https://github.com/laminas-api-tools/api-tools-hal/issues",
+        "source": "https://github.com/laminas-api-tools/api-tools-hal",
+        "rss": "https://github.com/laminas-api-tools/api-tools-hal/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
     },
-    "repositories": [
-        { "type": "composer", "url": "https://packages.zendframework.com" }
-    ],
-    "minimum-stability": "dev",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": ">=5.3.3",
-        "zfcampus/zf-api-problem": "dev-master",
-        "zendframework/zend-eventmanager": "dev-develop",
-        "zendframework/zend-json": "dev-develop",
-        "zendframework/zend-mvc": "dev-develop",
-        "zendframework/zend-paginator": "dev-develop",
-        "zendframework/zend-uri": "dev-develop",
-        "zendframework/zend-view": "dev-develop",
-        "zendframework/zend-stdlib": "dev-develop"
+        "laminas-api-tools/api-tools-api-problem": "dev-master",
+        "laminas/laminas-eventmanager": "dev-develop",
+        "laminas/laminas-json": "dev-develop",
+        "laminas/laminas-mvc": "dev-develop",
+        "laminas/laminas-paginator": "dev-develop",
+        "laminas/laminas-stdlib": "dev-develop",
+        "laminas/laminas-uri": "dev-develop",
+        "laminas/laminas-view": "dev-develop",
+        "laminas/laminas-zendframework-bridge": "^1.0"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "3.7.*",
-        "zendframework/zend-console": "dev-develop",
-        "zendframework/zend-http": "dev-develop",
-        "zendframework/zend-loader": "dev-develop",
-        "zendframework/zend-servicemanager": "dev-develop"
+        "laminas/laminas-console": "dev-develop",
+        "laminas/laminas-http": "dev-develop",
+        "laminas/laminas-loader": "dev-develop",
+        "laminas/laminas-servicemanager": "dev-develop",
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
         "psr-0": {
-            "ZF\\Hal\\": "src/",
-            "ZFTest\\": "test/"
+            "Laminas\\ApiTools\\Hal\\": "src/",
+            "LaminasTest\\ApiTools\\": "test/"
         }
+    },
+    "replace": {
+        "zfcampus/zf-hal": "self.version"
     }
 }
