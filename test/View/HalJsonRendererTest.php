@@ -1,29 +1,31 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\View;
+namespace LaminasTest\ApiTools\Hal\View;
 
+use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
+use Laminas\ApiTools\Hal\View\HalJsonModel;
+use Laminas\ApiTools\Hal\View\HalJsonRenderer;
+use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\Paginator\Adapter\ArrayAdapter;
+use Laminas\Paginator\Paginator;
+use Laminas\Stdlib\Hydrator;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use LaminasTest\ApiTools\Hal\TestAsset;
 use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionObject;
-use Zend\Mvc\Router\Http\Segment;
-use Zend\Mvc\Router\Http\TreeRouteStack;
-use Zend\Paginator\Adapter\ArrayAdapter;
-use Zend\Paginator\Paginator;
-use Zend\Stdlib\Hydrator;
-use Zend\View\HelperPluginManager;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
-use ZF\ApiProblem\View\ApiProblemRenderer;
-use ZF\Hal\Collection;
-use ZF\Hal\Entity;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Plugin\Hal as HalHelper;
-use ZF\Hal\View\HalJsonModel;
-use ZF\Hal\View\HalJsonRenderer;
-use ZFTest\Hal\TestAsset;
 
 /**
  * @subpackage UnitTest
@@ -180,7 +182,7 @@ class HalJsonRendererTest extends TestCase
     {
         $this->setUpHelpers();
         $this->helpers->get('Hal')->addHydrator(
-            'ZFTest\Hal\TestAsset\ArraySerializable',
+            'LaminasTest\ApiTools\Hal\TestAsset\ArraySerializable',
             new Hydrator\ArraySerializable()
         );
 

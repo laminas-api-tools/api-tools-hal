@@ -1,15 +1,17 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal;
+namespace Laminas\ApiTools\Hal;
 
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
- * ZF2 module
+ * Laminas module
  */
 class Module
 {
@@ -21,7 +23,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\StandardAutoloader' => array(
+            'Laminas\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/',
                 ),
@@ -44,7 +46,7 @@ class Module
      *
      * Attaches a render event.
      *
-     * @param  \Zend\Mvc\MvcEvent $e
+     * @param  \Laminas\Mvc\MvcEvent $e
      */
     public function onBootstrap($e)
     {
@@ -57,7 +59,7 @@ class Module
      *
      * Attaches a rendering/response strategy to the View.
      *
-     * @param  \Zend\Mvc\MvcEvent $e
+     * @param  \Laminas\Mvc\MvcEvent $e
      */
     public function onRender($e)
     {
@@ -71,6 +73,6 @@ class Module
 
         // register at high priority, to "beat" normal json strategy registered
         // via view manager
-        $events->attach($services->get('ZF\Hal\JsonStrategy'), 200);
+        $events->attach($services->get('Laminas\ApiTools\Hal\JsonStrategy'), 200);
     }
 }
