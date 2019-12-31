@@ -1,20 +1,22 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\View;
+namespace LaminasTest\ApiTools\Hal\View;
 
+use Laminas\ApiTools\ApiProblem\ApiProblem;
+use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\View\HalJsonModel;
+use Laminas\ApiTools\Hal\View\HalJsonRenderer;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
-use ZF\ApiProblem\ApiProblem;
-use ZF\ApiProblem\View\ApiProblemRenderer;
-use ZF\Hal\Collection;
-use ZF\Hal\Entity;
-use ZF\Hal\View\HalJsonModel;
-use ZF\Hal\View\HalJsonRenderer;
 
 /**
  * @subpackage UnitTest
@@ -134,11 +136,11 @@ class HalJsonRendererTest extends TestCase
 
     private function getHelperPluginManager()
     {
-        $helperPluginManager = $this->getMockBuilder('Zend\View\HelperPluginManager')
+        $helperPluginManager = $this->getMockBuilder('Laminas\View\HelperPluginManager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $halPlugin = $this->getMock('ZF\Hal\Plugin\Hal');
+        $halPlugin = $this->getMock('Laminas\ApiTools\Hal\Plugin\Hal');
 
         $helperPluginManager
             ->method('get')

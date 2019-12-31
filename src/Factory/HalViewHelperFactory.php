@@ -1,15 +1,17 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Factory;
+namespace Laminas\ApiTools\Hal\Factory;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use ZF\Hal\Exception;
-use ZF\Hal\Plugin;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\ApiTools\Hal\Plugin;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class HalViewHelperFactory implements FactoryInterface
 {
@@ -21,12 +23,12 @@ class HalViewHelperFactory implements FactoryInterface
     {
         $services        = $serviceLocator->getServiceLocator();
         $config          = $services->get('Config');
-        $metadataMap     = $services->get('ZF\Hal\MetadataMap');
+        $metadataMap     = $services->get('Laminas\ApiTools\Hal\MetadataMap');
         $hydrators       = $metadataMap->getHydratorManager();
 
         $serverUrlHelper = $serviceLocator->get('ServerUrl');
-        if (isset($config['zf-hal']['options']['use_proxy'])) {
-            $serverUrlHelper->setUseProxy($config['zf-hal']['options']['use_proxy']);
+        if (isset($config['api-tools-hal']['options']['use_proxy'])) {
+            $serverUrlHelper->setUseProxy($config['api-tools-hal']['options']['use_proxy']);
         }
         $urlHelper       = $serviceLocator->get('Url');
 
@@ -36,10 +38,10 @@ class HalViewHelperFactory implements FactoryInterface
             ->setServerUrlHelper($serverUrlHelper)
             ->setUrlHelper($urlHelper);
 
-        if (isset($config['zf-hal'])
-            && isset($config['zf-hal']['renderer'])
+        if (isset($config['api-tools-hal'])
+            && isset($config['api-tools-hal']['renderer'])
         ) {
-            $config = $config['zf-hal']['renderer'];
+            $config = $config['api-tools-hal']['renderer'];
 
             if (isset($config['default_hydrator'])) {
                 $hydratorServiceName = $config['default_hydrator'];
