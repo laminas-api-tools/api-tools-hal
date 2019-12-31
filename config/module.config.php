@@ -1,11 +1,13 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
 return [
-    'zf-hal' => [
+    'api-tools-hal' => [
         'renderer' => [
             // 'default_hydrator' => 'Hydrator Service Name',
             // 'hydrators'        => [
@@ -42,11 +44,11 @@ return [
             'use_proxy' => false,
         ],
     ],
-    // Creates a "HalJson" selector for zfcampus/zf-content-negotiation
-    'zf-content-negotiation' => [
+    // Creates a "HalJson" selector for laminas-api-tools/api-tools-content-negotiation
+    'api-tools-content-negotiation' => [
         'selectors' => [
             'HalJson' => [
-                'ZF\Hal\View\HalJsonModel' => [
+                'Laminas\ApiTools\Hal\View\HalJsonModel' => [
                     'application/json',
                     'application/*+json',
                 ],
@@ -55,21 +57,21 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            'ZF\Hal\HalConfig'       => 'ZF\Hal\Factory\HalConfigFactory',
-            'ZF\Hal\JsonRenderer'    => 'ZF\Hal\Factory\HalJsonRendererFactory',
-            'ZF\Hal\JsonStrategy'    => 'ZF\Hal\Factory\HalJsonStrategyFactory',
-            'ZF\Hal\MetadataMap'     => 'ZF\Hal\Factory\MetadataMapFactory',
-            'ZF\Hal\RendererOptions' => 'ZF\Hal\Factory\RendererOptionsFactory',
+            'Laminas\ApiTools\Hal\HalConfig'       => 'Laminas\ApiTools\Hal\Factory\HalConfigFactory',
+            'Laminas\ApiTools\Hal\JsonRenderer'    => 'Laminas\ApiTools\Hal\Factory\HalJsonRendererFactory',
+            'Laminas\ApiTools\Hal\JsonStrategy'    => 'Laminas\ApiTools\Hal\Factory\HalJsonStrategyFactory',
+            'Laminas\ApiTools\Hal\MetadataMap'     => 'Laminas\ApiTools\Hal\Factory\MetadataMapFactory',
+            'Laminas\ApiTools\Hal\RendererOptions' => 'Laminas\ApiTools\Hal\Factory\RendererOptionsFactory',
         ],
     ],
     'view_helpers' => [
         'factories' => [
-            'Hal' => 'ZF\Hal\Factory\HalViewHelperFactory',
+            'Hal' => 'Laminas\ApiTools\Hal\Factory\HalViewHelperFactory',
         ],
     ],
     'controller_plugins' => [
         'factories' => [
-            'Hal' => 'ZF\Hal\Factory\HalControllerPluginFactory',
+            'Hal' => 'Laminas\ApiTools\Hal\Factory\HalControllerPluginFactory',
         ],
     ],
 ];

@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Factory;
+namespace Laminas\ApiTools\Hal\Factory;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use ZF\Hal\Exception;
-use ZF\Hal\Extractor\LinkCollectionExtractor;
-use ZF\Hal\Extractor\LinkExtractor;
-use ZF\Hal\Plugin;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
+use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
+use Laminas\ApiTools\Hal\Plugin;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class HalViewHelperFactory implements FactoryInterface
 {
@@ -22,10 +24,10 @@ class HalViewHelperFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $services        = $serviceLocator->getServiceLocator();
-        $halConfig       = $services->get('ZF\Hal\HalConfig');
-        /* @var $rendererOptions \ZF\Hal\RendererOptions */
-        $rendererOptions = $services->get('ZF\Hal\RendererOptions');
-        $metadataMap     = $services->get('ZF\Hal\MetadataMap');
+        $halConfig       = $services->get('Laminas\ApiTools\Hal\HalConfig');
+        /* @var $rendererOptions \Laminas\ApiTools\Hal\RendererOptions */
+        $rendererOptions = $services->get('Laminas\ApiTools\Hal\RendererOptions');
+        $metadataMap     = $services->get('Laminas\ApiTools\Hal\MetadataMap');
         $hydrators       = $metadataMap->getHydratorManager();
 
         $serverUrlHelper = $serviceLocator->get('ServerUrl');

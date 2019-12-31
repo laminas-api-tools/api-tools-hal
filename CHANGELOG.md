@@ -6,10 +6,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#123](https://github.com/zfcampus/zf-hal/pull/123) updates the component
-  to use zend-hydrator for hydrator functionality; this provides forward
-  compatibility with zend-hydrator, and backwards compatibility with
-  hydrators from older versions of zend-stdlib.
+- [zfcampus/zf-hal#123](https://github.com/zfcampus/zf-hal/pull/123) updates the component
+  to use laminas-hydrator for hydrator functionality; this provides forward
+  compatibility with laminas-hydrator, and backwards compatibility with
+  hydrators from older versions of laminas-stdlib.
 
 ### Deprecated
 
@@ -39,7 +39,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#122](https://github.com/zfcampus/zf-hal/pull/122) updates the
-  zend-stdlib dependency to reference `>=2.5.0,<2.7.0` to ensure hydrators
-  will work as expected following extraction of hydrators to the zend-hydrator
+- [zfcampus/zf-hal#122](https://github.com/zfcampus/zf-hal/pull/122) updates the
+  laminas-stdlib dependency to reference `>=2.5.0,<2.7.0` to ensure hydrators
+  will work as expected following extraction of hydrators to the laminas-hydrator
   repository.

@@ -1,18 +1,20 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
+use Laminas\ApiTools\Hal\EntityHydratorManager;
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\ApiTools\Hal\ResourceFactory;
+use Laminas\Hydrator\HydratorPluginManager;
+use LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Hydrator\HydratorPluginManager;
-use ZF\Hal\EntityHydratorManager;
-use ZF\Hal\Extractor\EntityExtractor;
-use ZF\Hal\Metadata\MetadataMap;
-use ZF\Hal\ResourceFactory;
-use ZFTest\Hal\Plugin\TestAsset;
 
 /**
  * @subpackage UnitTest
@@ -27,8 +29,8 @@ class ResourceFactoryTest extends TestCase
         $object = new TestAsset\Entity('foo', 'Foo');
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'links'      => [
                     [
@@ -49,10 +51,10 @@ class ResourceFactoryTest extends TestCase
 
         $entity = $resourceFactory->createEntityFromMetadata(
             $object,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Entity')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity')
         );
 
-        $this->assertInstanceof('ZF\Hal\Entity', $entity);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Entity', $entity);
         $links = $entity->getLinks();
         $this->assertTrue($links->has('describedby'));
         $this->assertTrue($links->has('children'));
@@ -89,8 +91,8 @@ class ResourceFactoryTest extends TestCase
         $test = $this;
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'     => 'Zend\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'     => 'Laminas\Hydrator\ObjectProperty',
                 'route_name'   => 'hostname/resource',
                 'route_params' => [
                     'test-1' => [$callback, 'callback'],
@@ -110,10 +112,10 @@ class ResourceFactoryTest extends TestCase
 
         $entity = $resourceFactory->createEntityFromMetadata(
             $object,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Entity')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity')
         );
 
-        $this->assertInstanceof('ZF\Hal\Entity', $entity);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Entity', $entity);
 
         $links = $entity->getLinks();
         $this->assertTrue($links->has('self'));
@@ -140,7 +142,7 @@ class ResourceFactoryTest extends TestCase
         ]);
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => [
                 'is_collection'       => true,
                 'route_name'          => 'hostname/contacts',
                 'entity_route_name'   => 'hostname/embedded',
@@ -157,10 +159,10 @@ class ResourceFactoryTest extends TestCase
 
         $collection = $resourceFactory->createCollectionFromMetadata(
             $set,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Collection')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection')
         );
 
-        $this->assertInstanceof('ZF\Hal\Collection', $collection);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Collection', $collection);
         $links = $collection->getLinks();
         $this->assertTrue($links->has('describedby'));
         $link = $links->get('describedby');
