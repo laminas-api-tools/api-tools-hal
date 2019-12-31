@@ -1,7 +1,7 @@
-ZF HAL
+Laminas HAL
 ======
 
-[![Build Status](https://travis-ci.org/zfcampus/zf-hal.png)](https://travis-ci.org/zfcampus/zf-hal)
+[![Build Status](https://travis-ci.org/laminas-api-tools/api-tools-hal.png)](https://travis-ci.org/laminas-api-tools/api-tools-hal)
 
 Introduction
 ------------
@@ -20,14 +20,14 @@ Installation
 Run the following `composer` command:
 
 ```console
-$ composer require "zfcampus/zf-hal:~1.0-dev"
+$ composer require "laminas-api-tools/api-tools-hal:~1.0-dev"
 ```
 
 Alternately, manually add the following to your `composer.json`, in the `require` section:
 
 ```javascript
 "require": {
-    "zfcampus/zf-hal": "~1.0-dev"
+    "laminas-api-tools/api-tools-hal": "~1.0-dev"
 }
 ```
 
@@ -41,7 +41,7 @@ return array(
     /* ... */
     'modules' => array(
         /* ... */
-        'ZF\Hal',
+        'Laminas\ApiTools\Hal',
     ),
     /* ... */
 );
@@ -52,11 +52,11 @@ Configuration
 
 ### User Configuration
 
-This module utilizes the top level key `zf-hal` for user configuration.
+This module utilizes the top level key `api-tools-hal` for user configuration.
 
 #### Key: `renderer`
 
-This is a configuration array used to configure the `zf-hal` `Hal` view helper/controller plugin.  It
+This is a configuration array used to configure the `api-tools-hal` `Hal` view helper/controller plugin.  It
 consists of the following keys:
 
 - `default_hydrator` - when present, this named hydrator service will be used as the default
@@ -112,14 +112,14 @@ array(
 ### System Configuration
 
 The following configuration is present to ensure the proper functioning of this module in
-a ZF2-based application.
+a Laminas-based application.
 
 ```php
-// Creates a "HalJson" selector for use with zfcampus/zf-content-negotiation
-'zf-content-negotiation' => array(
+// Creates a "HalJson" selector for use with laminas-api-tools/api-tools-content-negotiation
+'api-tools-content-negotiation' => array(
     'selectors' => array(
         'HalJson' => array(
-            'ZF\Hal\View\HalJsonModel' => array(
+            'Laminas\ApiTools\Hal\View\HalJsonModel' => array(
                 'application/json',
                 'application/*+json',
             ),
@@ -128,14 +128,14 @@ a ZF2-based application.
 ),
 ```
 
-ZF2 Events
+Laminas Events
 ==========
 
 ### Events
 
-#### ZF\Hal\Plugin\Hal Event Manager
+#### Laminas\ApiTools\Hal\Plugin\Hal Event Manager
 
-The `ZF\Hal\Plugin\Hal` triggers several events during its lifecycle. From the `EventManager`
+The `Laminas\ApiTools\Hal\Plugin\Hal` triggers several events during its lifecycle. From the `EventManager`
 instance composed into the HAL plugin, you may attach to the following events:
 
 - `renderCollection`
@@ -145,7 +145,7 @@ instance composed into the HAL plugin, you may attach to the following events:
 - `getIdFromEntity`
 
 As an example, you could listen to the `renderEntity` event as follows (the following is done within
-a `Module` class for a ZF2 module and/or Apigility API module):
+a `Module` class for a Laminas module and/or Laminas API Tools API module):
 
 ```php
 class Module
@@ -171,7 +171,7 @@ class Module
         }
 
         // Add a "describedBy" relational link
-        $entity->getLinks()->add(\ZF\Hal\Link\Link::factory(array(
+        $entity->getLinks()->add(\Laminas\ApiTools\Hal\Link\Link::factory(array(
             'rel' => 'describedBy',
             'route' => array(
                 'name' => 'my/api/docs',
@@ -183,50 +183,50 @@ class Module
 
 ### Listeners
 
-#### ZF\Hal\Module::onRender
+#### Laminas\ApiTools\Hal\Module::onRender
 
 This listener is attached to `MvcEvent::EVENT_RENDER` at priority `100`.  If the controller service
-result is a `HalJsonModel`, this listener attaches the `ZF\Hal\JsonStrategy` to the view at
+result is a `HalJsonModel`, this listener attaches the `Laminas\ApiTools\Hal\JsonStrategy` to the view at
 priority `200`.
 
-ZF2 Services
+Laminas Services
 ============
 
 ### Models
 
-#### ZF\Hal\Collection
+#### Laminas\ApiTools\Hal\Collection
 
 `Collection` is responsible for modeling general collections as HAL collections, and composing
 relational links.
 
-#### ZF\Hal\Entity
+#### Laminas\ApiTools\Hal\Entity
 
 `Entity` is responsible for modeling general purpose entities and plain objects as HAL entities, and
 composing relational links.
 
-#### ZF\Hal\Link\Link
+#### Laminas\ApiTools\Hal\Link\Link
 
 `Link` is responsible for modeling a relational link.  The `Link` class also has a static
 `factory()` method that can take an array of information as an argument to produce valid `Link`
 instances.
 
-#### ZF\Hal\Link\LinkCollection
+#### Laminas\ApiTools\Hal\Link\LinkCollection
 
 `LinkCollection` is a model responsible for aggregating a collection of `Link` instances.
 
-#### ZF\Hal\Metadata\Metadata
+#### Laminas\ApiTools\Hal\Metadata\Metadata
 
 `Metadata` is responsible for collecting all the necessary dependencies, hydrators and other
 information necessary to create HAL entities, links, or collections.
 
-#### ZF\Hal\Metadata\MetadataMap
+#### Laminas\ApiTools\Hal\Metadata\MetadataMap
 
 The `MetadataMap` aggregates an array of class name keyed `Metadata` instances to be used in
 producing HAL entities, links, or collections.
 
 ### Controller Plugins
 
-#### ZF\Hal\Plugin\Hal (a.k.a. "Hal")
+#### Laminas\ApiTools\Hal\Plugin\Hal (a.k.a. "Hal")
 
 This class operates both as a view helper and as a controller plugin. It is responsible for
 providing controllers the facilities to generate HAL data models, as well as rendering relational
@@ -234,19 +234,19 @@ links and HAL data structures.
 
 ### View Layer
 
-#### ZF\Hal\View\HalJsonModel
+#### Laminas\ApiTools\Hal\View\HalJsonModel
 
 `HalJsonModel` is a view model that when used as the result of a controller service response
-signifies to the `zf-hal` module that the data within the model should be utilized to
+signifies to the `api-tools-hal` module that the data within the model should be utilized to
 produce a JSON HAL representation.
 
-#### ZF\Hal\View\HalJsonRenderer
+#### Laminas\ApiTools\Hal\View\HalJsonRenderer
 
 `HalJsonRenderer` is a view renderer responsible for rendering `HalJsonModel` instances. In turn,
 this renderer will call upon the `Hal` plugin/view helper in order to transform the model content
 (an `Entity` or `Collection`) into a HAL representation.
 
-#### ZF\Hal\View\HalJsonStrategy
+#### Laminas\ApiTools\Hal\View\HalJsonStrategy
 
 `HalJsonStrategy` is responsible for selecting `HalJsonRenderer` when it identifies a `HalJsonModel`
 as the controller service response.
