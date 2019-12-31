@@ -1,15 +1,17 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Metadata;
+namespace Laminas\ApiTools\Hal\Metadata;
 
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\Hydrator\HydratorPluginManagerInterface;
-use Zend\ServiceManager\ServiceManager;
-use ZF\Hal\Exception;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\Hydrator\HydratorPluginManagerInterface;
+use Laminas\ServiceManager\ServiceManager;
 
 class MetadataMap
 {
@@ -94,7 +96,7 @@ class MetadataMap
             $metadata = $options;
             if (! is_array($metadata) && ! $metadata instanceof Metadata) {
                 throw new Exception\InvalidArgumentException(sprintf(
-                    '%s expects each map to be an array or a ZF\Hal\Metadata instance; received "%s"',
+                    '%s expects each map to be an array or a Laminas\ApiTools\Hal\Metadata instance; received "%s"',
                     __METHOD__,
                     (is_object($metadata) ? get_class($metadata) : gettype($metadata))
                 ));

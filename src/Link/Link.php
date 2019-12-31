@@ -1,18 +1,20 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Link;
+namespace Laminas\ApiTools\Hal\Link;
 
+use Laminas\ApiTools\ApiProblem\Exception\DomainException;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\Uri\Exception as UriException;
+use Laminas\Uri\UriFactory;
 use Psr\Link\LinkInterface;
 use Traversable;
-use Zend\Stdlib\ArrayUtils;
-use Zend\Uri\Exception as UriException;
-use Zend\Uri\UriFactory;
-use ZF\ApiProblem\Exception\DomainException;
-use ZF\Hal\Exception;
 
 /**
  * Object describing a link relation
@@ -398,7 +400,7 @@ class Link implements LinkInterface
      */
     public function isTemplated()
     {
-        return false; // zf-hal doesn't support this currently
+        return false; // api-tools-hal doesn't support this currently
     }
 
     /**

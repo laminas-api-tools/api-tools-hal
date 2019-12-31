@@ -1,16 +1,18 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\Exception\InvalidEntityException;
+use Laminas\ApiTools\Hal\Link\LinkCollection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use ZF\Hal\Entity;
-use ZF\Hal\Exception\InvalidEntityException;
-use ZF\Hal\Link\LinkCollection;
 
 class EntityTest extends TestCase
 {

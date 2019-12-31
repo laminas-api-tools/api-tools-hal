@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Extractor;
+namespace LaminasTest\ApiTools\Hal\Extractor;
 
+use Laminas\ApiTools\Hal\EntityHydratorManager;
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use Laminas\Hydrator\ObjectProperty;
+use Laminas\Hydrator\ObjectPropertyHydrator;
+use LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 use PHPUnit\Framework\TestCase;
-use Zend\Hydrator\ObjectProperty;
-use Zend\Hydrator\ObjectPropertyHydrator;
-use ZF\Hal\EntityHydratorManager;
-use ZF\Hal\Extractor\EntityExtractor;
-use ZFTest\Hal\Plugin\TestAsset;
 
 /**
  * @subpackage UnitTest

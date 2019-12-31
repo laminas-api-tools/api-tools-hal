@@ -1,25 +1,27 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Factory;
+namespace LaminasTest\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
+use Laminas\ApiTools\Hal\Factory\MetadataMapFactory;
+use Laminas\ApiTools\Hal\Metadata\Metadata;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\Hydrator\ObjectProperty;
+use LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 use PHPUnit\Framework\TestCase;
-use Zend\Hydrator\ObjectProperty;
-use ZF\Hal\Factory\MetadataMapFactory;
-use ZF\Hal\Metadata\Metadata;
-use ZF\Hal\Metadata\MetadataMap;
-use ZFTest\Hal\Plugin\TestAsset;
 
 class MetadataMapFactoryTest extends TestCase
 {
     public function testInstantiatesMetadataMapWithEmptyConfig()
     {
         $services = $this->prophesize(ContainerInterface::class);
-        $services->get('ZF\Hal\HalConfig')->willReturn([]);
+        $services->get('Laminas\ApiTools\Hal\HalConfig')->willReturn([]);
         $services->has('HydratorManager')->willReturn(false);
 
         $factory = new MetadataMapFactory();
@@ -54,7 +56,7 @@ class MetadataMapFactoryTest extends TestCase
         ];
 
         $services = $this->prophesize(ContainerInterface::class);
-        $services->get('ZF\Hal\HalConfig')->willReturn($config);
+        $services->get('Laminas\ApiTools\Hal\HalConfig')->willReturn($config);
         $services->has('HydratorManager')->willReturn(false);
 
         $factory = new MetadataMapFactory();
