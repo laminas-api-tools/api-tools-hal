@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Extractor;
+namespace LaminasTest\ApiTools\Hal\Extractor;
 
+use Laminas\ApiTools\Hal\EntityHydratorManager;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\Stdlib\Hydrator\HydratorPluginManager;
+use LaminasTest\ApiTools\Hal\Plugin\TestAsset;
+use LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Stdlib\Hydrator\HydratorPluginManager;
-use ZF\Hal\EntityHydratorManager;
-use ZF\Hal\Metadata\MetadataMap;
-use ZFTest\Hal\Plugin\TestAsset;
-use ZFTest\Hal\Plugin\TestAsset\DummyHydrator;
 
 /**
  * @subpackage UnitTest
@@ -21,7 +23,7 @@ class EntityHydratorManagerTest extends TestCase
     public function testAddHydratorGivenEntityClassAndHydratorInstanceShouldAssociateThem()
     {
         $entity        = new TestAsset\Entity('foo', 'Foo Bar');
-        $hydratorClass = 'ZFTest\Hal\Plugin\TestAsset\DummyHydrator';
+        $hydratorClass = 'LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator';
         $hydrator      = new $hydratorClass();
 
         $metadataMap = new MetadataMap();
@@ -29,7 +31,7 @@ class EntityHydratorManagerTest extends TestCase
         $entityHydratorManager = new EntityHydratorManager($hydratorPluginManager, $metadataMap);
 
         $entityHydratorManager->addHydrator(
-            'ZFTest\Hal\Plugin\TestAsset\Entity',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity',
             $hydrator
         );
 
@@ -41,14 +43,14 @@ class EntityHydratorManagerTest extends TestCase
     public function testAddHydratorGivenEntityAndHydratorClassesShouldAssociateThem()
     {
         $entity        = new TestAsset\Entity('foo', 'Foo Bar');
-        $hydratorClass = 'ZFTest\Hal\Plugin\TestAsset\DummyHydrator';
+        $hydratorClass = 'LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator';
 
         $metadataMap = new MetadataMap();
         $hydratorPluginManager = new HydratorPluginManager();
         $entityHydratorManager = new EntityHydratorManager($hydratorPluginManager, $metadataMap);
 
         $entityHydratorManager->addHydrator(
-            'ZFTest\Hal\Plugin\TestAsset\Entity',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity',
             $hydratorClass
         );
 
@@ -64,10 +66,10 @@ class EntityHydratorManagerTest extends TestCase
         $hydratorPluginManager = new HydratorPluginManager();
         $entityHydratorManager = new EntityHydratorManager($hydratorPluginManager, $metadataMap);
 
-        $entityHydratorManager->addHydrator('stdClass', 'ZFTest\Hal\Plugin\TestAsset\DummyHydrator');
+        $entityHydratorManager->addHydrator('stdClass', 'LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator');
 
         $this->assertInstanceOf(
-            'ZFTest\Hal\Plugin\TestAsset\DummyHydrator',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator',
             $entityHydratorManager->getHydratorForEntity(new \stdClass)
         );
     }
@@ -75,10 +77,10 @@ class EntityHydratorManagerTest extends TestCase
     public function testGetHydratorForEntityGivenEntityDefinedInMetadataMapShouldReturnDefaultHydrator()
     {
         $entity        = new TestAsset\Entity('foo', 'Foo Bar');
-        $hydratorClass = 'ZFTest\Hal\Plugin\TestAsset\DummyHydrator';
+        $hydratorClass = 'LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator';
 
         $metadataMap = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
                 'hydrator' => $hydratorClass,
             ],
         ]);

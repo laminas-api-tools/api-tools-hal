@@ -1,15 +1,17 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Extractor;
+namespace LaminasTest\ApiTools\Hal\Extractor;
 
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use Laminas\Stdlib\Hydrator\ObjectProperty;
+use LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Stdlib\Hydrator\ObjectProperty;
-use ZF\Hal\Extractor\EntityExtractor;
-use ZFTest\Hal\Plugin\TestAsset;
 
 /**
  * @subpackage UnitTest
@@ -21,7 +23,7 @@ class EntityExtractorTest extends TestCase
         $hydrator = new ObjectProperty();
 
         $entity = new TestAsset\Entity('foo', 'Foo Bar');
-        $entityHydratorManager = $this->getMockBuilder('ZF\Hal\EntityHydratorManager')
+        $entityHydratorManager = $this->getMockBuilder('Laminas\ApiTools\Hal\EntityHydratorManager')
             ->disableOriginalConstructor()
             ->getMock();
         $entityHydratorManager
@@ -37,7 +39,7 @@ class EntityExtractorTest extends TestCase
     public function testExtractGivenEntityWithoutAssociateHydratorShouldExtractPublicProperties()
     {
         $entity = new TestAsset\Entity('foo', 'Foo Bar');
-        $entityHydratorManager = $this->getMockBuilder('ZF\Hal\EntityHydratorManager')
+        $entityHydratorManager = $this->getMockBuilder('Laminas\ApiTools\Hal\EntityHydratorManager')
             ->disableOriginalConstructor()
             ->getMock();
         $entityHydratorManager
@@ -56,7 +58,7 @@ class EntityExtractorTest extends TestCase
     public function testExtractTwiceGivenSameEntityShouldProcessExtractionOnceAndReturnSameData()
     {
         $entity = new TestAsset\Entity('foo', 'Foo Bar');
-        $entityHydratorManager = $this->getMockBuilder('ZF\Hal\EntityHydratorManager')
+        $entityHydratorManager = $this->getMockBuilder('Laminas\ApiTools\Hal\EntityHydratorManager')
             ->disableOriginalConstructor()
             ->getMock();
         $entityHydratorManager

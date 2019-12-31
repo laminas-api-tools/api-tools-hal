@@ -1,24 +1,26 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Factory;
+namespace LaminasTest\ApiTools\Hal\Factory;
 
+use Laminas\ApiTools\Hal\Factory\MetadataMapFactory;
 use PHPUnit_Framework_TestCase as TestCase;
-use ZF\Hal\Factory\MetadataMapFactory;
 
 class MetadataMapFactoryTest extends TestCase
 {
     public function testInstantiatesMetadataMapWithEmptyConfig()
     {
-        $services = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $services = $this->getMock('Laminas\ServiceManager\ServiceLocatorInterface');
 
         $services
             ->expects($this->at(0))
             ->method('get')
-            ->with('ZF\Hal\HalConfig')
+            ->with('Laminas\ApiTools\Hal\HalConfig')
             ->will($this->returnValue([]));
 
         $services
@@ -30,29 +32,29 @@ class MetadataMapFactoryTest extends TestCase
         $factory = new MetadataMapFactory();
         $renderer = $factory->createService($services);
 
-        $this->assertInstanceOf('ZF\Hal\Metadata\MetadataMap', $renderer);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Metadata\MetadataMap', $renderer);
     }
 
     public function testInstantiatesMetadataMapWithMetadataMapConfig()
     {
-        $services = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $services = $this->getMock('Laminas\ServiceManager\ServiceLocatorInterface');
 
         $config = [
             'metadata_map' => [
-                'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                    'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+                'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                    'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                     'route_name' => 'hostname/resource',
                     'route_identifier_name' => 'id',
                     'entity_identifier_name' => 'id',
                 ],
-                'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntity' => [
-                    'hydrator' => 'Zend\Stdlib\Hydrator\ObjectProperty',
+                'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntity' => [
+                    'hydrator' => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                     'route'    => 'hostname/embedded',
                     'route_identifier_name' => 'id',
                     'entity_identifier_name' => 'id',
                 ],
-                'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => [
-                    'hydrator'        => 'Zend\Stdlib\Hydrator\ObjectProperty',
+                'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => [
+                    'hydrator'        => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                     'route'           => 'hostname/embedded_custom',
                     'route_identifier_name' => 'custom_id',
                     'entity_identifier_name' => 'custom_id',
@@ -63,7 +65,7 @@ class MetadataMapFactoryTest extends TestCase
         $services
             ->expects($this->at(0))
             ->method('get')
-            ->with('ZF\Hal\HalConfig')
+            ->with('Laminas\ApiTools\Hal\HalConfig')
             ->will($this->returnValue($config));
 
         $services
@@ -75,11 +77,11 @@ class MetadataMapFactoryTest extends TestCase
         $factory = new MetadataMapFactory();
         $metadataMap = $factory->createService($services);
 
-        $this->assertInstanceOf('ZF\Hal\Metadata\MetadataMap', $metadataMap);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Metadata\MetadataMap', $metadataMap);
 
         foreach ($config['metadata_map'] as $key => $value) {
             $this->assertTrue($metadataMap->has($key));
-            $this->assertInstanceOf('ZF\Hal\Metadata\Metadata', $metadataMap->get($key));
+            $this->assertInstanceOf('Laminas\ApiTools\Hal\Metadata\Metadata', $metadataMap->get($key));
         }
     }
 }
