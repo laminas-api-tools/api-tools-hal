@@ -1,11 +1,13 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
 return array(
-    'zf-hal' => array(
+    'api-tools-hal' => array(
         'renderer' => array(
             // 'default_hydrator' => 'Hydrator Service Name',
             // 'hydrators'        => array(
@@ -38,11 +40,11 @@ return array(
             // repeat as needed for each resource/collection type
         ),
     ),
-    // Creates a "HalJson" selector for zfcampus/zf-content-negotiation
-    'zf-content-negotiation' => array(
+    // Creates a "HalJson" selector for laminas-api-tools/api-tools-content-negotiation
+    'api-tools-content-negotiation' => array(
         'selectors' => array(
             'HalJson' => array(
-                'ZF\Hal\View\HalJsonModel' => array(
+                'Laminas\ApiTools\Hal\View\HalJsonModel' => array(
                     'application/json',
                     'application/*+json',
                 ),
