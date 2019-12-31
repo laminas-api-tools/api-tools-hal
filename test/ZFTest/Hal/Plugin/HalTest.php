@@ -1,27 +1,29 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Plugin;
+namespace LaminasTest\ApiTools\Hal\Plugin;
 
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
+use Laminas\ApiTools\Hal\Resource;
+use Laminas\Http\Request;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Mvc\Router\SimpleRouteStack;
+use Laminas\Uri\Http;
+use Laminas\Uri\Uri;
+use Laminas\View\Helper\ServerUrl as ServerUrlHelper;
+use Laminas\View\Helper\Url as UrlHelper;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Http\Request;
-use Zend\Mvc\Router\Http\TreeRouteStack;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\SimpleRouteStack;
-use Zend\Mvc\Router\Http\Segment;
-use Zend\Mvc\MvcEvent;
-use Zend\Uri\Http;
-use Zend\Uri\Uri;
-use Zend\View\Helper\Url as UrlHelper;
-use Zend\View\Helper\ServerUrl as ServerUrlHelper;
-use ZF\Hal\Collection;
-use ZF\Hal\Resource;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Metadata\MetadataMap;
-use ZF\Hal\Plugin\Hal as HalHelper;
 
 /**
  * @subpackage UnitTest
@@ -89,7 +91,7 @@ class HalTest extends TestCase
         $event->setRouter($router);
         $router->setRequestUri(new Http('http://localhost.localdomain/resource'));
 
-        $controller = $this->controller = $this->getMock('Zend\Mvc\Controller\AbstractRestfulController');
+        $controller = $this->controller = $this->getMock('Laminas\Mvc\Controller\AbstractRestfulController');
         $controller->expects($this->any())
             ->method('getEvent')
             ->will($this->returnValue($event));
@@ -212,16 +214,16 @@ class HalTest extends TestCase
         $resource->getLinks()->add($self);
 
         $metadata = new MetadataMap(array(
-            'ZFTest\Hal\Plugin\TestAsset\Resource' => array(
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Resource' => array(
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
             ),
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedResource' => array(
-                'hydrator' => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedResource' => array(
+                'hydrator' => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'    => 'hostname/embedded',
             ),
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedResourceWithCustomIdentifier' => array(
-                'hydrator'        => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedResourceWithCustomIdentifier' => array(
+                'hydrator'        => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'           => 'hostname/embedded_custom',
                 'identifier_name' => 'custom_id',
             ),
@@ -258,7 +260,7 @@ class HalTest extends TestCase
         );
 
         $metadata = new MetadataMap(array(
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => array(
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => array(
                 'is_collection'       => true,
                 'route_name'          => 'hostname/contacts',
                 'resource_route_name' => 'hostname/embedded',
@@ -308,13 +310,13 @@ class HalTest extends TestCase
         $resource->first_child = $childCollection;
 
         $metadata = new MetadataMap(array(
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => array(
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => array(
                 'is_collection'  => true,
                 'route'          => 'hostname/contacts',
                 'resource_route' => 'hostname/embedded',
             ),
-            'ZFTest\Hal\Plugin\TestAsset\Resource' => array(
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Resource' => array(
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
             ),
         ));
@@ -366,12 +368,12 @@ class HalTest extends TestCase
 
         $this->assertTrue($links->has('self'));
         $link = $links->get('self');
-        $this->assertInstanceof('ZF\Hal\Link\Link', $link);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Link\Link', $link);
 
         $this->plugin->injectSelfLink($resource, 'hostname/resource');
         $this->assertTrue($links->has('self'));
         $link = $links->get('self');
-        $this->assertInstanceof('ZF\Hal\Link\Link', $link);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Link\Link', $link);
     }
 
     /**
@@ -440,7 +442,7 @@ class HalTest extends TestCase
         $resource = new Resource($object, 'foo');
 
         $metadata = new MetadataMap(array(
-            'ZFTest\Hal\Plugin\TestAsset\ResourceWithProtectedProperties' => array(
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\ResourceWithProtectedProperties' => array(
                 'hydrator'   => 'ArraySerializable',
                 'route_name' => 'hostname/resource',
             ),
@@ -476,8 +478,8 @@ class HalTest extends TestCase
         $resource = new Resource($object, 'foo');
 
         $metadata = new MetadataMap(array(
-            'ZFTest\Hal\Plugin\TestAsset\Resource' => array(
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Resource' => array(
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'links'      => array(
                     array(
@@ -495,8 +497,8 @@ class HalTest extends TestCase
         ));
 
         $this->plugin->setMetadataMap($metadata);
-        $resource = $this->plugin->createResourceFromMetadata($object, $metadata->get('ZFTest\Hal\Plugin\TestAsset\Resource'));
-        $this->assertInstanceof('ZF\Hal\Resource', $resource);
+        $resource = $this->plugin->createResourceFromMetadata($object, $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Resource'));
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Resource', $resource);
         $links = $resource->getLinks();
         $this->assertTrue($links->has('describedby'));
         $this->assertTrue($links->has('children'));
@@ -524,7 +526,7 @@ class HalTest extends TestCase
         );
 
         $metadata = new MetadataMap(array(
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => array(
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => array(
                 'is_collection'       => true,
                 'route_name'          => 'hostname/contacts',
                 'resource_route_name' => 'hostname/embedded',
@@ -541,9 +543,9 @@ class HalTest extends TestCase
 
         $collection = $this->plugin->createCollectionFromMetadata(
             $set,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Collection'
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection'
         ));
-        $this->assertInstanceof('ZF\Hal\Collection', $collection);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Collection', $collection);
         $links = $collection->getLinks();
         $this->assertTrue($links->has('describedby'));
         $link = $links->get('describedby');

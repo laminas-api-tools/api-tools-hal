@@ -1,25 +1,27 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
+use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
+use Laminas\ApiTools\Hal\Resource;
+use Laminas\ApiTools\Hal\View\HalJsonModel;
+use Laminas\ApiTools\Hal\View\HalJsonRenderer;
+use Laminas\Http\Request;
+use Laminas\Mvc\Controller\PluginManager as ControllerPluginManager;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\View\Helper\ServerUrl as ServerUrlHelper;
+use Laminas\View\Helper\Url as UrlHelper;
+use Laminas\View\HelperPluginManager;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Http\Request;
-use Zend\Mvc\Controller\PluginManager as ControllerPluginManager;
-use Zend\Mvc\Router\Http\TreeRouteStack;
-use Zend\View\HelperPluginManager;
-use Zend\View\Helper\ServerUrl as ServerUrlHelper;
-use Zend\View\Helper\Url as UrlHelper;
-use ZF\ApiProblem\View\ApiProblemRenderer;
-use ZF\Hal\Collection;
-use ZF\Hal\Resource;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Plugin\Hal as HalHelper;
-use ZF\Hal\View\HalJsonModel;
-use ZF\Hal\View\HalJsonRenderer;
 
 /**
  * @subpackage UnitTest
@@ -159,7 +161,7 @@ class ChildResourcesIntegrationTest extends TestCase
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $this->assertInstanceOf('Zend\Mvc\Router\RouteMatch', $matches);
+        $this->assertInstanceOf('Laminas\Mvc\Router\RouteMatch', $matches);
         $this->assertEquals('anakin', $matches->getParam('parent'));
         $this->assertEquals('parent', $matches->getMatchedRouteName());
 
@@ -184,7 +186,7 @@ class ChildResourcesIntegrationTest extends TestCase
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $this->assertInstanceOf('Zend\Mvc\Router\RouteMatch', $matches);
+        $this->assertInstanceOf('Laminas\Mvc\Router\RouteMatch', $matches);
         $this->assertEquals('anakin', $matches->getParam('parent'));
         $this->assertEquals('luke', $matches->getParam('child'));
         $this->assertEquals('parent/child', $matches->getMatchedRouteName());
@@ -210,7 +212,7 @@ class ChildResourcesIntegrationTest extends TestCase
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $this->assertInstanceOf('Zend\Mvc\Router\RouteMatch', $matches);
+        $this->assertInstanceOf('Laminas\Mvc\Router\RouteMatch', $matches);
         $this->assertEquals('anakin', $matches->getParam('parent'));
         $this->assertNull($matches->getParam('child'));
         $this->assertEquals('parent/child', $matches->getMatchedRouteName());
@@ -279,7 +281,7 @@ class ChildResourcesIntegrationTest extends TestCase
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $this->assertInstanceOf('Zend\Mvc\Router\RouteMatch', $matches);
+        $this->assertInstanceOf('Laminas\Mvc\Router\RouteMatch', $matches);
         $this->assertEquals('anakin', $matches->getParam('id'));
         $this->assertEquals('luke', $matches->getParam('child_id'));
         $this->assertEquals('parent/child', $matches->getMatchedRouteName());
@@ -307,7 +309,7 @@ class ChildResourcesIntegrationTest extends TestCase
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $this->assertInstanceOf('Zend\Mvc\Router\RouteMatch', $matches);
+        $this->assertInstanceOf('Laminas\Mvc\Router\RouteMatch', $matches);
         $this->assertEquals('anakin', $matches->getParam('id'));
         $this->assertNull($matches->getParam('child_id'));
         $this->assertEquals('parent/child', $matches->getMatchedRouteName());

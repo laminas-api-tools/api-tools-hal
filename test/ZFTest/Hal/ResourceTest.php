@@ -1,13 +1,15 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
-use ZF\Hal\Resource;
-use ZF\Hal\Link\LinkCollection;
+use Laminas\ApiTools\Hal\Link\LinkCollection;
+use Laminas\ApiTools\Hal\Resource;
 use PHPUnit_Framework_TestCase as TestCase;
 use stdClass;
 
@@ -32,7 +34,7 @@ class ResourceTest extends TestCase
      */
     public function testConstructorRaisesExceptionForNonObjectNonArrayResource($resource)
     {
-        $this->setExpectedException('ZF\Hal\Exception\InvalidResourceException');
+        $this->setExpectedException('Laminas\ApiTools\Hal\Exception\InvalidResourceException');
         $hal = new Resource($resource, 'id');
     }
 
@@ -48,7 +50,7 @@ class ResourceTest extends TestCase
     {
         $resource = new stdClass;
         $hal      = new Resource($resource, 'id', 'route', array('foo' => 'bar'));
-        $this->assertInstanceOf('ZF\Hal\Link\LinkCollection', $hal->getLinks());
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Link\LinkCollection', $hal->getLinks());
     }
 
     public function testLinkCollectionMayBeInjected()
