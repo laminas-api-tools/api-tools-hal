@@ -1,13 +1,15 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal;
+namespace Laminas\ApiTools\Hal;
 
 return [
-    'zf-hal' => [
+    'api-tools-hal' => [
         'renderer' => [
             // 'default_hydrator' => 'Hydrator Service Name',
             // 'hydrators'        => [
@@ -44,11 +46,11 @@ return [
             'use_proxy' => false,
         ],
     ],
-    // Creates a "HalJson" selector for zfcampus/zf-content-negotiation
-    'zf-content-negotiation' => [
+    // Creates a "HalJson" selector for laminas-api-tools/api-tools-content-negotiation
+    'api-tools-content-negotiation' => [
         'selectors' => [
             'HalJson' => [
-                'ZF\Hal\View\HalJsonModel' => [
+                'Laminas\ApiTools\Hal\View\HalJsonModel' => [
                     'application/json',
                     'application/*+json',
                 ],
@@ -56,6 +58,17 @@ return [
         ],
     ],
     'service_manager' => [
+        // Legacy Zend Framework aliases
+        'aliases' => [
+            \ZF\Hal\Extractor\LinkExtractor::class => Extractor\LinkExtractor::class,
+            \ZF\Hal\Extractor\LinkCollectionExtractor::class => Extractor\LinkCollectionExtractor::class,
+            \ZF\Hal\HalConfig::class => HalConfig::class,
+            \ZF\Hal\JsonRenderer::class => JsonRenderer::class,
+            \ZF\Hal\JsonStrategy::class => JsonStrategy::class,
+            \ZF\Hal\Link\LinkUrlBuilder::class => Link\LinkUrlBuilder::class,
+            \ZF\Hal\MetadataMap::class => MetadataMap::class,
+            \ZF\Hal\RendererOptions::class => RendererOptions::class,
+        ],
         'factories' => [
             Extractor\LinkExtractor::class => Factory\LinkExtractorFactory::class,
             Extractor\LinkCollectionExtractor::class => Factory\LinkCollectionExtractorFactory::class,
@@ -68,11 +81,17 @@ return [
         ],
     ],
     'view_helpers' => [
+        // Legacy Zend Framework aliases
+        'aliases' => [
+        ],
         'factories' => [
             'Hal' => Factory\HalViewHelperFactory::class,
         ],
     ],
     'controller_plugins' => [
+        // Legacy Zend Framework aliases
+        'aliases' => [
+        ],
         'factories' => [
             'Hal' => Factory\HalControllerPluginFactory::class,
         ],

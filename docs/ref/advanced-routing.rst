@@ -3,8 +3,8 @@
 Advanced Routing
 ================
 
-The recommended route for a resource is a ``Zend\Router\Http\Segment``
-route (or ``Zend\Mvc\Router\Http\Segment``, if using zend-mvc v2 releases), with
+The recommended route for a resource is a ``Laminas\Router\Http\Segment``
+route (or ``Laminas\Mvc\Router\Http\Segment``, if using laminas-mvc v2 releases), with
 an identifier:
 
 .. code-block:: php
@@ -71,7 +71,7 @@ the specific resource being exposed. You can do this via the
 .. code-block:: php
     :linenos:
 
-    'zf-rest' => array(
+    'api-tools-rest' => array(
         'resources' => array(
             'UserResourceController' => array(
                 // ...
@@ -90,7 +90,7 @@ If you are rendering child resources as part of a resource, however, you need to
 hint to the renderer about where to look for an identifier.
 
 There are several mechanisms for this: the ``getIdFromResource`` and
-``createLink`` events of the ``ZF\Rest\Plugin\HalLinks`` plugin; or
+``createLink`` events of the ``Laminas\ApiTools\Rest\Plugin\HalLinks`` plugin; or
 :ref:`a metadata map <ref/metadata-map>`.
 
 The ``HalLinks`` events are as followed, and triggered by the methods specified:
@@ -119,7 +119,7 @@ createLink event
 ----------------
 
 The ``createLink`` method is currently called only from
-``ZF\Rest\ResourceController::create()``, and is used to generate the
+``Laminas\ApiTools\Rest\ResourceController::create()``, and is used to generate the
 ``Location`` header. Essentially, what it does is call the ``url()`` helper with
 the passed route, and the ``serverUrl()`` helper with that result to generate a
 fully-qualified URL.
@@ -139,7 +139,7 @@ The following will do that:
     :linenos:
 
     $request = $services->get('Request');
-    $sharedEvents->attach('ZF\Rest\Plugin\HalLinks', 'createLink', function ($e) use ($request) {
+    $sharedEvents->attach('Laminas\ApiTools\Rest\Plugin\HalLinks', 'createLink', function ($e) use ($request) {
         $resource = $e->getParam('resource');
         if (!$resource instanceof Paste) {
             // only react for a specific type of resource
@@ -196,7 +196,7 @@ like the following:
 .. code-block:: php
     :linenos:
 
-    $sharedEvents->attach('ZF\Rest\Plugin\HalLinks', 'getIdFromResource', function ($e) {
+    $sharedEvents->attach('Laminas\ApiTools\Rest\Plugin\HalLinks', 'getIdFromResource', function ($e) {
         $resource = $e->getParam('resource');
         if (!$resource instanceof User) {
             return;
@@ -204,7 +204,7 @@ like the following:
         return $resource->user_id;
     }, 100);
 
-    $sharedEvents->attach('ZF\Rest\Plugin\HalLinks', 'getIdFromResource', function ($e) {
+    $sharedEvents->attach('Laminas\ApiTools\Rest\Plugin\HalLinks', 'getIdFromResource', function ($e) {
         $resource = $e->getParam('resource');
         if (!$resource instanceof UserAddress) {
             return;

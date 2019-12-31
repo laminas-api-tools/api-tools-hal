@@ -1,24 +1,26 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
+use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
+use Laminas\ApiTools\Hal\Module;
+use Laminas\ApiTools\Hal\View\HalJsonModel;
+use Laminas\ApiTools\Hal\View\HalJsonRenderer;
+use Laminas\ApiTools\Hal\View\HalJsonStrategy;
+use Laminas\EventManager\EventManager;
+use Laminas\Mvc\ApplicationInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\View;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use stdClass;
-use Zend\EventManager\EventManager;
-use Zend\Mvc\ApplicationInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceManager;
-use Zend\View\View;
-use ZF\ApiProblem\View\ApiProblemRenderer;
-use ZF\Hal\Module;
-use ZF\Hal\View\HalJsonModel;
-use ZF\Hal\View\HalJsonRenderer;
-use ZF\Hal\View\HalJsonStrategy;
 
 class ModuleTest extends TestCase
 {
@@ -55,7 +57,7 @@ class ModuleTest extends TestCase
         $view->setEventManager($eventManager);
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('ZF\Hal\JsonStrategy', $strategy);
+        $serviceManager->setService('Laminas\ApiTools\Hal\JsonStrategy', $strategy);
         $serviceManager->setService('View', $view);
 
         $application = $this->prophesize(ApplicationInterface::class);

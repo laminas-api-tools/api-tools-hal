@@ -1,21 +1,23 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Extractor;
+namespace Laminas\ApiTools\Hal\Extractor;
 
 use JsonSerializable;
+use Laminas\ApiTools\Hal\EntityHydratorManager;
+use Laminas\Hydrator\ExtractionInterface;
 use SplObjectStorage;
-use Zend\Hydrator\ExtractionInterface;
-use ZF\Hal\EntityHydratorManager;
 
 /**
  * Extract entities.
  *
- * This version targets zend-hydrator v1 and v2, and will be aliased to
- * ZF\Hal\Extractor\EntityExtractor when one of those versions is in use.
+ * This version targets laminas-hydrator v1 and v2, and will be aliased to
+ * Laminas\ApiTools\Hal\Extractor\EntityExtractor when one of those versions is in use.
  */
 class EntityExtractorHydratorV2 implements ExtractionInterface
 {
@@ -25,7 +27,7 @@ class EntityExtractorHydratorV2 implements ExtractionInterface
     protected $entityHydratorManager;
 
     /**
-     * Map of entities to their ZF\Hal\Entity serializations
+     * Map of entities to their Laminas\ApiTools\Hal\Entity serializations
      *
      * @var SplObjectStorage
      */

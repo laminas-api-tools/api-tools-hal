@@ -1,16 +1,18 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Factory;
+namespace LaminasTest\ApiTools\Hal\Factory;
 
+use Laminas\ApiTools\Hal\Factory\LinkUrlBuilderFactory;
+use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\Helper;
 use PHPUnit\Framework\TestCase;
-use Zend\ServiceManager\ServiceManager;
-use Zend\View\Helper;
-use ZF\Hal\Factory\LinkUrlBuilderFactory;
-use ZF\Hal\Link\LinkUrlBuilder;
 
 class LinkUrlBuilderFactoryTest extends TestCase
 {
@@ -54,7 +56,7 @@ class LinkUrlBuilderFactoryTest extends TestCase
     private function getServiceManager($config = [])
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('ZF\Hal\HalConfig', $config);
+        $serviceManager->setService('Laminas\ApiTools\Hal\HalConfig', $config);
 
         $viewHelperManager = new ServiceManager();
         $serviceManager->setService('ViewHelperManager', $viewHelperManager);
