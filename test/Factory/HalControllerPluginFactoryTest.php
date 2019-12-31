@@ -1,22 +1,24 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Factory;
+namespace LaminasTest\ApiTools\Hal\Factory;
 
+use Laminas\ApiTools\Hal\Factory\HalControllerPluginFactory;
+use Laminas\ApiTools\Hal\Plugin\Hal as HalPlugin;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\ServiceManager\ServiceManager;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\ServiceManager\ServiceManager;
-use ZF\Hal\Factory\HalControllerPluginFactory;
-use ZF\Hal\Plugin\Hal as HalPlugin;
 
 class HalControllerPluginFactoryTest extends TestCase
 {
     public function testInstantiatesHalJsonRenderer()
     {
-        $viewHelperManager = $this->getMockBuilder('Zend\View\HelperPluginManager')
+        $viewHelperManager = $this->getMockBuilder('Laminas\View\HelperPluginManager')
             ->disableOriginalConstructor()
             ->getMock();
         $viewHelperManager
@@ -30,12 +32,12 @@ class HalControllerPluginFactoryTest extends TestCase
         $factory = new HalControllerPluginFactory();
         $plugin = $factory($services, 'Hal');
 
-        $this->assertInstanceOf('ZF\Hal\Plugin\Hal', $plugin);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Plugin\Hal', $plugin);
     }
 
     public function testInstantiatesHalJsonRendererWithV2()
     {
-        $viewHelperManager = $this->getMockBuilder('Zend\View\HelperPluginManager')
+        $viewHelperManager = $this->getMockBuilder('Laminas\View\HelperPluginManager')
             ->disableOriginalConstructor()
             ->getMock();
         $viewHelperManager
@@ -46,7 +48,7 @@ class HalControllerPluginFactoryTest extends TestCase
         $services = new ServiceManager();
         $services->setService('ViewHelperManager', $viewHelperManager);
 
-        $pluginManager = $this->getMockBuilder('Zend\ServiceManager\AbstractPluginManager')
+        $pluginManager = $this->getMockBuilder('Laminas\ServiceManager\AbstractPluginManager')
             ->disableOriginalConstructor()
             ->getMock();
         $pluginManager->expects($this->once())
@@ -56,6 +58,6 @@ class HalControllerPluginFactoryTest extends TestCase
         $factory = new HalControllerPluginFactory();
         $plugin = $factory->createService($pluginManager);
 
-        $this->assertInstanceOf('ZF\Hal\Plugin\Hal', $plugin);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Plugin\Hal', $plugin);
     }
 }

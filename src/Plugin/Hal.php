@@ -1,44 +1,46 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Plugin;
+namespace Laminas\ApiTools\Hal\Plugin;
 
 use ArrayObject;
 use Countable;
-use Zend\EventManager\Event;
-use Zend\EventManager\EventInterface;
-use Zend\EventManager\EventManagerAwareInterface;
-use Zend\EventManager\EventManagerAwareTrait;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Hydrator\ExtractionInterface;
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\Mvc\Controller\Plugin\PluginInterface as ControllerPluginInterface;
-use Zend\Paginator\Paginator;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\DispatchableInterface;
-use Zend\View\Helper\AbstractHelper;
-use ZF\ApiProblem\ApiProblem;
-use ZF\Hal\Collection;
-use ZF\Hal\Entity;
-use ZF\Hal\EntityHydratorManager;
-use ZF\Hal\Exception;
-use ZF\Hal\Extractor\EntityExtractor;
-use ZF\Hal\Extractor\LinkCollectionExtractorInterface;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Link\LinkCollection;
-use ZF\Hal\Link\LinkCollectionAwareInterface;
-use ZF\Hal\Link\LinkUrlBuilder;
-use ZF\Hal\Link\PaginationInjector;
-use ZF\Hal\Link\PaginationInjectorInterface;
-use ZF\Hal\Link\SelfLinkInjector;
-use ZF\Hal\Link\SelfLinkInjectorInterface;
-use ZF\Hal\Metadata\Metadata;
-use ZF\Hal\Metadata\MetadataMap;
-use ZF\Hal\Resource;
-use ZF\Hal\ResourceFactory;
+use Laminas\ApiTools\ApiProblem\ApiProblem;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\EntityHydratorManager;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractorInterface;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\LinkCollection;
+use Laminas\ApiTools\Hal\Link\LinkCollectionAwareInterface;
+use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
+use Laminas\ApiTools\Hal\Link\PaginationInjector;
+use Laminas\ApiTools\Hal\Link\PaginationInjectorInterface;
+use Laminas\ApiTools\Hal\Link\SelfLinkInjector;
+use Laminas\ApiTools\Hal\Link\SelfLinkInjectorInterface;
+use Laminas\ApiTools\Hal\Metadata\Metadata;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\ApiTools\Hal\Resource;
+use Laminas\ApiTools\Hal\ResourceFactory;
+use Laminas\EventManager\Event;
+use Laminas\EventManager\EventInterface;
+use Laminas\EventManager\EventManagerAwareInterface;
+use Laminas\EventManager\EventManagerAwareTrait;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Hydrator\ExtractionInterface;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\Mvc\Controller\Plugin\PluginInterface as ControllerPluginInterface;
+use Laminas\Paginator\Paginator;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\DispatchableInterface;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Generate links for use with HAL payloads

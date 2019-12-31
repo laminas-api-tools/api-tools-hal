@@ -1,19 +1,21 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
+use Laminas\ApiTools\Hal\EntityHydratorManager;
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\ApiTools\Hal\ResourceFactory;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\ServiceManager\ServiceManager;
+use LaminasTest\ApiTools\Hal\Plugin\TestAsset as HalPluginTestAsset;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\ServiceManager\ServiceManager;
-use ZF\Hal\EntityHydratorManager;
-use ZF\Hal\Extractor\EntityExtractor;
-use ZF\Hal\Metadata\MetadataMap;
-use ZF\Hal\ResourceFactory;
-use ZFTest\Hal\Plugin\TestAsset as HalPluginTestAsset;
 
 /**
  * @subpackage UnitTest
@@ -29,7 +31,7 @@ class ResourceFactoryTest extends TestCase
 
         $metadata = new MetadataMap([
             HalPluginTestAsset\Entity::class => [
-                'hydrator'   => 'Zend\Hydrator\ObjectProperty',
+                'hydrator'   => 'Laminas\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'links'      => [
                     [
@@ -54,7 +56,7 @@ class ResourceFactoryTest extends TestCase
             $metadata->get(HalPluginTestAsset\Entity::class)
         );
 
-        $this->assertInstanceof('ZF\Hal\Entity', $entity);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Entity', $entity);
         $links = $entity->getLinks();
         $this->assertTrue($links->has('describedby'));
         $this->assertTrue($links->has('children'));
@@ -88,7 +90,7 @@ class ResourceFactoryTest extends TestCase
 
         $metadata = new MetadataMap([
             HalPluginTestAsset\Entity::class => [
-                'hydrator'     => 'Zend\Hydrator\ObjectProperty',
+                'hydrator'     => 'Laminas\Hydrator\ObjectProperty',
                 'route_name'   => 'hostname/resource',
                 'route_params' => [
                     'test-1' => [$entityDefiningCallback, 'callback'],
@@ -109,7 +111,7 @@ class ResourceFactoryTest extends TestCase
             $metadata->get(HalPluginTestAsset\Entity::class)
         );
 
-        $this->assertInstanceof('ZF\Hal\Entity', $entity);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Entity', $entity);
 
         $links = $entity->getLinks();
         $this->assertTrue($links->has('self'));
@@ -157,7 +159,7 @@ class ResourceFactoryTest extends TestCase
             $metadata->get(HalPluginTestAsset\Collection::class)
         );
 
-        $this->assertInstanceof('ZF\Hal\Collection', $collection);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Collection', $collection);
         $links = $collection->getLinks();
         $this->assertTrue($links->has('describedby'));
         $link = $links->get('describedby');

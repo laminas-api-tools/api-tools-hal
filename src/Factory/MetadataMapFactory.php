@@ -1,17 +1,19 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Factory;
+namespace Laminas\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\Hydrator\HydratorPluginManager;
-use ZF\Hal\Metadata;
+use Laminas\ApiTools\Hal\Metadata;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 class MetadataMapFactory
 {
@@ -29,7 +31,7 @@ class MetadataMapFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $config = $container->get('ZF\Hal\HalConfig');
+        $config = $container->get('Laminas\ApiTools\Hal\HalConfig');
 
         $hydrators = $container->has('HydratorManager')
             ? $container->get('HydratorManager')

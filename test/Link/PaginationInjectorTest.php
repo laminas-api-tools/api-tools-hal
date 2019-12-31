@@ -1,15 +1,17 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Link;
+namespace LaminasTest\ApiTools\Hal\Link;
 
-use Zend\Paginator\Adapter\ArrayAdapter;
-use Zend\Paginator\Paginator;
-use ZF\Hal\Collection;
-use ZF\Hal\Link\PaginationInjector;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Link\PaginationInjector;
+use Laminas\Paginator\Adapter\ArrayAdapter;
+use Laminas\Paginator\Paginator;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class PaginationInjectorTest extends TestCase
@@ -104,7 +106,7 @@ class PaginationInjectorTest extends TestCase
         $injector = new PaginationInjector();
         $result = $injector->injectPaginationLinks($halCollection);
 
-        $this->assertInstanceOf('ZF\ApiProblem\ApiProblem', $result);
+        $this->assertInstanceOf('Laminas\ApiTools\ApiProblem\ApiProblem', $result);
         $this->assertEquals(409, $result->status);
     }
 

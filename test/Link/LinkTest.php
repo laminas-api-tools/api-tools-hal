@@ -1,12 +1,14 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Link;
+namespace LaminasTest\ApiTools\Hal\Link;
 
-use ZF\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\Link;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class LinkTest extends TestCase
@@ -80,7 +82,7 @@ class LinkTest extends TestCase
         $link = new Link('describedby');
         $link->setRoute('api/docs');
 
-        $this->setExpectedException('ZF\ApiProblem\Exception\DomainException');
+        $this->setExpectedException('Laminas\ApiTools\ApiProblem\Exception\DomainException');
         $link->setUrl('http://example.com/api/docs.html');
     }
 
@@ -89,7 +91,7 @@ class LinkTest extends TestCase
         $link = new Link('describedby');
         $link->setUrl('http://example.com/api/docs.html');
 
-        $this->setExpectedException('ZF\ApiProblem\Exception\DomainException');
+        $this->setExpectedException('Laminas\ApiTools\ApiProblem\Exception\DomainException');
         $link->setRoute('api/docs');
     }
 
@@ -150,7 +152,7 @@ class LinkTest extends TestCase
             'rel' => $rel,
             'url' => $url,
         ]);
-        $this->assertInstanceOf('ZF\Hal\Link\Link', $link);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Link\Link', $link);
         $this->assertEquals($rel, $link->getRelation());
         $this->assertEquals($url, $link->getUrl());
     }
@@ -173,7 +175,7 @@ class LinkTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf('ZF\Hal\Link\Link', $link);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Link\Link', $link);
         $this->assertEquals('describedby', $link->getRelation());
         $this->assertEquals($route, $link->getRoute());
         $this->assertEquals($params, $link->getRouteParams());
@@ -193,7 +195,7 @@ class LinkTest extends TestCase
             ]
         ]);
 
-        $this->assertInstanceOf('ZF\Hal\Link\Link', $link);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Link\Link', $link);
         $this->assertEquals('describedby', $link->getRelation());
         $props = $link->getProps();
         $this->assertEquals([
