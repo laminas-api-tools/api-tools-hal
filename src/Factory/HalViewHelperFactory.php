@@ -1,20 +1,22 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal\Factory;
+namespace Laminas\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
-use Zend\Hydrator\HydratorInterface;
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use ZF\Hal\Exception;
-use ZF\Hal\Extractor\LinkCollectionExtractor;
-use ZF\Hal\Link;
-use ZF\Hal\Plugin;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
+use Laminas\ApiTools\Hal\Link;
+use Laminas\ApiTools\Hal\Plugin;
+use Laminas\Hydrator\HydratorInterface;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class HalViewHelperFactory
 {
@@ -28,9 +30,9 @@ class HalViewHelperFactory
             ? $container->getServiceLocator()
             : $container;
 
-        /* @var $rendererOptions \ZF\Hal\RendererOptions */
-        $rendererOptions = $container->get('ZF\Hal\RendererOptions');
-        $metadataMap     = $container->get('ZF\Hal\MetadataMap');
+        /* @var $rendererOptions \Laminas\ApiTools\Hal\RendererOptions */
+        $rendererOptions = $container->get('Laminas\ApiTools\Hal\RendererOptions');
+        $metadataMap     = $container->get('Laminas\ApiTools\Hal\MetadataMap');
 
         /** @var HydratorPluginManager $hydrators */
         $hydrators       = $metadataMap->getHydratorManager();

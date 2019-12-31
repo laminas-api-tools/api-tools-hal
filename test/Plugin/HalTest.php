@@ -1,42 +1,44 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Plugin;
+namespace LaminasTest\ApiTools\Hal\Plugin;
 
 use ArrayObject;
+use Laminas\ApiTools\ApiProblem\ApiProblem;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\ApiTools\Hal\Exception\CircularReferenceException;
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
+use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\LinkCollection;
+use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
+use Laminas\Hydrator;
+use Laminas\Mvc\Controller\AbstractRestfulController;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\Exception as V2RouterException;
+use Laminas\Mvc\Router\Http\Segment as V2Segment;
+use Laminas\Mvc\Router\Http\TreeRouteStack as V2TreeRouteStack;
+use Laminas\Paginator\Adapter\ArrayAdapter as ArrayPaginator;
+use Laminas\Paginator\Paginator;
+use Laminas\Router\Exception as RouterException;
+use Laminas\Router\Http\Segment;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Uri\Http;
+use Laminas\View\Helper\ServerUrl as ServerUrlHelper;
+use Laminas\View\Helper\Url as UrlHelper;
+use LaminasTest\ApiTools\Hal\TestAsset as HalTestAsset;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
-use Zend\Hydrator;
-use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Exception as V2RouterException;
-use Zend\Mvc\Router\Http\Segment as V2Segment;
-use Zend\Mvc\Router\Http\TreeRouteStack as V2TreeRouteStack;
-use Zend\Paginator\Adapter\ArrayAdapter as ArrayPaginator;
-use Zend\Paginator\Paginator;
-use Zend\Router\Exception as RouterException;
-use Zend\Router\Http\Segment;
-use Zend\Router\Http\TreeRouteStack;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Uri\Http;
-use Zend\View\Helper\ServerUrl as ServerUrlHelper;
-use Zend\View\Helper\Url as UrlHelper;
-use ZF\ApiProblem\ApiProblem;
-use ZF\Hal\Collection;
-use ZF\Hal\Entity;
-use ZF\Hal\Exception;
-use ZF\Hal\Exception\CircularReferenceException;
-use ZF\Hal\Extractor\LinkCollectionExtractor;
-use ZF\Hal\Extractor\LinkExtractor;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Link\LinkCollection;
-use ZF\Hal\Link\LinkUrlBuilder;
-use ZF\Hal\Metadata\MetadataMap;
-use ZF\Hal\Plugin\Hal as HalHelper;
-use ZFTest\Hal\TestAsset as HalTestAsset;
 
 /**
  * @subpackage UnitTest
@@ -907,7 +909,7 @@ class HalTest extends TestCase
 
         $this->plugin->getEventManager()->attach(
             'fromLink.pre',
-            function (\Zend\EventManager\Event $e) use (&$preEventTriggered, $link) {
+            function (\Laminas\EventManager\Event $e) use (&$preEventTriggered, $link) {
                 $preEventTriggered = true;
                 $this->assertSame($link, $e->getParam('linkDefinition'));
             }
@@ -1157,7 +1159,7 @@ class HalTest extends TestCase
                 null,
                 [
                     'class'   => CircularReferenceException::class,
-                    'message' => 'Circular reference detected in \'ZFTest\Hal\Plugin\TestAsset\Entity\'',
+                    'message' => 'Circular reference detected in \'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity\'',
                 ],
             ],
             [
@@ -1340,7 +1342,7 @@ class HalTest extends TestCase
                 null,
                 [
                     'class'   => CircularReferenceException::class,
-                    'message' => 'Circular reference detected in \'ZFTest\Hal\Plugin\TestAsset\Entity\'',
+                    'message' => 'Circular reference detected in \'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity\'',
                 ],
             ],
             [
@@ -1440,7 +1442,7 @@ class HalTest extends TestCase
                 null,
                 [
                     'class'   => CircularReferenceException::class,
-                    'message' => 'Circular reference detected in \'ZFTest\Hal\Plugin\TestAsset\Entity\'',
+                    'message' => 'Circular reference detected in \'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity\'',
                 ],
             ],
             [

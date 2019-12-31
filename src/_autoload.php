@@ -1,17 +1,18 @@
 <?php
+
 /**
- * @see       https://github.com/zfcampus/zf-hal for the canonical source repository
- * @copyright Copyright (c) 2018 Zend Technologies USA Inc. (https://www.zend.com)
- * @license   https://github.com/zfcampus/zf-hal/blob/master/LICENSE.md New BSD License
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal;
+namespace Laminas\ApiTools\Hal;
 
-use Zend\Hydrator\HydratorPluginManagerInterface;
+use Laminas\Hydrator\HydratorPluginManagerInterface;
 
 /**
- * Alias ZF\Hal\Extractor\EntityExtractor to the appropriate class based on
- * which version of zend-hydrator we detect. HydratorPluginManagerInterface
+ * Alias Laminas\ApiTools\Hal\Extractor\EntityExtractor to the appropriate class based on
+ * which version of laminas-hydrator we detect. HydratorPluginManagerInterface
  * is added in v3.
  */
 if (interface_exists(HydratorPluginManagerInterface::class, true)) {

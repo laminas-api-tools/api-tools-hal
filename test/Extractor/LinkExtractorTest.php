@@ -1,23 +1,25 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2015-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Extractor;
+namespace LaminasTest\ApiTools\Hal\Extractor;
 
+use Laminas\ApiTools\ApiProblem\Exception\DomainException;
+use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
+use Laminas\Http\Request;
+use Laminas\Mvc\Router\Http\TreeRouteStack as V2TreeRouteStack;
+use Laminas\Mvc\Router\RouteMatch as V2RouteMatch;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\Router\RouteMatch;
+use Laminas\View\Helper\ServerUrl;
+use Laminas\View\Helper\Url as UrlHelper;
 use PHPUnit\Framework\TestCase;
-use Zend\Http\Request;
-use Zend\Mvc\Router\Http\TreeRouteStack as V2TreeRouteStack;
-use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
-use Zend\Router\Http\TreeRouteStack;
-use Zend\Router\RouteMatch;
-use Zend\View\Helper\ServerUrl;
-use Zend\View\Helper\Url as UrlHelper;
-use ZF\ApiProblem\Exception\DomainException;
-use ZF\Hal\Extractor\LinkExtractor;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Link\LinkUrlBuilder;
 
 class LinkExtractorTest extends TestCase
 {

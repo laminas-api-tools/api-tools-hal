@@ -1,16 +1,18 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2015-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Extractor;
+namespace LaminasTest\ApiTools\Hal\Extractor;
 
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
+use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\LinkCollection;
 use PHPUnit\Framework\TestCase;
-use ZF\Hal\Extractor\LinkCollectionExtractor;
-use ZF\Hal\Extractor\LinkExtractor;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Link\LinkCollection;
 
 class LinkCollectionExtractorTest extends TestCase
 {
