@@ -1,31 +1,33 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Plugin;
+namespace LaminasTest\ApiTools\Hal\Plugin;
 
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
+use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\LinkCollection;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
+use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\Paginator\Adapter\ArrayAdapter as ArrayPaginator;
+use Laminas\Paginator\Paginator;
+use Laminas\Stdlib\Hydrator;
+use Laminas\Uri\Http;
+use Laminas\View\Helper\ServerUrl as ServerUrlHelper;
+use Laminas\View\Helper\Url as UrlHelper;
+use LaminasTest\ApiTools\Hal\TestAsset as HalTestAsset;
 use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionObject;
-use Zend\Mvc\Router\Http\TreeRouteStack;
-use Zend\Mvc\Router\Http\Segment;
-use Zend\Mvc\MvcEvent;
-use Zend\Paginator\Adapter\ArrayAdapter as ArrayPaginator;
-use Zend\Paginator\Paginator;
-use Zend\Uri\Http;
-use Zend\Stdlib\Hydrator;
-use Zend\View\Helper\Url as UrlHelper;
-use Zend\View\Helper\ServerUrl as ServerUrlHelper;
-use ZF\Hal\Collection;
-use ZF\Hal\Entity;
-use ZF\Hal\Extractor\LinkCollectionExtractor;
-use ZF\Hal\Extractor\LinkExtractor;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Link\LinkCollection;
-use ZF\Hal\Metadata\MetadataMap;
-use ZF\Hal\Plugin\Hal as HalHelper;
-use ZFTest\Hal\TestAsset as HalTestAsset;
 
 /**
  * @subpackage UnitTest
@@ -96,7 +98,7 @@ class HalTest extends TestCase
         $event->setRouter($router);
         $router->setRequestUri(new Http('http://localhost.localdomain/resource'));
 
-        $controller = $this->controller = $this->getMock('Zend\Mvc\Controller\AbstractRestfulController');
+        $controller = $this->controller = $this->getMock('Laminas\Mvc\Controller\AbstractRestfulController');
         $controller->expects($this->any())
             ->method('getEvent')
             ->will($this->returnValue($event));
@@ -223,20 +225,20 @@ class HalTest extends TestCase
         $entity->getLinks()->add($self);
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
             ],
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntity' => [
-                'hydrator' => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntity' => [
+                'hydrator' => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'    => 'hostname/embedded',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
             ],
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => [
-                'hydrator'        => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => [
+                'hydrator'        => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'           => 'hostname/embedded_custom',
                 'route_identifier_name' => 'custom_id',
                 'entity_identifier_name' => 'custom_id',
@@ -274,20 +276,20 @@ class HalTest extends TestCase
         $entity->getLinks()->add($self);
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
             ],
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntity' => [
-                'hydrator' => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntity' => [
+                'hydrator' => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'    => 'hostname/embedded',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
             ],
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => [
-                'hydrator'        => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => [
+                'hydrator'        => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'           => 'hostname/embedded_custom',
                 'route_identifier_name' => 'custom_id',
                 'entity_identifier_name' => 'custom_id',
@@ -333,7 +335,7 @@ class HalTest extends TestCase
         ]);
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => [
                 'is_collection'       => true,
                 'collection_name'     => 'collection', // should be overridden
                 'route_name'          => 'hostname/contacts',
@@ -384,15 +386,15 @@ class HalTest extends TestCase
         $entity->first_child = $childCollection;
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => [
                 'is_collection'  => true,
                 'route'          => 'hostname/contacts',
                 'entity_route'   => 'hostname/embedded',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
             ],
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
@@ -440,24 +442,24 @@ class HalTest extends TestCase
         $entity->second_child = new TestAsset\EmbeddedEntityWithCustomIdentifier('baz', 'Baz');
 
         $metadata = new MetadataMap(array(
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntity' => array(
-                'hydrator' => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntity' => array(
+                'hydrator' => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'    => 'hostname/embedded',
             ),
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => array(
-                'hydrator'        => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntityWithCustomIdentifier' => array(
+                'hydrator'        => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'           => 'hostname/embedded_custom',
                 'route_identifier_name' => 'custom_id',
                 'entity_identifier_name' => 'custom_id',
             ),
 
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => array(
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => array(
                 'is_collection'  => true,
                 'route'          => 'hostname/contacts',
                 'entity_route'   => 'hostname/embedded',
             ),
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => array(
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => array(
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
             ),
         ));
@@ -508,12 +510,12 @@ class HalTest extends TestCase
 
         $this->assertTrue($links->has('self'));
         $link = $links->get('self');
-        $this->assertInstanceof('ZF\Hal\Link\Link', $link);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Link\Link', $link);
 
         $this->plugin->injectSelfLink($entity, 'hostname/resource');
         $this->assertTrue($links->has('self'));
         $link = $links->get('self');
-        $this->assertInstanceof('ZF\Hal\Link\Link', $link);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Link\Link', $link);
     }
 
     public function testEntityPropertiesCanBeLinks()
@@ -668,7 +670,7 @@ class HalTest extends TestCase
         $entity   = new Entity($object, 'foo');
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\EntityWithProtectedProperties' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EntityWithProtectedProperties' => [
                 'hydrator'   => 'ArraySerializable',
                 'route_name' => 'hostname/resource',
             ],
@@ -704,8 +706,8 @@ class HalTest extends TestCase
         $entity = new Entity($object, 'foo');
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'links'      => [
                     [
@@ -725,9 +727,9 @@ class HalTest extends TestCase
         $this->plugin->setMetadataMap($metadata);
         $entity = $this->plugin->createEntityFromMetadata(
             $object,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Entity')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity')
         );
-        $this->assertInstanceof('ZF\Hal\Entity', $entity);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Entity', $entity);
         $links = $entity->getLinks();
         $this->assertTrue($links->has('describedby'));
         $this->assertTrue($links->has('children'));
@@ -750,8 +752,8 @@ class HalTest extends TestCase
         $entity = new Entity($object, 'foo');
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'links'      => [
                     [
@@ -770,7 +772,7 @@ class HalTest extends TestCase
 
         $this->plugin->setMetadataMap($metadata);
         $entity = $this->plugin->createEntity($object, 'hostname/resource', 'id');
-        $this->assertInstanceof('ZF\Hal\Entity', $entity);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Entity', $entity);
         $links = $entity->getLinks();
         $this->assertTrue($links->has('describedby'), 'Missing describedby link');
         $this->assertTrue($links->has('children'), 'Missing children link');
@@ -798,7 +800,7 @@ class HalTest extends TestCase
         );
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => [
                 'is_collection'       => true,
                 'route_name'          => 'hostname/contacts',
                 'entity_route_name'   => 'hostname/embedded',
@@ -815,9 +817,9 @@ class HalTest extends TestCase
 
         $collection = $this->plugin->createCollectionFromMetadata(
             $set,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Collection')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection')
         );
-        $this->assertInstanceof('ZF\Hal\Collection', $collection);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Collection', $collection);
         $links = $collection->getLinks();
         $this->assertTrue($links->has('describedby'));
         $link = $links->get('describedby');
@@ -848,8 +850,8 @@ class HalTest extends TestCase
         $test = $this;
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'     => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'     => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name'   => 'hostname/resource',
                 'route_params' => [
                     'test-1' => [$callback, 'callback'],
@@ -868,9 +870,9 @@ class HalTest extends TestCase
         $this->plugin->setMetadataMap($metadata);
         $entity = $this->plugin->createEntityFromMetadata(
             $object,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Entity')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity')
         );
-        $this->assertInstanceof('ZF\Hal\Entity', $entity);
+        $this->assertInstanceof('Laminas\ApiTools\Hal\Entity', $entity);
 
         $links = $entity->getLinks();
         $this->assertTrue($links->has('self'));
@@ -943,7 +945,7 @@ class HalTest extends TestCase
             $payload = $e->getParam('payload');
 
             $that->assertInstanceOf('ArrayObject', $payload);
-            $that->assertInstanceOf('ZF\Hal\Collection', $collection);
+            $that->assertInstanceOf('Laminas\ApiTools\Hal\Collection', $collection);
 
             $payload['_post'] = true;
         });
@@ -957,7 +959,7 @@ class HalTest extends TestCase
     {
         $extraction = true;
 
-        $linkExtractor = $this->getMockBuilder('ZF\Hal\Extractor\LinkExtractor')
+        $linkExtractor = $this->getMockBuilder('Laminas\ApiTools\Hal\Extractor\LinkExtractor')
             ->disableOriginalConstructor()
             ->getMock();
         $linkExtractor
@@ -965,7 +967,7 @@ class HalTest extends TestCase
             ->method('extract')
             ->will($this->returnValue($extraction));
 
-        $linkCollectionExtractor = $this->getMockBuilder('ZF\Hal\Extractor\LinkCollectionExtractor')
+        $linkCollectionExtractor = $this->getMockBuilder('Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor')
             ->disableOriginalConstructor()
             ->getMock();
         $linkCollectionExtractor
@@ -986,7 +988,7 @@ class HalTest extends TestCase
     {
         $extraction = true;
 
-        $linkCollectionExtractor = $this->getMockBuilder('ZF\Hal\Extractor\LinkCollectionExtractor')
+        $linkCollectionExtractor = $this->getMockBuilder('Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor')
             ->disableOriginalConstructor()
             ->getMock();
         $linkCollectionExtractor
@@ -1035,13 +1037,13 @@ class HalTest extends TestCase
         ]);
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
             ],
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => [
                 'is_collection'       => true,
                 'collection_name'     => 'collection',
                 'route_name'          => 'hostname/contacts',
@@ -1147,8 +1149,8 @@ class HalTest extends TestCase
     public function testCreateEntityShouldNotSerializeEntity()
     {
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
@@ -1159,14 +1161,14 @@ class HalTest extends TestCase
         $foo = new TestAsset\Entity('foo', 'Foo Bar');
 
         $entity = $this->plugin->createEntity($foo, 'api.foo', 'foo_id');
-        $this->assertInstanceOf('ZF\Hal\Entity', $entity);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Entity', $entity);
         $this->assertSame($foo, $entity->entity);
     }
 
     /**
      * Test that the convertEntityToArray() caches serialization results by object.
      *
-     * This is done because if you call createEntity() -- say, from a ZF\Rest\RestController,
+     * This is done because if you call createEntity() -- say, from a Laminas\ApiTools\Rest\RestController,
      * you may end up calling convertEntityToArray() twice -- once to create the HAL
      * entity with the appropriate identifier, and another when creating the serialized
      * representation.
@@ -1179,8 +1181,8 @@ class HalTest extends TestCase
     public function testConvertEntityToArrayCachesSerialization()
     {
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
@@ -1229,7 +1231,7 @@ class HalTest extends TestCase
     {
         $entity = ['foo' => 'bar'];
         $hal    = $this->plugin->createEntity($entity, 'api.foo', 'foo_id');
-        $this->assertInstanceOf('ZF\Hal\Entity', $hal);
+        $this->assertInstanceOf('Laminas\ApiTools\Hal\Entity', $hal);
         $this->assertEquals($entity, $hal->entity);
         $this->assertNull($hal->id);
 
@@ -1242,10 +1244,10 @@ class HalTest extends TestCase
 
     public function testAddHydratorDoesntFailWithAutoInvokables()
     {
-        $this->plugin->addHydrator('stdClass', 'ZFTest\Hal\Plugin\TestAsset\DummyHydrator');
+        $this->plugin->addHydrator('stdClass', 'LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator');
 
         $this->assertInstanceOf(
-            'ZFTest\Hal\Plugin\TestAsset\DummyHydrator',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\DummyHydrator',
             $this->plugin->getHydratorForEntity(new \stdClass)
         );
     }
@@ -1287,8 +1289,8 @@ class HalTest extends TestCase
                 $this->createNestedMetadataMap(),
                 null,
                 [
-                    'class'   => 'ZF\Hal\Exception\CircularReferenceException',
-                    'message' => 'Circular reference detected in \'ZFTest\Hal\Plugin\TestAsset\Entity\'',
+                    'class'   => 'Laminas\ApiTools\Hal\Exception\CircularReferenceException',
+                    'message' => 'Circular reference detected in \'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity\'',
                 ]
             ],
             [
@@ -1387,15 +1389,15 @@ class HalTest extends TestCase
     protected function createNestedMetadataMap($maxDepth = null)
     {
         return new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
                 'max_depth' => $maxDepth,
             ],
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntityWithBackReference' => [
-                'hydrator' => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntityWithBackReference' => [
+                'hydrator' => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'    => 'hostname/embedded',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
@@ -1465,8 +1467,8 @@ class HalTest extends TestCase
                 $this->createNestedCollectionMetadataMap(),
                 null,
                 [
-                    'class'   => 'ZF\Hal\Exception\CircularReferenceException',
-                    'message' => 'Circular reference detected in \'ZFTest\Hal\Plugin\TestAsset\Entity\'',
+                    'class'   => 'Laminas\ApiTools\Hal\Exception\CircularReferenceException',
+                    'message' => 'Circular reference detected in \'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity\'',
                 ]
             ],
             [
@@ -1565,8 +1567,8 @@ class HalTest extends TestCase
                 $this->createNestedCollectionMetadataMap(),
                 null,
                 [
-                    'class'   => 'ZF\Hal\Exception\CircularReferenceException',
-                    'message' => 'Circular reference detected in \'ZFTest\Hal\Plugin\TestAsset\Entity\'',
+                    'class'   => 'Laminas\ApiTools\Hal\Exception\CircularReferenceException',
+                    'message' => 'Circular reference detected in \'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity\'',
                 ]
             ],
             [
@@ -1641,21 +1643,21 @@ class HalTest extends TestCase
     protected function createNestedCollectionMetadataMap($maxDepth = null)
     {
         return new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => [
                 'is_collection'       => true,
                 'collection_name'     => 'collection',
                 'route_name'          => 'hostname/contacts',
                 'entity_route_name'   => 'hostname/embedded',
                 'max_depth'           => $maxDepth,
             ],
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'   => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'   => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name' => 'hostname/resource',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
             ],
-            'ZFTest\Hal\Plugin\TestAsset\EmbeddedEntityWithBackReference' => [
-                'hydrator' => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\EmbeddedEntityWithBackReference' => [
+                'hydrator' => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route'    => 'hostname/embedded',
                 'route_identifier_name' => 'id',
                 'entity_identifier_name' => 'id',
@@ -1713,8 +1715,8 @@ class HalTest extends TestCase
     {
         $object = new TestAsset\Entity('foo', 'Foo');
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'         => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'         => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name'       => 'hostname/resource',
                 'links'            => [],
                 'force_self_link' => false,
@@ -1724,7 +1726,7 @@ class HalTest extends TestCase
         $this->plugin->setMetadataMap($metadata);
         $entity = $this->plugin->createEntityFromMetadata(
             $object,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Entity')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity')
         );
         $links = $entity->getLinks();
         $this->assertFalse($links->has('self'));
@@ -1735,8 +1737,8 @@ class HalTest extends TestCase
         $object = new TestAsset\Entity('foo', 'Foo');
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Entity' => [
-                'hydrator'        => 'Zend\Stdlib\Hydrator\ObjectProperty',
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Entity' => [
+                'hydrator'        => 'Laminas\Stdlib\Hydrator\ObjectProperty',
                 'route_name'      => 'hostname/resource',
                 'links'           => [],
                 'force_self_link' => false,
@@ -1759,7 +1761,7 @@ class HalTest extends TestCase
         );
 
         $metadata = new MetadataMap([
-            'ZFTest\Hal\Plugin\TestAsset\Collection' => [
+            'LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection' => [
                 'is_collection'       => true,
                 'route_name'          => 'hostname/contacts',
                 'entity_route_name'   => 'hostname/embedded',
@@ -1772,7 +1774,7 @@ class HalTest extends TestCase
 
         $collection = $this->plugin->createCollectionFromMetadata(
             $set,
-            $metadata->get('ZFTest\Hal\Plugin\TestAsset\Collection')
+            $metadata->get('LaminasTest\ApiTools\Hal\Plugin\TestAsset\Collection')
         );
         $links = $collection->getLinks();
         $this->assertFalse($links->has('self'));
@@ -1782,7 +1784,7 @@ class HalTest extends TestCase
     {
         $collection = ['foo' => 'bar'];
         $metadata = new MetadataMap([
-            'ZF\Hal\Collection' => [
+            'Laminas\ApiTools\Hal\Collection' => [
                 'is_collection'       => true,
                 'route_name'          => 'hostname/contacts',
                 'entity_route_name'   => 'hostname/embedded',
@@ -1889,7 +1891,7 @@ class HalTest extends TestCase
     public function testCanSerializeHydratableEntity()
     {
         $this->plugin->addHydrator(
-            'ZFTest\Hal\TestAsset\ArraySerializable',
+            'LaminasTest\ApiTools\Hal\TestAsset\ArraySerializable',
             new Hydrator\ArraySerializable()
         );
 
@@ -2046,10 +2048,10 @@ class HalTest extends TestCase
         $p->setAccessible(true);
         $p->setValue($collection, $page);
 
-        /* @var \ZF\ApiProblem\ApiProblem*/
+        /* @var \Laminas\ApiTools\ApiProblem\ApiProblem*/
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInstanceOf('ZF\ApiProblem\ApiProblem', $result, var_export($result, 1));
+        $this->assertInstanceOf('Laminas\ApiTools\ApiProblem\ApiProblem', $result, var_export($result, 1));
 
         $data = $result->toArray();
         $this->assertArrayHasKey('status', $data, var_export($result, 1));

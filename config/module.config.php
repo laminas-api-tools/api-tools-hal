@@ -1,11 +1,13 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
 return array(
-    'zf-hal' => array(
+    'api-tools-hal' => array(
         'renderer' => array(
             // 'default_hydrator' => 'Hydrator Service Name',
             // 'hydrators'        => array(
@@ -42,11 +44,11 @@ return array(
             'use_proxy' => false,
         ),
     ),
-    // Creates a "HalJson" selector for zfcampus/zf-content-negotiation
-    'zf-content-negotiation' => array(
+    // Creates a "HalJson" selector for laminas-api-tools/api-tools-content-negotiation
+    'api-tools-content-negotiation' => array(
         'selectors' => array(
             'HalJson' => array(
-                'ZF\Hal\View\HalJsonModel' => array(
+                'Laminas\ApiTools\Hal\View\HalJsonModel' => array(
                     'application/json',
                     'application/*+json',
                 ),
@@ -55,19 +57,19 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'ZF\Hal\JsonRenderer' => 'ZF\Hal\Factory\HalJsonRendererFactory',
-            'ZF\Hal\JsonStrategy' => 'ZF\Hal\Factory\HalJsonStrategyFactory',
-            'ZF\Hal\MetadataMap'  => 'ZF\Hal\Factory\MetadataMapFactory',
+            'Laminas\ApiTools\Hal\JsonRenderer' => 'Laminas\ApiTools\Hal\Factory\HalJsonRendererFactory',
+            'Laminas\ApiTools\Hal\JsonStrategy' => 'Laminas\ApiTools\Hal\Factory\HalJsonStrategyFactory',
+            'Laminas\ApiTools\Hal\MetadataMap'  => 'Laminas\ApiTools\Hal\Factory\MetadataMapFactory',
         ),
     ),
     'view_helpers' => array(
         'factories' => array(
-            'Hal' => 'ZF\Hal\Factory\HalViewHelperFactory',
+            'Hal' => 'Laminas\ApiTools\Hal\Factory\HalViewHelperFactory',
         ),
     ),
     'controller_plugins' => array(
         'factories' => array(
-            'Hal' => 'ZF\Hal\Factory\HalControllerPluginFactory',
+            'Hal' => 'Laminas\ApiTools\Hal\Factory\HalControllerPluginFactory',
         ),
     ),
 );
