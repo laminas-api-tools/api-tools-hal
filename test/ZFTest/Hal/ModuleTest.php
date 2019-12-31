@@ -1,19 +1,21 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
-use ZF\Hal\Module;
+use Laminas\ApiTools\Hal\Module;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch;
+use Laminas\ServiceManager\Config;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\ArrayUtils;
 use PHPUnit_Framework_TestCase as TestCase;
 use ReflectionObject;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Stdlib\ArrayUtils;
 
 class ModuleTest extends TestCase
 {
@@ -26,9 +28,9 @@ class ModuleTest extends TestCase
     {
         $options = array('service_manager' => array(
             'factories' => array(
-                // Consumed by ZF\Hal\JsonRenderer service
-                'ViewHelperManager'       => 'Zend\Mvc\Service\ViewHelperManagerFactory',
-                'ControllerPluginManager' => 'Zend\Mvc\Service\ControllerPluginManagerFactory',
+                // Consumed by Laminas\ApiTools\Hal\JsonRenderer service
+                'ViewHelperManager'       => 'Laminas\Mvc\Service\ViewHelperManagerFactory',
+                'ControllerPluginManager' => 'Laminas\Mvc\Service\ControllerPluginManagerFactory',
             ),
         ));
         $config = ArrayUtils::merge($options['service_manager'], $this->module->getServiceConfig());
@@ -43,10 +45,10 @@ class ModuleTest extends TestCase
         $event = new MvcEvent();
         $event->setRouteMatch(new RouteMatch(array()));
 
-        $router = $this->getMock('Zend\Mvc\Router\RouteStackInterface');
+        $router = $this->getMock('Laminas\Mvc\Router\RouteStackInterface');
         $services->setService('HttpRouter', $router);
 
-        $app = $this->getMockBuilder('Zend\Mvc\Application')
+        $app = $this->getMockBuilder('Laminas\Mvc\Application')
                     ->disableOriginalConstructor()
                     ->getMock();
         $app->expects($this->once())
@@ -68,7 +70,7 @@ class ModuleTest extends TestCase
     public function testJsonRendererFactoryInjectsDefaultHydratorIfPresentInConfig()
     {
         $options = array(
-            'zf-hal' => array(
+            'api-tools-hal' => array(
                 'renderer' => array(
                     'default_hydrator' => 'ObjectProperty',
                 ),
@@ -82,13 +84,13 @@ class ModuleTest extends TestCase
 
         $helpers = $services->get('ViewHelperManager');
         $plugin  = $helpers->get('Hal');
-        $this->assertAttributeInstanceOf('Zend\Stdlib\Hydrator\ObjectProperty', 'defaultHydrator', $plugin);
+        $this->assertAttributeInstanceOf('Laminas\Stdlib\Hydrator\ObjectProperty', 'defaultHydrator', $plugin);
     }
 
     public function testJsonRendererFactoryInjectsHydratorMappingsIfPresentInConfig()
     {
         $options = array(
-            'zf-hal' => array(
+            'api-tools-hal' => array(
                 'renderer' => array(
                     'hydrators' => array(
                         'Some\MadeUp\Component'            => 'ClassMethods',
@@ -117,7 +119,7 @@ class ModuleTest extends TestCase
 
         $this->assertInternalType('array', $hydratorMap);
 
-        foreach ($options['zf-hal']['renderer']['hydrators'] as $class => $serviceName) {
+        foreach ($options['api-tools-hal']['renderer']['hydrators'] as $class => $serviceName) {
             $key = strtolower($class);
             $this->assertArrayHasKey($key, $hydratorMap);
             $hydrator = $hydratorMap[$key];
