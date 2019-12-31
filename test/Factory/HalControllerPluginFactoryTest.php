@@ -1,18 +1,20 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal\Factory;
+namespace LaminasTest\ApiTools\Hal\Factory;
 
+use Laminas\ApiTools\Hal\Factory\HalControllerPluginFactory;
+use Laminas\ApiTools\Hal\Plugin\Hal as HalPlugin;
+use Laminas\Hydrator\HydratorPluginManager;
+use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\HelperPluginManager;
 use PHPUnit\Framework\TestCase;
-use Zend\Hydrator\HydratorPluginManager;
-use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\ServiceManager;
-use Zend\View\HelperPluginManager;
-use ZF\Hal\Factory\HalControllerPluginFactory;
-use ZF\Hal\Plugin\Hal as HalPlugin;
 
 class HalControllerPluginFactoryTest extends TestCase
 {
