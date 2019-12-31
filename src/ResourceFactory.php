@@ -1,19 +1,21 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZF\Hal;
+namespace Laminas\ApiTools\Hal;
 
 use Closure;
-use ZF\Hal\Collection;
-use ZF\Hal\Entity;
-use ZF\Hal\Extractor\EntityExtractor;
-use ZF\Hal\Exception;
-use ZF\Hal\Link\Link;
-use ZF\Hal\Link\LinkCollection;
-use ZF\Hal\Metadata\Metadata;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\Exception;
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use Laminas\ApiTools\Hal\Link\Link;
+use Laminas\ApiTools\Hal\Link\LinkCollection;
+use Laminas\ApiTools\Hal\Metadata\Metadata;
 
 class ResourceFactory
 {

@@ -1,20 +1,22 @@
 <?php
+
 /**
- * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
+ * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
+ * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
  */
 
-namespace ZFTest\Hal;
+namespace LaminasTest\ApiTools\Hal;
 
-use Zend\ServiceManager\ServiceManager;
-use Zend\View\View;
-use ZF\ApiProblem\View\ApiProblemRenderer;
-use ZF\Hal\Module;
-use ZF\Hal\View\HalJsonModel;
+use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
+use Laminas\ApiTools\Hal\Module;
+use Laminas\ApiTools\Hal\View\HalJsonModel;
+use Laminas\ApiTools\Hal\View\HalJsonRenderer;
+use Laminas\ApiTools\Hal\View\HalJsonStrategy;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\View;
 use PHPUnit_Framework_TestCase as TestCase;
 use stdClass;
-use ZF\Hal\View\HalJsonRenderer;
-use ZF\Hal\View\HalJsonStrategy;
 
 class ModuleTest extends TestCase
 {
@@ -27,7 +29,7 @@ class ModuleTest extends TestCase
 
     public function testOnRenderWhenMvcEventResultIsNotHalJsonModel()
     {
-        $mvcEvent = $this->getMockBuilder('Zend\Mvc\MvcEvent')->getMock();
+        $mvcEvent = $this->getMockBuilder('Laminas\Mvc\MvcEvent')->getMock();
         $mvcEvent
             ->expects($this->once())
             ->method('getResult')
@@ -45,7 +47,7 @@ class ModuleTest extends TestCase
 
         $view = new View();
 
-        $eventManager = $this->getMockBuilder('Zend\EventManager\EventManager')->getMock();
+        $eventManager = $this->getMockBuilder('Laminas\EventManager\EventManager')->getMock();
         $eventManager
             ->expects($this->exactly(2))
             ->method('attach');
@@ -53,16 +55,16 @@ class ModuleTest extends TestCase
         $view->setEventManager($eventManager);
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('ZF\Hal\JsonStrategy', $strategy);
+        $serviceManager->setService('Laminas\ApiTools\Hal\JsonStrategy', $strategy);
         $serviceManager->setService('View', $view);
 
-        $application = $this->getMockBuilder('Zend\Mvc\ApplicationInterface')->getMock();
+        $application = $this->getMockBuilder('Laminas\Mvc\ApplicationInterface')->getMock();
         $application
             ->expects($this->once())
             ->method('getServiceManager')
             ->will($this->returnValue($serviceManager));
 
-        $mvcEvent = $this->getMockBuilder('Zend\Mvc\MvcEvent')->getMock();
+        $mvcEvent = $this->getMockBuilder('Laminas\Mvc\MvcEvent')->getMock();
         $mvcEvent
             ->expects($this->at(0))
             ->method('getResult')
