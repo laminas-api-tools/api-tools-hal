@@ -1,7 +1,7 @@
 Laminas HAL
 ======
 
-[![Build Status](https://travis-ci.org/laminas-api-tools/api-tools-hal.svg?branch=master)](https://travis-ci.org/laminas-api-tools/api-tools-hal)
+[![Build Status](https://travis-ci.com/laminas-api-tools/api-tools-hal.svg?branch=master)](https://travis-ci.com/laminas-api-tools/api-tools-hal)
 [![Coverage Status](https://coveralls.io/repos/github/laminas-api-tools/api-tools-hal/badge.svg?branch=master)](https://coveralls.io/github/laminas-api-tools/api-tools-hal?branch=master)
 
 Introduction
