@@ -74,6 +74,6 @@
         "test-coverage": "phpunit --coverage-clover clover.xml"
     },
     "replace": {
-        "zfcampus/zf-hal": "self.version"
+        "zfcampus/zf-hal": "^1.6.0"
     }
 }
