@@ -23,10 +23,6 @@
         "sort-packages": true
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "1.6.x-dev",
-            "dev-develop": "1.7.x-dev"
-        },
         "laminas": {
             "module": "Laminas\\ApiTools\\Hal"
         }
