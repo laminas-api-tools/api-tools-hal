@@ -16,15 +16,12 @@ use Laminas\ApiTools\Hal\Plugin;
 use Laminas\Hydrator\HydratorInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
-class HalViewHelperFactory
+class HalViewHelperFactory implements FactoryInterface
 {
-    /**
-     * @param  ContainerInterface|ServiceLocatorInterface $container
-     * @return Plugin\Hal
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Plugin\Hal
     {
         $container = ($container instanceof AbstractPluginManager)
             ? $container->getServiceLocator()
@@ -83,8 +80,8 @@ class HalViewHelperFactory
      * @param  ServiceLocatorInterface $container
      * @return Plugin\Hal
      */
-    public function createService($container)
+    public function createService($container): Plugin\Hal
     {
-        return $this($container);
+        return $this($container, Plugin\Hal::class);
     }
 }

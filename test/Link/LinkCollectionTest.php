@@ -19,7 +19,7 @@ class LinkCollectionTest extends TestCase
      */
     protected $links;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->links = new LinkCollection();
     }
@@ -47,7 +47,7 @@ class LinkCollectionTest extends TestCase
 
         $this->assertTrue($this->links->has('order'));
         $orders = $this->links->get('order');
-        $this->assertInternalType('array', $orders);
+        $this->assertIsArray($orders);
         $this->assertContains($order1, $orders);
         $this->assertContains($order2, $orders);
     }

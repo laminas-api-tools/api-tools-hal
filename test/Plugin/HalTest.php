@@ -21,6 +21,7 @@ use Laminas\ApiTools\Hal\Link\LinkCollection;
 use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
 use Laminas\ApiTools\Hal\Metadata\MetadataMap;
 use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
+use Laminas\EventManager\Event;
 use Laminas\Hydrator;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\Mvc\MvcEvent;
@@ -38,6 +39,7 @@ use Laminas\View\Helper\ServerUrl as ServerUrlHelper;
 use Laminas\View\Helper\Url as UrlHelper;
 use LaminasTest\ApiTools\Hal\TestAsset as HalTestAsset;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 use ReflectionObject;
 
 /**
@@ -45,6 +47,8 @@ use ReflectionObject;
  */
 class HalTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var MvcEvent
      */
@@ -70,10 +74,10 @@ class HalTest extends TestCase
      */
     protected $urlHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $routerClass  = class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
-        $routeClass   = class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
+        $routerClass  = \class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
+        $routeClass   = \class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
 
         $this->router = $router = new $routerClass();
         $route = new $routeClass('/resource[/[:id]]');
@@ -153,60 +157,54 @@ class HalTest extends TestCase
         $plugin->setLinkCollectionExtractor($linkCollectionExtractor);
     }
 
-    /**
-     * @return string
-     */
-    public function getArraySerializableHydratorClass()
+    public function getArraySerializableHydratorClass(): string
     {
-        return class_exists(Hydrator\ArraySerializableHydrator::class)
+        return \class_exists(Hydrator\ArraySerializableHydrator::class)
             ? Hydrator\ArraySerializableHydrator::class
             : Hydrator\ArraySerializable::class;
     }
 
-    /**
-     * @return string
-     */
-    public function getObjectPropertyHydratorClass()
+    public function getObjectPropertyHydratorClass(): string
     {
-        return class_exists(Hydrator\ObjectPropertyHydrator::class)
+        return \class_exists(Hydrator\ObjectPropertyHydrator::class)
             ? Hydrator\ObjectPropertyHydrator::class
             : Hydrator\ObjectProperty::class;
     }
 
-    public function assertRelationalLinkContains($match, $relation, $entity)
+    public function assertRelationalLinkContains($match, $relation, $entity): void
     {
-        $this->assertInternalType('array', $entity);
-        $this->assertArrayHasKey('_links', $entity);
+        self::assertIsArray($entity);
+        self::assertArrayHasKey('_links', $entity);
         $links = $entity['_links'];
-        $this->assertInternalType('array', $links);
-        $this->assertArrayHasKey($relation, $links);
+        self::assertIsArray($links);
+        self::assertArrayHasKey($relation, $links);
         $link = $links[$relation];
-        $this->assertInternalType('array', $link);
-        $this->assertArrayHasKey('href', $link);
+        self::assertIsArray($link);
+        self::assertArrayHasKey('href', $link);
         $href = $link['href'];
-        $this->assertInternalType('string', $href);
-        $this->assertContains($match, $href);
+        self::assertIsString($href);
+        self::assertStringContainsString($match, $href);
     }
 
-    public function testCreateLinkSkipServerUrlHelperIfSchemeExists()
+    public function testCreateLinkSkipServerUrlHelperIfSchemeExists(): void
     {
         $url = $this->plugin->createLink('hostname/resource');
-        $this->assertEquals('http://localhost.localdomain/resource', $url);
+        self::assertEquals('http://localhost.localdomain/resource', $url);
     }
 
-    public function testLinkCreationWithoutIdCreatesFullyQualifiedLink()
+    public function testLinkCreationWithoutIdCreatesFullyQualifiedLink(): void
     {
         $url = $this->plugin->createLink('resource');
-        $this->assertEquals('http://localhost.localdomain/resource', $url);
+        self::assertEquals('http://localhost.localdomain/resource', $url);
     }
 
-    public function testLinkCreationWithIdCreatesFullyQualifiedLink()
+    public function testLinkCreationWithIdCreatesFullyQualifiedLink(): void
     {
         $url = $this->plugin->createLink('resource', 123);
-        $this->assertEquals('http://localhost.localdomain/resource/123', $url);
+        self::assertEquals('http://localhost.localdomain/resource/123', $url);
     }
 
-    public function testLinkCreationFromEntity()
+    public function testLinkCreationFromEntity(): void
     {
         $self = new Link('self');
         $self->setRoute('resource', ['id' => 123]);
@@ -216,22 +214,22 @@ class HalTest extends TestCase
         $entity->getLinks()->add($self)->add($docs);
         $links = $this->plugin->fromResource($entity);
 
-        $this->assertInternalType('array', $links);
-        $this->assertArrayHasKey('self', $links, var_export($links, 1));
-        $this->assertArrayHasKey('describedby', $links, var_export($links, 1));
+        self::assertIsArray($links);
+        self::assertArrayHasKey('self', $links, var_export($links, 1));
+        self::assertArrayHasKey('describedby', $links, var_export($links, 1));
 
         $selfLink = $links['self'];
-        $this->assertInternalType('array', $selfLink);
-        $this->assertArrayHasKey('href', $selfLink);
-        $this->assertEquals('http://localhost.localdomain/resource/123', $selfLink['href']);
+        self::assertIsArray($selfLink);
+        self::assertArrayHasKey('href', $selfLink);
+        self::assertEquals('http://localhost.localdomain/resource/123', $selfLink['href']);
 
         $docsLink = $links['describedby'];
-        $this->assertInternalType('array', $docsLink);
-        $this->assertArrayHasKey('href', $docsLink);
-        $this->assertEquals('http://localhost.localdomain/help', $docsLink['href']);
+        self::assertIsArray($docsLink);
+        self::assertArrayHasKey('href', $docsLink);
+        self::assertEquals('http://localhost.localdomain/help', $docsLink['href']);
     }
 
-    public function testRendersEmbeddedCollectionsInsideEntities()
+    public function testRendersEmbeddedCollectionsInsideEntities(): void
     {
         $collection = new Collection(
             [
@@ -255,19 +253,19 @@ class HalTest extends TestCase
         $rendered = $this->plugin->renderEntity($entity);
         $this->assertRelationalLinkContains('/users/', 'self', $rendered);
 
-        $this->assertArrayHasKey('_embedded', $rendered);
+        self::assertArrayHasKey('_embedded', $rendered);
         $embed = $rendered['_embedded'];
-        $this->assertArrayHasKey('contacts', $embed);
+        self::assertArrayHasKey('contacts', $embed);
         $contacts = $embed['contacts'];
-        $this->assertInternalType('array', $contacts);
-        $this->assertEquals(3, count($contacts));
+        self::assertIsArray($contacts);
+        self::assertCount(3, $contacts);
         foreach ($contacts as $contact) {
-            $this->assertInternalType('array', $contact);
+            self::assertIsArray($contact);
             $this->assertRelationalLinkContains('/contacts/', 'self', $contact);
         }
     }
 
-    public function testRendersEmbeddedEntitiesInsideEntitiesBasedOnMetadataMap()
+    public function testRendersEmbeddedEntitiesInsideEntitiesBasedOnMetadataMap(): void
     {
         $object = new TestAsset\Entity('foo', 'Foo');
         $object->first_child  = new TestAsset\EmbeddedEntity('bar', 'Bar');
@@ -305,22 +303,22 @@ class HalTest extends TestCase
         $rendered = $this->plugin->renderEntity($entity);
         $this->assertRelationalLinkContains('/resource/foo', 'self', $rendered);
 
-        $this->assertArrayHasKey('_embedded', $rendered);
+        self::assertArrayHasKey('_embedded', $rendered);
         $embed = $rendered['_embedded'];
-        $this->assertEquals(2, count($embed));
-        $this->assertArrayHasKey('first_child', $embed);
-        $this->assertArrayHasKey('second_child', $embed);
+        self::assertCount(2, $embed);
+        self::assertArrayHasKey('first_child', $embed);
+        self::assertArrayHasKey('second_child', $embed);
 
         $first = $embed['first_child'];
-        $this->assertInternalType('array', $first);
+        self::assertIsArray($first);
         $this->assertRelationalLinkContains('/embedded/bar', 'self', $first);
 
         $second = $embed['second_child'];
-        $this->assertInternalType('array', $second);
+        self::assertIsArray($second);
         $this->assertRelationalLinkContains('/embedded_custom/baz', 'self', $second);
     }
 
-    public function testMetadataMapLooksForParentClasses()
+    public function testMetadataMapLooksForParentClasses(): void
     {
         $object = new TestAsset\Entity('foo', 'Foo');
         $object->first_child  = new TestAsset\EmbeddedProxyEntity('bar', 'Bar');
@@ -358,34 +356,33 @@ class HalTest extends TestCase
         $rendered = $this->plugin->renderEntity($entity);
         $this->assertRelationalLinkContains('/resource/foo', 'self', $rendered);
 
-        $this->assertArrayHasKey('_embedded', $rendered);
+        self::assertArrayHasKey('_embedded', $rendered);
         $embed = $rendered['_embedded'];
-        $this->assertEquals(2, count($embed));
-        $this->assertArrayHasKey('first_child', $embed);
-        $this->assertArrayHasKey('second_child', $embed);
+        self::assertCount(2, $embed);
+        self::assertArrayHasKey('first_child', $embed);
+        self::assertArrayHasKey('second_child', $embed);
 
         $first = $embed['first_child'];
-        $this->assertInternalType('array', $first);
+        self::assertIsArray($first);
         $this->assertRelationalLinkContains('/embedded/bar', 'self', $first);
 
         $second = $embed['second_child'];
-        $this->assertInternalType('array', $second);
+        self::assertIsArray($second);
         $this->assertRelationalLinkContains('/embedded_custom/baz', 'self', $second);
     }
 
-    public function testRendersJsonSerializableObjectUsingJsonserializeMethod()
+    public function testRendersJsonSerializableObjectUsingJsonSerializeMethod(): void
     {
         $object   = new TestAsset\JsonSerializableEntity('foo', 'Foo');
         $entity   = new Entity($object, 'foo');
-
         $rendered = $this->plugin->renderEntity($entity);
 
-        $this->assertArrayHasKey('id', $rendered);
-        $this->assertArrayNotHasKey('name', $rendered);
-        $this->assertArrayHasKey('_links', $rendered);
+        self::assertArrayHasKey('id', $rendered);
+        self::assertArrayNotHasKey('name', $rendered);
+        self::assertArrayHasKey('_links', $rendered);
     }
 
-    public function testRendersEmbeddedCollectionsInsideEntitiesBasedOnMetadataMap()
+    public function testRendersEmbeddedCollectionsInsideEntitiesBasedOnMetadataMap(): void
     {
         $collection = new TestAsset\Collection([
             (object) ['id' => 'foo', 'name' => 'foo'],
@@ -423,20 +420,20 @@ class HalTest extends TestCase
 
         $this->assertRelationalLinkContains('/users/', 'self', $rendered);
 
-        $this->assertArrayHasKey('_embedded', $rendered);
+        self::assertArrayHasKey('_embedded', $rendered);
         $embed = $rendered['_embedded'];
-        $this->assertArrayHasKey('contacts', $embed);
+        self::assertArrayHasKey('contacts', $embed);
         $contacts = $embed['contacts'];
-        $this->assertInternalType('array', $contacts);
-        $this->assertEquals(3, count($contacts));
+        self::assertIsArray($contacts);
+        self::assertCount(3, $contacts);
         foreach ($contacts as $contact) {
-            $this->assertInternalType('array', $contact);
-            $this->assertArrayHasKey('id', $contact);
+            self::assertIsArray($contact);
+            self::assertArrayHasKey('id', $contact);
             $this->assertRelationalLinkContains('/embedded/' . $contact['id'], 'self', $contact);
         }
     }
 
-    public function testRendersEmbeddedCollectionsInsideCollectionsBasedOnMetadataMap()
+    public function testRendersEmbeddedCollectionsInsideCollectionsBasedOnMetadataMap(): void
     {
         $childCollection = new TestAsset\Collection([
             (object) ['id' => 'foo', 'name' => 'foo'],
@@ -476,29 +473,29 @@ class HalTest extends TestCase
 
         $this->assertRelationalLinkContains('/resource', 'self', $rendered);
 
-        $this->assertArrayHasKey('_embedded', $rendered);
+        self::assertArrayHasKey('_embedded', $rendered);
         $embed = $rendered['_embedded'];
-        $this->assertArrayHasKey('resources', $embed);
+        self::assertArrayHasKey('resources', $embed);
         $resources = $embed['resources'];
-        $this->assertInternalType('array', $resources);
-        $this->assertEquals(1, count($resources));
+        self::assertIsArray($resources);
+        self::assertCount(1, $resources);
 
         $resource = array_shift($resources);
-        $this->assertInternalType('array', $resource);
-        $this->assertArrayHasKey('_embedded', $resource);
-        $this->assertInternalType('array', $resource['_embedded']);
-        $this->assertArrayHasKey('first_child', $resource['_embedded']);
-        $this->assertInternalType('array', $resource['_embedded']['first_child']);
+        self::assertIsArray($resource);
+        self::assertArrayHasKey('_embedded', $resource);
+        self::assertIsArray($resource['_embedded']);
+        self::assertArrayHasKey('first_child', $resource['_embedded']);
+        self::assertIsArray($resource['_embedded']['first_child']);
 
         foreach ($resource['_embedded']['first_child'] as $contact) {
-            $this->assertInternalType('array', $contact);
-            $this->assertArrayHasKey('id', $contact);
+            self::assertIsArray($contact);
+            self::assertArrayHasKey('id', $contact);
             $this->assertRelationalLinkContains('/embedded/' . $contact['id'], 'self', $contact);
         }
     }
 
     // @codingStandardsIgnoreStart
-    public function testDoesNotRenderEmbeddedEntitiesInsideCollectionsBasedOnMetadataMapAndRenderEmbeddedEntitiesAsFalse()
+    public function testDoesNotRenderEmbeddedEntitiesInsideCollectionsBasedOnMetadataMapAndRenderEmbeddedEntitiesAsFalse(): void
     {
         $entity = new TestAsset\Entity('spock', 'Spock');
         $entity->first_child  = new TestAsset\EmbeddedEntity('bar', 'Bar');
@@ -541,26 +538,26 @@ class HalTest extends TestCase
 
         $this->assertRelationalLinkContains('/resource', 'self', $rendered);
 
-        $this->assertArrayHasKey('_embedded', $rendered);
+        self::assertArrayHasKey('_embedded', $rendered);
         $embed = $rendered['_embedded'];
-        $this->assertArrayHasKey('resources', $embed);
+        self::assertArrayHasKey('resources', $embed);
         $resources = $embed['resources'];
-        $this->assertInternalType('array', $resources);
-        $this->assertEquals(1, count($resources));
+        self::assertIsArray($resources);
+        self::assertCount(1, $resources);
 
         $resource = array_shift($resources);
-        $this->assertInternalType('array', $resource);
-        $this->assertArrayHasKey('_embedded', $resource);
-        $this->assertInternalType('array', $resource['_embedded']);
+        self::assertIsArray($resource);
+        self::assertArrayHasKey('_embedded', $resource);
+        self::assertIsArray($resource['_embedded']);
 
         foreach ($resource['_embedded']['first_child'] as $contact) {
-            $this->assertInternalType('array', $contact);
-            $this->assertArrayNotHasKey('id', $contact);
+            self::assertIsArray($contact);
+            self::assertArrayNotHasKey('id', $contact);
         }
     }
     // @codingStandardsIgnoreEnd
 
-    public function testWillNotAllowInjectingASelfRelationMultipleTimes()
+    public function testWillNotAllowInjectingASelfRelationMultipleTimes(): void
     {
         $entity = new Entity([
             'id'  => 1,
@@ -568,21 +565,21 @@ class HalTest extends TestCase
         ], 1);
         $links = $entity->getLinks();
 
-        $this->assertFalse($links->has('self'));
+        self::assertFalse($links->has('self'));
 
         $this->plugin->injectSelfLink($entity, 'hostname/resource');
 
-        $this->assertTrue($links->has('self'));
+        self::assertTrue($links->has('self'));
         $link = $links->get('self');
-        $this->assertInstanceOf(Link::class, $link);
+        self::assertInstanceOf(Link::class, $link);
 
         $this->plugin->injectSelfLink($entity, 'hostname/resource');
-        $this->assertTrue($links->has('self'));
+        self::assertTrue($links->has('self'));
         $link = $links->get('self');
-        $this->assertInstanceOf(Link::class, $link);
+        self::assertInstanceOf(Link::class, $link);
     }
 
-    public function testEntityPropertiesCanBeLinks()
+    public function testEntityPropertiesCanBeLinks(): void
     {
         $embeddedLink = new Link('embeddedLink');
         $embeddedLink->setRoute('hostname/contacts', ['id' => 'bar']);
@@ -596,14 +593,14 @@ class HalTest extends TestCase
 
         $rendered = $this->plugin->renderEntity($entity);
 
-        $this->assertArrayHasKey('_links', $rendered);
-        $this->assertArrayHasKey('embeddedLink', $rendered['_links']);
-        $this->assertArrayNotHasKey('embeddedLink', $rendered);
-        $this->assertArrayHasKey('href', $rendered['_links']['embeddedLink']);
-        $this->assertEquals('http://localhost.localdomain/contacts/bar', $rendered['_links']['embeddedLink']['href']);
+        self::assertArrayHasKey('_links', $rendered);
+        self::assertArrayHasKey('embeddedLink', $rendered['_links']);
+        self::assertArrayNotHasKey('embeddedLink', $rendered);
+        self::assertArrayHasKey('href', $rendered['_links']['embeddedLink']);
+        self::assertEquals('http://localhost.localdomain/contacts/bar', $rendered['_links']['embeddedLink']['href']);
     }
 
-    public function testEntityPropertyLinksUseHref()
+    public function testEntityPropertyLinksUseHref(): void
     {
         $link1 = new Link('link1');
         $link1->setUrl('link1');
@@ -621,17 +618,17 @@ class HalTest extends TestCase
 
         $rendered = $this->plugin->renderEntity($entity);
 
-        $this->assertArrayHasKey('_links', $rendered);
-        $this->assertArrayHasKey('link1', $rendered['_links']);
-        $this->assertArrayNotHasKey('bar', $rendered['_links']);
-        $this->assertArrayNotHasKey('link1', $rendered);
+        self::assertArrayHasKey('_links', $rendered);
+        self::assertArrayHasKey('link1', $rendered['_links']);
+        self::assertArrayNotHasKey('bar', $rendered['_links']);
+        self::assertArrayNotHasKey('link1', $rendered);
 
-        $this->assertArrayHasKey('link2', $rendered['_links']);
-        $this->assertArrayNotHasKey('baz', $rendered['_links']);
-        $this->assertArrayNotHasKey('link2', $rendered);
+        self::assertArrayHasKey('link2', $rendered['_links']);
+        self::assertArrayNotHasKey('baz', $rendered['_links']);
+        self::assertArrayNotHasKey('link2', $rendered);
     }
 
-    public function testResourcePropertiesCanBeLinkCollections()
+    public function testResourcePropertiesCanBeLinkCollections(): void
     {
         $link = new Link('embeddedLink');
         $link->setRoute('hostname/contacts', ['id' => 'bar']);
@@ -658,20 +655,20 @@ class HalTest extends TestCase
 
         $rendered = $this->plugin->renderEntity($entity);
 
-        $this->assertArrayHasKey('_links', $rendered);
-        $this->assertArrayHasKey('embeddedLink', $rendered['_links']);
-        $this->assertArrayNotHasKey('embeddedLink', $rendered);
-        $this->assertArrayHasKey('href', $rendered['_links']['embeddedLink']);
-        $this->assertEquals('http://localhost.localdomain/contacts/bar', $rendered['_links']['embeddedLink']['href']);
+        self::assertArrayHasKey('_links', $rendered);
+        self::assertArrayHasKey('embeddedLink', $rendered['_links']);
+        self::assertArrayNotHasKey('embeddedLink', $rendered);
+        self::assertArrayHasKey('href', $rendered['_links']['embeddedLink']);
+        self::assertEquals('http://localhost.localdomain/contacts/bar', $rendered['_links']['embeddedLink']['href']);
 
-        $this->assertArrayHasKey('arrayLink', $rendered['_links']);
-        $this->assertCount(2, $rendered['_links']['arrayLink']);
+        self::assertArrayHasKey('arrayLink', $rendered['_links']);
+        self::assertCount(2, $rendered['_links']['arrayLink']);
     }
 
     /**
      * @group 71
      */
-    public function testRenderingEmbeddedEntityEmbedsEntity()
+    public function testRenderingEmbeddedEntityEmbedsEntity(): void
     {
         $embedded = new Entity((object) ['id' => 'foo', 'name' => 'foo'], 'foo');
         $self = new Link('self');
@@ -687,7 +684,7 @@ class HalTest extends TestCase
 
         $this->assertRelationalLinkContains('/users/user', 'self', $rendered);
         $this->assertArrayHasKey('_embedded', $rendered);
-        $this->assertInternalType('array', $rendered['_embedded']);
+        $this->assertIsArray($rendered['_embedded']);
         $this->assertArrayHasKey('contact', $rendered['_embedded']);
         $contact = $rendered['_embedded']['contact'];
         $this->assertRelationalLinkContains('/contacts/foo', 'self', $contact);
@@ -696,7 +693,7 @@ class HalTest extends TestCase
     /**
      * @group 71
      */
-    public function testRenderingCollectionRendersAllLinksInEmbeddedEntities()
+    public function testRenderingCollectionRendersAllLinksInEmbeddedEntities(): void
     {
         $embedded = new Entity((object) ['id' => 'foo', 'name' => 'foo'], 'foo');
         $links = $embedded->getLinks();
@@ -716,19 +713,19 @@ class HalTest extends TestCase
         $rendered = $this->plugin->renderCollection($collection);
 
         $this->assertRelationalLinkContains('/users', 'self', $rendered);
-        $this->assertArrayHasKey('_embedded', $rendered);
-        $this->assertInternalType('array', $rendered['_embedded']);
-        $this->assertArrayHasKey('users', $rendered['_embedded']);
+        self::assertArrayHasKey('_embedded', $rendered);
+        self::assertIsArray($rendered['_embedded']);
+        self::assertArrayHasKey('users', $rendered['_embedded']);
 
         $users = $rendered['_embedded']['users'];
-        $this->assertInternalType('array', $users);
+        self::assertIsArray($users);
         $user = array_shift($users);
 
         $this->assertRelationalLinkContains('/users/foo', 'self', $user);
         $this->assertRelationalLinkContains('/users/foo/phones', 'phones', $user);
     }
 
-    public function testEntitiesFromCollectionCanUseHydratorSetInMetadataMap()
+    public function testEntitiesFromCollectionCanUseHydratorSetInMetadataMap(): void
     {
         $object   = new TestAsset\EntityWithProtectedProperties('foo', 'Foo');
         $entity   = new Entity($object, 'foo');
@@ -750,23 +747,23 @@ class HalTest extends TestCase
 
         $test = $this->plugin->renderCollection($collection);
 
-        $this->assertInternalType('array', $test);
-        $this->assertArrayHasKey('_embedded', $test);
-        $this->assertInternalType('array', $test['_embedded']);
-        $this->assertArrayHasKey('resource', $test['_embedded']);
-        $this->assertInternalType('array', $test['_embedded']['resource']);
+        self::assertIsArray($test);
+        self::assertArrayHasKey('_embedded', $test);
+        self::assertIsArray($test['_embedded']);
+        self::assertArrayHasKey('resource', $test['_embedded']);
+        self::assertIsArray($test['_embedded']['resource']);
 
         $resources = $test['_embedded']['resource'];
         $testResource = array_shift($resources);
-        $this->assertInternalType('array', $testResource);
-        $this->assertArrayHasKey('id', $testResource);
-        $this->assertArrayHasKey('name', $testResource);
+        self::assertIsArray($testResource);
+        self::assertArrayHasKey('id', $testResource);
+        self::assertArrayHasKey('name', $testResource);
     }
 
     /**
      * @group 47
      */
-    public function testRetainsLinksInjectedViaMetadataDuringCreateEntity()
+    public function testRetainsLinksInjectedViaMetadataDuringCreateEntity(): void
     {
         $object = new TestAsset\Entity('foo', 'Foo');
 
@@ -793,24 +790,24 @@ class HalTest extends TestCase
 
         $this->plugin->setMetadataMap($metadata);
         $entity = $this->plugin->createEntity($object, 'hostname/resource', 'id');
-        $this->assertInstanceOf(Entity::class, $entity);
+        self::assertInstanceOf(Entity::class, $entity);
         $links = $entity->getLinks();
-        $this->assertTrue($links->has('describedby'), 'Missing describedby link');
-        $this->assertTrue($links->has('children'), 'Missing children link');
+        self::assertTrue($links->has('describedby'), 'Missing describedby link');
+        self::assertTrue($links->has('children'), 'Missing children link');
 
         $describedby = $links->get('describedby');
-        $this->assertTrue($describedby->hasUrl());
-        $this->assertEquals('http://example.com/api/help/resource', $describedby->getUrl());
+        self::assertTrue($describedby->hasUrl());
+        self::assertEquals('http://example.com/api/help/resource', $describedby->getUrl());
 
         $children = $links->get('children');
-        $this->assertTrue($children->hasRoute());
-        $this->assertEquals('resource/children', $children->getRoute());
+        self::assertTrue($children->hasRoute());
+        self::assertEquals('resource/children', $children->getRoute());
     }
 
     /**
      * @group 79
      */
-    public function testRenderEntityTriggersEvents()
+    public function testRenderEntityTriggersEvents(): void
     {
         $entity = new Entity(
             (object) [
@@ -829,13 +826,13 @@ class HalTest extends TestCase
         });
 
         $rendered = $this->plugin->renderEntity($entity);
-        $this->assertContains('/users/matthew', $rendered['_links']['self']['href']);
+        self::assertStringContainsString('/users/matthew', $rendered['_links']['self']['href']);
     }
 
     /**
      * @group 79
      */
-    public function testRenderCollectionTriggersEvents()
+    public function testRenderCollectionTriggersEvents(): void
     {
         $collection = new Collection(
             [
@@ -856,8 +853,8 @@ class HalTest extends TestCase
         });
 
         $rendered = $this->plugin->renderCollection($collection);
-        $this->assertArrayHasKey('injected', $rendered);
-        $this->assertTrue($rendered['injected']);
+        self::assertArrayHasKey('injected', $rendered);
+        self::assertTrue($rendered['injected']);
 
         $this->plugin->getEventManager()->attach('renderCollection.post', function ($e) {
             $collection = $e->getParam('collection');
@@ -870,14 +867,14 @@ class HalTest extends TestCase
         });
 
         $rendered = $this->plugin->renderCollection($collection);
-        $this->assertArrayHasKey('_post', $rendered);
-        $this->assertTrue($rendered['_post']);
+        self::assertArrayHasKey('_post', $rendered);
+        self::assertTrue($rendered['_post']);
     }
 
-    public function testFromLinkShouldUseLinkExtractor()
+    public function testFromLinkShouldUseLinkExtractor(): void
     {
-        $link = new Link('foo');
-        $extraction = true;
+        $link       = new Link('foo');
+        $extraction = [true];
 
         $linkExtractor = $this->prophesize(LinkExtractor::class);
         $linkExtractor->extract($link)->willReturn($extraction);
@@ -889,13 +886,13 @@ class HalTest extends TestCase
 
         $result = $this->plugin->fromLink($link);
 
-        $this->assertEquals($extraction, $result);
+        self::assertEquals($extraction, $result);
     }
 
-    public function testFromLinkShouldTriggerPreEvent()
+    public function testFromLinkShouldTriggerPreEvent(): void
     {
-        $link = new Link('foo');
-        $extraction = true;
+        $link       = new Link('foo');
+        $extraction = [true];
 
         $linkExtractor = $this->prophesize(LinkExtractor::class);
         $linkExtractor->extract($link)->willReturn($extraction);
@@ -909,7 +906,7 @@ class HalTest extends TestCase
 
         $this->plugin->getEventManager()->attach(
             'fromLink.pre',
-            function (\Laminas\EventManager\Event $e) use (&$preEventTriggered, $link) {
+            function (Event $e) use (&$preEventTriggered, $link) {
                 $preEventTriggered = true;
                 $this->assertSame($link, $e->getParam('linkDefinition'));
             }
@@ -917,14 +914,14 @@ class HalTest extends TestCase
 
         $result = $this->plugin->fromLink($link);
 
-        $this->assertEquals($extraction, $result);
-        $this->assertTrue($preEventTriggered);
+        self::assertEquals($extraction, $result);
+        self::assertTrue($preEventTriggered);
     }
 
-    public function testFromLinkCollectionShouldUseLinkCollectionExtractor()
+    public function testFromLinkCollectionShouldUseLinkCollectionExtractor(): void
     {
         $linkCollection = new LinkCollection();
-        $extraction = true;
+        $extraction     = [true];
 
         $linkCollectionExtractor = $this->prophesize(LinkCollectionExtractor::class);
         $linkCollectionExtractor->extract($linkCollection)->willReturn($extraction);
@@ -933,10 +930,10 @@ class HalTest extends TestCase
 
         $result = $this->plugin->fromLinkCollection($linkCollection);
 
-        $this->assertEquals($extraction, $result);
+        self::assertEquals($extraction, $result);
     }
 
-    public function testCreateCollectionShouldUseCollectionRouteMetadataWhenInjectingSelfLink()
+    public function testCreateCollectionShouldUseCollectionRouteMetadataWhenInjectingSelfLink(): void
     {
         $collection = new Collection(['foo' => 'bar']);
         $collection->setCollectionRoute('hostname/resource');
@@ -948,14 +945,14 @@ class HalTest extends TestCase
         $result = $this->plugin->createCollection($collection);
         $links  = $result->getLinks();
         $self   = $links->get('self');
-        $this->assertEquals([
+        self::assertEquals([
             'query' => [
                 'version' => 2,
             ],
         ], $self->getRouteOptions());
     }
 
-    public function testRenderingCollectionUsesCollectionNameFromMetadataMap()
+    public function testRenderingCollectionUsesCollectionNameFromMetadataMap(): void
     {
         $object1 = new TestAsset\Entity('foo', 'Foo');
         $object2 = new TestAsset\Entity('bar', 'Bar');
@@ -990,9 +987,9 @@ class HalTest extends TestCase
         $rendered = $this->plugin->renderCollection($halCollection);
 
         $this->assertRelationalLinkContains('/contacts', 'self', $rendered);
-        $this->assertArrayHasKey('_embedded', $rendered);
-        $this->assertInternalType('array', $rendered['_embedded']);
-        $this->assertArrayHasKey('collection', $rendered['_embedded']);
+        self::assertArrayHasKey('_embedded', $rendered);
+        self::assertIsArray($rendered['_embedded']);
+        self::assertArrayHasKey('collection', $rendered['_embedded']);
 
         $renderedCollection = $rendered['_embedded']['collection'];
 
@@ -1007,7 +1004,7 @@ class HalTest extends TestCase
     public function testRenderingPaginatorCollectionRendersPaginationAttributes()
     {
         $set = [];
-        for ($id = 1; $id <= 100; $id += 1) {
+        for ($id = 1; $id <= 100; ++$id) {
             $entity = new Entity((object) ['id' => $id, 'name' => 'foo'], 'foo');
             $links = $entity->getLinks();
             $self = new Link('self');
@@ -1032,11 +1029,11 @@ class HalTest extends TestCase
             'total_items',
             'page',
         ];
-        $this->assertEquals($expected, array_keys($rendered));
-        $this->assertEquals(100, $rendered['total_items']);
-        $this->assertEquals(3, $rendered['page']);
-        $this->assertEquals(10, $rendered['page_count']);
-        $this->assertEquals(10, $rendered['page_size']);
+        self::assertEquals($expected, array_keys($rendered));
+        self::assertEquals(100, $rendered['total_items']);
+        self::assertEquals(3, $rendered['page']);
+        self::assertEquals(10, $rendered['page_count']);
+        self::assertEquals(10, $rendered['page_size']);
         return $rendered;
     }
 
@@ -1044,19 +1041,19 @@ class HalTest extends TestCase
      * @group 50
      * @depends testRenderingPaginatorCollectionRendersPaginationAttributes
      */
-    public function testRenderingPaginatorCollectionRendersFirstLinkWithoutPageInQueryString($rendered)
+    public function testRenderingPaginatorCollectionRendersFirstLinkWithoutPageInQueryString($rendered): void
     {
         $links = $rendered['_links'];
-        $this->assertArrayHasKey('first', $links);
+        self::assertArrayHasKey('first', $links);
         $first = $links['first'];
-        $this->assertArrayHasKey('href', $first);
-        $this->assertNotContains('page=1', $first['href']);
+        self::assertArrayHasKey('href', $first);
+        self::assertStringNotContainsString('page=1', $first['href']);
     }
 
     /**
      * @group 14
      */
-    public function testRenderingNonPaginatorCollectionRendersCountOfTotalItems()
+    public function testRenderingNonPaginatorCollectionRendersCountOfTotalItems(): void
     {
         $embedded = new Entity((object) ['id' => 'foo', 'name' => 'foo'], 'foo');
         $links = $embedded->getLinks();
@@ -1073,13 +1070,13 @@ class HalTest extends TestCase
         $rendered = $this->plugin->renderCollection($collection);
 
         $expectedKeys = ['_links', '_embedded', 'total_items'];
-        $this->assertEquals($expectedKeys, array_keys($rendered));
+        self::assertEquals($expectedKeys, array_keys($rendered));
     }
 
     /**
      * @group 33
      */
-    public function testCreateEntityShouldNotSerializeEntity()
+    public function testCreateEntityShouldNotSerializeEntity(): void
     {
         $metadata = new MetadataMap([
             TestAsset\Entity::class => [
@@ -1096,26 +1093,26 @@ class HalTest extends TestCase
         $foo = new TestAsset\Entity('foo', 'Foo Bar');
 
         $entity = $this->plugin->createEntity($foo, 'api.foo', 'foo_id');
-        $this->assertInstanceOf(Entity::class, $entity);
-        $this->assertSame($foo, $entity->getEntity());
+        self::assertInstanceOf(Entity::class, $entity);
+        self::assertSame($foo, $entity->getEntity());
     }
 
     /**
      * @group 39
      */
-    public function testCreateEntityPassesNullValueForIdentifierIfNotDiscovered()
+    public function testCreateEntityPassesNullValueForIdentifierIfNotDiscovered(): void
     {
         $entity = ['foo' => 'bar'];
         $hal    = $this->plugin->createEntity($entity, 'api.foo', 'foo_id');
-        $this->assertInstanceOf(Entity::class, $hal);
-        $this->assertEquals($entity, $hal->getEntity());
-        $this->assertNull($hal->getId());
+        self::assertInstanceOf(Entity::class, $hal);
+        self::assertEquals($entity, $hal->getEntity());
+        self::assertNull($hal->getId());
 
         $links = $hal->getLinks();
-        $this->assertTrue($links->has('self'));
+        self::assertTrue($links->has('self'));
         $link = $links->get('self');
         $params = $link->getRouteParams();
-        $this->assertEquals([], $params);
+        self::assertEquals([], $params);
     }
 
     /**
@@ -1126,7 +1123,7 @@ class HalTest extends TestCase
      * @param array       $expectedResult
      * @param array       $exception
      */
-    public function testRenderEntityMaxDepth($entity, $metadataMap, $expectedResult, $exception = null)
+    public function testRenderEntityMaxDepth($entity, $metadataMap, $expectedResult, $exception = null): void
     {
         $this->plugin->setMetadataMap($metadataMap);
 
@@ -1139,10 +1136,10 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderEntity($entity);
 
-        $this->assertEquals($expectedResult, $result);
+        self::assertEquals($expectedResult, $result);
     }
 
-    public function renderEntityMaxDepthProvider()
+    public function renderEntityMaxDepthProvider(): array
     {
         return [
             /**
@@ -1243,38 +1240,7 @@ class HalTest extends TestCase
         ];
     }
 
-    protected function createNestedEntity()
-    {
-        $object = new TestAsset\Entity('foo', 'Foo');
-        $object->first_child  = new TestAsset\EmbeddedEntityWithBackReference('bar', $object);
-        $entity = new Entity($object, 'foo');
-        $self = new Link('self');
-        $self->setRoute('hostname/resource', ['id' => 'foo']);
-        $entity->getLinks()->add($self);
-
-        return $entity;
-    }
-
-    protected function createNestedMetadataMap($maxDepth = null)
-    {
-        return new MetadataMap([
-            TestAsset\Entity::class => [
-                'hydrator'   => $this->getObjectPropertyHydratorClass(),
-                'route_name' => 'hostname/resource',
-                'route_identifier_name' => 'id',
-                'entity_identifier_name' => 'id',
-                'max_depth' => $maxDepth,
-            ],
-            TestAsset\EmbeddedEntityWithBackReference::class => [
-                'hydrator' => $this->getObjectPropertyHydratorClass(),
-                'route'    => 'hostname/embedded',
-                'route_identifier_name' => 'id',
-                'entity_identifier_name' => 'id',
-            ],
-        ]);
-    }
-
-    public function testSubsequentRenderEntityCalls()
+    public function testSubsequentRenderEntityCalls(): void
     {
         $entity = $this->createNestedEntity();
         $metadataMap1 = $this->createNestedMetadataMap(0);
@@ -1289,7 +1255,7 @@ class HalTest extends TestCase
         $this->plugin->setMetadataMap($metadataMap2);
         $result2 = $this->plugin->renderEntity($entity);
 
-        $this->assertNotEquals($result1, $result2);
+        self::assertNotEquals($result1, $result2);
     }
 
     /**
@@ -1300,8 +1266,12 @@ class HalTest extends TestCase
      * @param array|null  $expectedResult
      * @param array|null  $exception
      */
-    public function testRenderCollectionWithMaxDepth($collection, $metadataMap, $expectedResult, $exception = null)
-    {
+    public function testRenderCollectionWithMaxDepth(
+        $collection,
+        $metadataMap,
+        $expectedResult,
+        $exception = null
+    ): void {
         $metadataMap->setHydratorManager(new Hydrator\HydratorPluginManager(new ServiceManager()));
         $this->plugin->setMetadataMap($metadataMap);
 
@@ -1317,10 +1287,10 @@ class HalTest extends TestCase
         $halCollection = $this->plugin->createCollection($collection);
         $result = $this->plugin->renderCollection($halCollection);
 
-        $this->assertEquals($expectedResult, $result);
+        self::assertEquals($expectedResult, $result);
     }
 
-    public function renderCollectionWithMaxDepthProvider()
+    public function renderCollectionWithMaxDepthProvider(): array
     {
         return [
             [
@@ -1514,35 +1484,10 @@ class HalTest extends TestCase
         ];
     }
 
-    protected function createNestedCollectionMetadataMap($maxDepth = null)
-    {
-        return new MetadataMap([
-            TestAsset\Collection::class => [
-                'is_collection'       => true,
-                'collection_name'     => 'collection',
-                'route_name'          => 'hostname/contacts',
-                'entity_route_name'   => 'hostname/embedded',
-                'max_depth'           => $maxDepth,
-            ],
-            TestAsset\Entity::class => [
-                'hydrator'   => $this->getObjectPropertyHydratorClass(),
-                'route_name' => 'hostname/resource',
-                'route_identifier_name' => 'id',
-                'entity_identifier_name' => 'id',
-            ],
-            TestAsset\EmbeddedEntityWithBackReference::class => [
-                'hydrator' => $this->getObjectPropertyHydratorClass(),
-                'route'    => 'hostname/embedded',
-                'route_identifier_name' => 'id',
-                'entity_identifier_name' => 'id',
-            ],
-        ]);
-    }
-
     /**
      * @group 102
      */
-    public function testRenderingEntityTwiceMustNotDuplicateLinkProperties()
+    public function testRenderingEntityTwiceMustNotDuplicateLinkProperties(): void
     {
         $link = new Link('resource');
         $link->setRoute('resource', ['id' => 'user']);
@@ -1558,13 +1503,13 @@ class HalTest extends TestCase
 
         $rendered1 = $this->plugin->renderEntity($entity);
         $rendered2 = $this->plugin->renderEntity($entity);
-        $this->assertEquals($rendered1, $rendered2);
+        self::assertEquals($rendered1, $rendered2);
     }
 
     /**
      * @group 102
      */
-    public function testRenderingEntityTwiceMustNotDuplicateLinkCollectionProperties()
+    public function testRenderingEntityTwiceMustNotDuplicateLinkCollectionProperties(): void
     {
         $link = new Link('resource');
         $link->setRoute('resource', ['id' => 'user']);
@@ -1582,10 +1527,10 @@ class HalTest extends TestCase
 
         $rendered1 = $this->plugin->renderEntity($entity);
         $rendered2 = $this->plugin->renderEntity($entity);
-        $this->assertEquals($rendered1, $rendered2);
+        self::assertEquals($rendered1, $rendered2);
     }
 
-    public function testCreateEntityFromMetadataWithoutForcedSelfLinks()
+    public function testCreateEntityFromMetadataWithoutForcedSelfLinks(): void
     {
         $object = new TestAsset\Entity('foo', 'Foo');
         $metadata = new MetadataMap([
@@ -1604,10 +1549,10 @@ class HalTest extends TestCase
             $metadata->get(TestAsset\Entity::class)
         );
         $links = $entity->getLinks();
-        $this->assertFalse($links->has('self'));
+        self::assertFalse($links->has('self'));
     }
 
-    public function testCreateEntityWithoutForcedSelfLinks()
+    public function testCreateEntityWithoutForcedSelfLinks(): void
     {
         $object = new TestAsset\Entity('foo', 'Foo');
 
@@ -1624,10 +1569,10 @@ class HalTest extends TestCase
         $this->plugin->setMetadataMap($metadata);
         $entity = $this->plugin->createEntity($object, 'hostname/resource', 'id');
         $links = $entity->getLinks();
-        $this->assertFalse($links->has('self'));
+        self::assertFalse($links->has('self'));
     }
 
-    public function testCreateCollectionFromMetadataWithoutForcedSelfLinks()
+    public function testCreateCollectionFromMetadataWithoutForcedSelfLinks(): void
     {
         $set = new TestAsset\Collection([
             (object) ['id' => 'foo', 'name' => 'foo'],
@@ -1654,10 +1599,10 @@ class HalTest extends TestCase
             $metadata->get(TestAsset\Collection::class)
         );
         $links = $collection->getLinks();
-        $this->assertFalse($links->has('self'));
+        self::assertFalse($links->has('self'));
     }
 
-    public function testCreateCollectionWithoutForcedSelfLinks()
+    public function testCreateCollectionWithoutForcedSelfLinks(): void
     {
         $collection = ['foo' => 'bar'];
         $metadata = new MetadataMap([
@@ -1676,13 +1621,13 @@ class HalTest extends TestCase
 
         $result = $this->plugin->createCollection($collection);
         $links  = $result->getLinks();
-        $this->assertFalse($links->has('self'));
+        self::assertFalse($links->has('self'));
     }
 
     /**
      * This is a special use-case. See comment in Hal::extractCollection.
      */
-    public function testExtractCollectionShouldAddSelfLinkToEntityIfEntityIsArray()
+    public function testExtractCollectionShouldAddSelfLinkToEntityIfEntityIsArray(): void
     {
         $object = ['id' => 'Foo'];
         $collection = new Collection([$object]);
@@ -1690,34 +1635,34 @@ class HalTest extends TestCase
         $method = new \ReflectionMethod($this->plugin, 'extractCollection');
         $method->setAccessible(true);
         $result = $method->invoke($this->plugin, $collection);
-        $this->assertTrue(isset($result[0]['_links']['self']));
+        self::assertTrue(isset($result[0]['_links']['self']));
     }
 
-    public function assertIsEntity($entity)
+    public function assertIsEntity($entity): void
     {
-        $this->assertInternalType('array', $entity);
-        $this->assertArrayHasKey('_links', $entity, 'Invalid HAL entity; does not contain links');
-        $this->assertInternalType('array', $entity['_links']);
+        self::assertIsArray($entity);
+        self::assertArrayHasKey('_links', $entity, 'Invalid HAL entity; does not contain links');
+        self::assertIsArray($entity['_links']);
     }
 
-    public function assertEntityHasRelationalLink($relation, $entity)
+    public function assertEntityHasRelationalLink($relation, $entity): void
     {
         $this->assertIsEntity($entity);
         $links = $entity['_links'];
-        $this->assertArrayHasKey(
+        self::assertArrayHasKey(
             $relation,
             $links,
             sprintf('HAL links do not contain relation "%s"', $relation)
         );
         $link = $links[$relation];
-        $this->assertInternalType('array', $link);
+        self::assertIsArray($link);
     }
 
-    public function assertRelationalLinkEquals($match, $relation, $entity)
+    public function assertRelationalLinkEquals($match, $relation, $entity): void
     {
         $this->assertEntityHasRelationalLink($relation, $entity);
         $link = $entity['_links'][$relation];
-        $this->assertArrayHasKey(
+        self::assertArrayHasKey(
             'href',
             $link,
             sprintf(
@@ -1727,10 +1672,10 @@ class HalTest extends TestCase
             )
         );
         $href = $link['href'];
-        $this->assertEquals($match, $href);
+        self::assertEquals($match, $href);
     }
 
-    public function testRendersEntityWithAssociatedLinks()
+    public function testRendersEntityWithAssociatedLinks(): void
     {
         $item = new Entity([
             'foo' => 'bar',
@@ -1744,11 +1689,11 @@ class HalTest extends TestCase
         $result = $this->plugin->renderEntity($item);
 
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/identifier', 'self', $result);
-        $this->assertArrayHasKey('foo', $result);
-        $this->assertEquals('bar', $result['foo']);
+        self::assertArrayHasKey('foo', $result);
+        self::assertEquals('bar', $result['foo']);
     }
 
-    public function testCanRenderStdclassEntity()
+    public function testCanRenderStdclassEntity(): void
     {
         $item = (object) [
             'foo' => 'bar',
@@ -1764,11 +1709,11 @@ class HalTest extends TestCase
         $result = $this->plugin->renderEntity($item);
 
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/identifier', 'self', $result);
-        $this->assertArrayHasKey('foo', $result);
-        $this->assertEquals('bar', $result['foo']);
+        self::assertArrayHasKey('foo', $result);
+        self::assertEquals('bar', $result['foo']);
     }
 
-    public function testCanSerializeHydratableEntity()
+    public function testCanSerializeHydratableEntity(): void
     {
         $hydratorClass = $this->getArraySerializableHydratorClass();
         $this->plugin->addHydrator(
@@ -1785,11 +1730,11 @@ class HalTest extends TestCase
         $result = $this->plugin->renderEntity($item);
 
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/identifier', 'self', $result);
-        $this->assertArrayHasKey('foo', $result);
-        $this->assertEquals('bar', $result['foo']);
+        self::assertArrayHasKey('foo', $result);
+        self::assertEquals('bar', $result['foo']);
     }
 
-    public function testUsesDefaultHydratorIfAvailable()
+    public function testUsesDefaultHydratorIfAvailable(): void
     {
         $hydratorClass = $this->getArraySerializableHydratorClass();
         $this->plugin->setDefaultHydrator(
@@ -1805,15 +1750,15 @@ class HalTest extends TestCase
         $result = $this->plugin->renderEntity($item);
 
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/identifier', 'self', $result);
-        $this->assertArrayHasKey('foo', $result);
-        $this->assertEquals('bar', $result['foo']);
+        self::assertArrayHasKey('foo', $result);
+        self::assertEquals('bar', $result['foo']);
     }
 
-    public function testCanRenderNonPaginatedCollection()
+    public function testCanRenderNonPaginatedCollection(): void
     {
         $prototype = ['foo' => 'bar'];
         $items = [];
-        foreach (range(1, 100) as $id) {
+        foreach (\range(1, 100) as $id) {
             $item       = $prototype;
             $item['id'] = $id;
             $items[]    = $item;
@@ -1831,28 +1776,28 @@ class HalTest extends TestCase
 
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource', 'self', $result);
 
-        $this->assertArrayHasKey('_embedded', $result);
-        $this->assertInternalType('array', $result['_embedded']);
-        $this->assertArrayHasKey('items', $result['_embedded']);
-        $this->assertInternalType('array', $result['_embedded']['items']);
-        $this->assertEquals(100, count($result['_embedded']['items']));
+        self::assertArrayHasKey('_embedded', $result);
+        self::assertIsArray($result['_embedded']);
+        self::assertArrayHasKey('items', $result['_embedded']);
+        self::assertIsArray($result['_embedded']['items']);
+        self::assertCount(100, $result['_embedded']['items']);
 
         foreach ($result['_embedded']['items'] as $key => $item) {
             $id = $key + 1;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
-            $this->assertArrayHasKey('id', $item, var_export($item, 1));
-            $this->assertEquals($id, $item['id']);
-            $this->assertArrayHasKey('foo', $item);
-            $this->assertEquals('bar', $item['foo']);
+            self::assertArrayHasKey('id', $item, \var_export($item, 1));
+            self::assertEquals($id, $item['id']);
+            self::assertArrayHasKey('foo', $item);
+            self::assertEquals('bar', $item['foo']);
         }
     }
 
-    public function testCanRenderPaginatedCollection()
+    public function testCanRenderPaginatedCollection(): void
     {
         $prototype = ['foo' => 'bar'];
         $items = [];
-        foreach (range(1, 100) as $id) {
+        foreach (\range(1, 100) as $id) {
             $item       = $prototype;
             $item['id'] = $id;
             $items[]    = $item;
@@ -1872,31 +1817,31 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInternalType('array', $result, var_export($result, 1));
+        self::assertIsArray($result);
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource?page=3', 'self', $result);
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource', 'first', $result);
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource?page=20', 'last', $result);
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource?page=2', 'prev', $result);
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource?page=4', 'next', $result);
 
-        $this->assertArrayHasKey('_embedded', $result);
-        $this->assertInternalType('array', $result['_embedded']);
-        $this->assertArrayHasKey('items', $result['_embedded']);
-        $this->assertInternalType('array', $result['_embedded']['items']);
-        $this->assertEquals(5, count($result['_embedded']['items']));
+        self::assertArrayHasKey('_embedded', $result);
+        self::assertIsArray($result['_embedded']);
+        self::assertArrayHasKey('items', $result['_embedded']);
+        self::assertIsArray($result['_embedded']['items']);
+        self::assertCount(5, $result['_embedded']['items']);
 
         foreach ($result['_embedded']['items'] as $key => $item) {
             $id = $key + 11;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
-            $this->assertArrayHasKey('id', $item, var_export($item, 1));
-            $this->assertEquals($id, $item['id']);
-            $this->assertArrayHasKey('foo', $item);
-            $this->assertEquals('bar', $item['foo']);
+            self::assertArrayHasKey('id', $item, \var_export($item, 1));
+            self::assertEquals($id, $item['id']);
+            self::assertArrayHasKey('foo', $item);
+            self::assertEquals('bar', $item['foo']);
         }
     }
 
-    public function invalidPages()
+    public function invalidPages(): array
     {
         return [
             '-1'   => [-1],
@@ -1909,11 +1854,11 @@ class HalTest extends TestCase
      *
      * @param int $page
      */
-    public function testRenderingPaginatedCollectionCanReturnApiProblemIfPageIsTooHighOrTooLow($page)
+    public function testRenderingPaginatedCollectionCanReturnApiProblemIfPageIsTooHighOrTooLow($page): void
     {
         $prototype = ['foo' => 'bar'];
         $items = [];
-        foreach (range(1, 100) as $id) {
+        foreach (\range(1, 100) as $id) {
             $item       = $prototype;
             $item['id'] = $id;
             $items[]    = $item;
@@ -1933,16 +1878,16 @@ class HalTest extends TestCase
         /* @var ApiProblem */
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInstanceOf(ApiProblem::class, $result, var_export($result, 1));
+        self::assertInstanceOf(ApiProblem::class, $result, \var_export($result, 1));
 
         $data = $result->toArray();
-        $this->assertArrayHasKey('status', $data, var_export($result, 1));
-        $this->assertEquals(409, $data['status']);
-        $this->assertArrayHasKey('detail', $data);
-        $this->assertEquals('Invalid page provided', $data['detail']);
+        self::assertArrayHasKey('status', $data, \var_export($result, 1));
+        self::assertEquals(409, $data['status']);
+        self::assertArrayHasKey('detail', $data);
+        self::assertEquals('Invalid page provided', $data['detail']);
     }
 
-    public function testRendersAttributesAsPartOfNonPaginatedCollection()
+    public function testRendersAttributesAsPartOfNonPaginatedCollection(): void
     {
         $attributes = [
             'count' => 100,
@@ -1951,7 +1896,7 @@ class HalTest extends TestCase
 
         $prototype = ['foo' => 'bar'];
         $items = [];
-        foreach (range(1, 100) as $id) {
+        foreach (\range(1, 100) as $id) {
             $item       = $prototype;
             $item['id'] = $id;
             $items[]    = $item;
@@ -1962,14 +1907,14 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInternalType('array', $result, var_export($result, 1));
-        $this->assertArrayHasKey('count', $result, var_export($result, 1));
-        $this->assertEquals(100, $result['count']);
-        $this->assertArrayHasKey('type', $result);
-        $this->assertEquals('foo', $result['type']);
+        self::assertIsArray($result);
+        self::assertArrayHasKey('count', $result, \var_export($result, 1));
+        self::assertEquals(100, $result['count']);
+        self::assertArrayHasKey('type', $result);
+        self::assertEquals('foo', $result['type']);
     }
 
-    public function testRendersAttributeAsPartOfPaginatedCollection()
+    public function testRendersAttributeAsPartOfPaginatedCollection(): void
     {
         $attributes = [
             'count' => 100,
@@ -1978,7 +1923,7 @@ class HalTest extends TestCase
 
         $prototype = ['foo' => 'bar'];
         $items = [];
-        foreach (range(1, 100) as $id) {
+        foreach (\range(1, 100) as $id) {
             $item       = $prototype;
             $item['id'] = $id;
             $items[]    = $item;
@@ -1999,16 +1944,16 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInternalType('array', $result, var_export($result, 1));
-        $this->assertArrayHasKey('count', $result, var_export($result, 1));
-        $this->assertEquals(100, $result['count']);
-        $this->assertArrayHasKey('type', $result);
-        $this->assertEquals('foo', $result['type']);
+        self::assertIsArray($result);
+        self::assertArrayHasKey('count', $result, \var_export($result, 1));
+        self::assertEquals(100, $result['count']);
+        self::assertArrayHasKey('type', $result);
+        self::assertEquals('foo', $result['type']);
     }
 
-    public function testCanRenderNestedEntitiesAsEmbeddedEntities()
+    public function testCanRenderNestedEntitiesAsEmbeddedEntities(): void
     {
-        $routeClass   = class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
+        $routeClass   = \class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
         $this->router->addRoute('user', new $routeClass('/user[/:id]'));
 
         $child = new Entity([
@@ -2031,22 +1976,22 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderEntity($item);
 
-        $this->assertInternalType('array', $result, var_export($result, 1));
-        $this->assertArrayHasKey('_embedded', $result);
+        self::assertIsArray($result);
+        self::assertArrayHasKey('_embedded', $result);
         $embedded = $result['_embedded'];
-        $this->assertArrayHasKey('user', $embedded);
+        self::assertArrayHasKey('user', $embedded);
         $user = $embedded['user'];
         $this->assertRelationalLinkContains('/user/matthew', 'self', $user);
 
         foreach ($child->getEntity() as $key => $value) {
-            $this->assertArrayHasKey($key, $user);
-            $this->assertEquals($value, $user[$key]);
+            self::assertArrayHasKey($key, $user);
+            self::assertEquals($value, $user[$key]);
         }
     }
 
-    public function testRendersEmbeddedEntitiesOfIndividualNonPaginatedCollections()
+    public function testRendersEmbeddedEntitiesOfIndividualNonPaginatedCollections(): void
     {
-        $routeClass   = class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
+        $routeClass   = \class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
         $this->router->addRoute('user', new $routeClass('/user[/:id]'));
 
         $child = new Entity([
@@ -2060,7 +2005,7 @@ class HalTest extends TestCase
 
         $prototype = ['foo' => 'bar', 'user' => $child];
         $items = [];
-        foreach (range(1, 3) as $id) {
+        foreach (\range(1, 3) as $id) {
             $item       = $prototype;
             $item['id'] = $id;
             $items[]    = $item;
@@ -2076,27 +2021,27 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInternalType('array', $result, var_export($result, 1));
+        self::assertIsArray($result);
 
         $collection = $result['_embedded']['items'];
         foreach ($collection as $item) {
-            $this->assertArrayHasKey('_embedded', $item);
+            self::assertArrayHasKey('_embedded', $item);
             $embedded = $item['_embedded'];
-            $this->assertArrayHasKey('user', $embedded);
+            self::assertArrayHasKey('user', $embedded);
 
             $user = $embedded['user'];
             $this->assertRelationalLinkContains('/user/matthew', 'self', $user);
 
             foreach ($child->getEntity() as $key => $value) {
-                $this->assertArrayHasKey($key, $user);
-                $this->assertEquals($value, $user[$key]);
+                self::assertArrayHasKey($key, $user);
+                self::assertEquals($value, $user[$key]);
             }
         }
     }
 
-    public function testRendersEmbeddedEntitiesOfIndividualPaginatedCollections()
+    public function testRendersEmbeddedEntitiesOfIndividualPaginatedCollections(): void
     {
-        $routeClass   = class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
+        $routeClass   = \class_exists(V2Segment::class) ? V2Segment::class : Segment::class;
         $this->router->addRoute('user', new $routeClass('/user[/:id]'));
 
         $child = new Entity([
@@ -2110,7 +2055,7 @@ class HalTest extends TestCase
 
         $prototype = ['foo' => 'bar', 'user' => $child];
         $items = [];
-        foreach (range(1, 3) as $id) {
+        foreach (\range(1, 3) as $id) {
             $item       = $prototype;
             $item['id'] = $id;
             $items[]    = $item;
@@ -2130,33 +2075,33 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInternalType('array', $result, var_export($result, 1));
+        self::assertIsArray($result);
         $collection = $result['_embedded']['items'];
         foreach ($collection as $item) {
-            $this->assertArrayHasKey('_embedded', $item, var_export($item, 1));
+            self::assertArrayHasKey('_embedded', $item, \var_export($item, 1));
             $embedded = $item['_embedded'];
-            $this->assertArrayHasKey('user', $embedded);
+            self::assertArrayHasKey('user', $embedded);
 
             $user = $embedded['user'];
             $this->assertRelationalLinkContains('/user/matthew', 'self', $user);
 
             foreach ($child->getEntity() as $key => $value) {
-                $this->assertArrayHasKey($key, $user);
-                $this->assertEquals($value, $user[$key]);
+                self::assertArrayHasKey($key, $user);
+                self::assertEquals($value, $user[$key]);
             }
         }
     }
 
-    public function testAllowsSpecifyingAlternateCallbackForReturningEntityId()
+    public function testAllowsSpecifyingAlternateCallbackForReturningEntityId(): void
     {
         $this->plugin->getEventManager()->attach('getIdFromEntity', function ($e) {
             $entity = $e->getParam('entity');
 
-            if (! is_array($entity)) {
+            if (! \is_array($entity)) {
                 return false;
             }
 
-            if (array_key_exists('name', $entity)) {
+            if (\array_key_exists('name', $entity)) {
                 return $entity['name'];
             }
 
@@ -2165,7 +2110,7 @@ class HalTest extends TestCase
 
         $prototype = ['foo' => 'bar'];
         $items = [];
-        foreach (range(1, 100) as $id) {
+        foreach (\range(1, 100) as $id) {
             $item         = $prototype;
             $item['name'] = $id;
             $items[]      = $item;
@@ -2181,71 +2126,71 @@ class HalTest extends TestCase
 
         $result = $this->plugin->renderCollection($collection);
 
-        $this->assertInternalType('array', $result, var_export($result, 1));
+        self::assertIsArray($result);
         $this->assertRelationalLinkEquals('http://localhost.localdomain/resource', 'self', $result);
 
-        $this->assertArrayHasKey('_embedded', $result);
-        $this->assertInternalType('array', $result['_embedded']);
-        $this->assertArrayHasKey('items', $result['_embedded']);
-        $this->assertInternalType('array', $result['_embedded']['items']);
-        $this->assertEquals(100, count($result['_embedded']['items']));
+        self::assertArrayHasKey('_embedded', $result);
+        self::assertIsArray($result['_embedded']);
+        self::assertArrayHasKey('items', $result['_embedded']);
+        self::assertIsArray($result['_embedded']['items']);
+        self::assertCount(100, $result['_embedded']['items']);
 
         foreach ($result['_embedded']['items'] as $key => $item) {
             $id = $key + 1;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
-            $this->assertArrayHasKey('name', $item, var_export($item, 1));
-            $this->assertEquals($id, $item['name']);
-            $this->assertArrayHasKey('foo', $item);
-            $this->assertEquals('bar', $item['foo']);
+            self::assertArrayHasKey('name', $item, \var_export($item, 1));
+            self::assertEquals($id, $item['name']);
+            self::assertArrayHasKey('foo', $item);
+            self::assertEquals('bar', $item['foo']);
         }
     }
 
     /**
      * @group 100
      */
-    public function testRenderEntityPostEventIsTriggered()
+    public function testRenderEntityPostEventIsTriggered(): void
     {
         $entity = ['id' => 1, 'foo' => 'bar'];
         $halEntity = new Entity($entity, 1);
 
         $triggered = false;
-        $this->plugin->getEventManager()->attach('renderEntity.post', function ($e) use (&$triggered) {
+        $this->plugin->getEventManager()->attach('renderEntity.post', function () use (&$triggered) {
             $triggered = true;
         });
 
         $this->plugin->renderEntity($halEntity);
-        $this->assertTrue($triggered);
+        self::assertTrue($triggered);
     }
 
     /**
      * @group 125
      */
-    public function testSetUrlHelperRaisesExceptionIndicatingDeprecation()
+    public function testSetUrlHelperRaisesExceptionIndicatingDeprecation(): void
     {
         $this->expectException(Exception\DeprecatedMethodException::class);
         $this->expectExceptionMessage('can no longer be used to influence URL generation');
 
-        $this->plugin->setUrlHelper(function () {
+        $this->plugin->setUrlHelper(static function () {
         });
     }
 
     /**
      * @group 125
      */
-    public function testSetServerUrlHelperRaisesExceptionIndicatingDeprecation()
+    public function testSetServerUrlHelperRaisesExceptionIndicatingDeprecation(): void
     {
         $this->expectException(Exception\DeprecatedMethodException::class);
         $this->expectExceptionMessage('can no longer be used to influence URL generation');
 
-        $this->plugin->setServerUrlHelper(function () {
+        $this->plugin->setServerUrlHelper(static function () {
         });
     }
 
     /**
      * @group 101
      */
-    public function testNotExistingRouteInMetadataLinks()
+    public function testNotExistingRouteInMetadataLinks(): void
     {
         $object = new TestAsset\Entity('foo', 'Foo');
         $object->first_child  = new TestAsset\EmbeddedEntity('bar', 'Bar');
@@ -2273,11 +2218,72 @@ class HalTest extends TestCase
 
         $this->plugin->setMetadataMap($metadata);
 
-        $expectedExceptionClass = class_exists(V2RouterException\RuntimeException::class)
+        $expectedExceptionClass = \class_exists(V2RouterException\RuntimeException::class)
             ? V2RouterException\RuntimeException::class
             : RouterException\RuntimeException::class;
 
         $this->expectException($expectedExceptionClass);
         $this->plugin->renderEntity($entity);
+    }
+
+    protected function createNestedEntity(): Entity
+    {
+        $object              = new TestAsset\Entity('foo', 'Foo');
+        $object->first_child = new TestAsset\EmbeddedEntityWithBackReference('bar', $object);
+        $entity              = new Entity($object, 'foo');
+        $self                = new Link('self');
+
+        $self->setRoute('hostname/resource', ['id' => 'foo']);
+        $entity->getLinks()->add($self);
+
+        return $entity;
+    }
+
+    protected function createNestedMetadataMap($maxDepth = null): MetadataMap
+    {
+        return new MetadataMap(
+            [
+                TestAsset\Entity::class                          => [
+                    'hydrator'               => $this->getObjectPropertyHydratorClass(),
+                    'route_name'             => 'hostname/resource',
+                    'route_identifier_name'  => 'id',
+                    'entity_identifier_name' => 'id',
+                    'max_depth'              => $maxDepth,
+                ],
+                TestAsset\EmbeddedEntityWithBackReference::class => [
+                    'hydrator'               => $this->getObjectPropertyHydratorClass(),
+                    'route'                  => 'hostname/embedded',
+                    'route_identifier_name'  => 'id',
+                    'entity_identifier_name' => 'id',
+                ],
+            ]
+        );
+    }
+
+    protected function createNestedCollectionMetadataMap($maxDepth = null): MetadataMap
+    {
+        return new MetadataMap(
+            [
+                TestAsset\Collection::class                      => [
+                    'is_collection'     => true,
+                    'collection_name'   => 'collection',
+                    'route_name'        => 'hostname/contacts',
+                    'entity_route_name' => 'hostname/embedded',
+                    'max_depth'         => $maxDepth,
+                ],
+                TestAsset\Entity::class                          => [
+                    'hydrator'               => $this->getObjectPropertyHydratorClass(),
+                    'route_name'             => 'hostname/resource',
+                    'route_identifier_name'  => 'id',
+                    'entity_identifier_name' => 'id',
+                ],
+                TestAsset\EmbeddedEntityWithBackReference::class => [
+                    'hydrator'               => $this->getObjectPropertyHydratorClass(),
+                    'route'                  => 'hostname/embedded',
+                    'route_identifier_name'  => 'id',
+                    'entity_identifier_name' => 'id',
+                ],
+            ]
+        );
     }
 }

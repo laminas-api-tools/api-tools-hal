@@ -13,9 +13,12 @@ use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\Helper;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class LinkUrlBuilderFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Helper\ServerUrl
      */
@@ -26,17 +29,17 @@ class LinkUrlBuilderFactoryTest extends TestCase
      */
     private $urlHelper;
 
-    public function testInstantiatesLinkUrlBuilder()
+    public function testInstantiatesLinkUrlBuilder(): void
     {
         $serviceManager = $this->getServiceManager();
 
         $factory = new LinkUrlBuilderFactory();
-        $builder = $factory($serviceManager);
+        $builder = $factory($serviceManager, LinkUrlBuilder::class);
 
-        $this->assertInstanceOf(LinkUrlBuilder::class, $builder);
+        self::assertInstanceOf(LinkUrlBuilder::class, $builder);
     }
 
-    public function testOptionUseProxyIfPresentInConfig()
+    public function testOptionUseProxyIfPresentInConfig(): void
     {
         $options = [
             'options' => [
@@ -50,10 +53,10 @@ class LinkUrlBuilderFactoryTest extends TestCase
             ->shouldBeCalled();
 
         $factory = new LinkUrlBuilderFactory();
-        $factory($serviceManager);
+        $factory($serviceManager, LinkUrlBuilder::class);
     }
 
-    private function getServiceManager($config = [])
+    private function getServiceManager($config = []): ServiceManager
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('Laminas\ApiTools\Hal\HalConfig', $config);

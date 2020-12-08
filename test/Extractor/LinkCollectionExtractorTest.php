@@ -21,7 +21,7 @@ class LinkCollectionExtractorTest extends TestCase
      */
     protected $linkCollectionExtractor;
 
-    public function setUp()
+    public function setUp(): void
     {
         $linkExtractor = $this->createMock(LinkExtractor::class);
 
@@ -46,7 +46,7 @@ class LinkCollectionExtractorTest extends TestCase
 
         $result = $this->linkCollectionExtractor->extract($linkCollection);
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount($linkCollection->count(), $result);
     }
 
@@ -68,9 +68,9 @@ class LinkCollectionExtractorTest extends TestCase
 
         $result = $this->linkCollectionExtractor->extract($linkCollection);
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(2, $result);
-        $this->assertInternalType('array', $result['foo']);
+        $this->assertIsArray($result['foo']);
         $this->assertCount(2, $result['foo']);
     }
 }

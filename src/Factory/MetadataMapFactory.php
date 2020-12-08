@@ -9,25 +9,13 @@
 namespace Laminas\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Laminas\ApiTools\Hal\Metadata;
 use Laminas\Hydrator\HydratorPluginManager;
-use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
-use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class MetadataMapFactory
+class MetadataMapFactory implements FactoryInterface
 {
-    /**
-     * Create an object
-     *
-     * @param  ContainerInterface $container
-     * @return Metadata\MetadataMap
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
-     * @throws ContainerException if any other error occurs.
-     */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Metadata\MetadataMap
     {
         $config = $container->get('Laminas\ApiTools\Hal\HalConfig');
 
@@ -35,7 +23,7 @@ class MetadataMapFactory
             ? $container->get('HydratorManager')
             : new HydratorPluginManager($container);
 
-        $map = (isset($config['metadata_map']) && is_array($config['metadata_map']))
+        $map = (isset($config['metadata_map']) && \is_array($config['metadata_map']))
             ? $config['metadata_map']
             : [];
 

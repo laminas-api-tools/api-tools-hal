@@ -19,26 +19,17 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
      */
     protected $linkExtractor;
 
-    /**
-     * @param LinkExtractorInterface $linkExtractor
-     */
     public function __construct(LinkExtractorInterface $linkExtractor)
     {
         $this->setLinkExtractor($linkExtractor);
     }
 
-    /**
-     * @return LinkExtractorInterface
-     */
-    public function getLinkExtractor()
+    public function getLinkExtractor(): LinkExtractorInterface
     {
         return $this->linkExtractor;
     }
 
-    /**
-     * @param LinkExtractorInterface $linkExtractor
-     */
-    public function setLinkExtractor(LinkExtractorInterface $linkExtractor)
+    public function setLinkExtractor(LinkExtractorInterface $linkExtractor): void
     {
         $this->linkExtractor = $linkExtractor;
     }
@@ -46,7 +37,7 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
     /**
      * @inheritDoc
      */
-    public function extract(LinkCollection $collection)
+    public function extract(LinkCollection $collection): array
     {
         $links = [];
         foreach ($collection as $rel => $linkDefinition) {
@@ -55,8 +46,8 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
                 continue;
             }
 
-            if (! is_array($linkDefinition)) {
-                throw new DomainException(sprintf(
+            if (! \is_array($linkDefinition)) {
+                throw new DomainException(\sprintf(
                     'Link object for relation "%s" in resource was malformed; cannot generate link',
                     $rel
                 ));
@@ -65,7 +56,7 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
             $aggregate = [];
             foreach ($linkDefinition as $subLink) {
                 if (! $subLink instanceof Link) {
-                    throw new DomainException(sprintf(
+                    throw new DomainException(\sprintf(
                         'Link object aggregated for relation "%s" in resource was malformed; cannot generate link',
                         $rel
                     ));

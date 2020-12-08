@@ -19,9 +19,6 @@ class LinkExtractor implements LinkExtractorInterface
      */
     protected $linkUrlBuilder;
 
-    /**
-     * @param  LinkUrlBuilder $linkUrlBuilder
-     */
     public function __construct(LinkUrlBuilder $linkUrlBuilder)
     {
         $this->linkUrlBuilder = $linkUrlBuilder;
@@ -30,33 +27,33 @@ class LinkExtractor implements LinkExtractorInterface
     /**
      * @inheritDoc
      */
-    public function extract(Link $object)
+    public function extract(Link $link): array
     {
-        if (! $object->isComplete()) {
+        if (! $link->isComplete()) {
             throw new DomainException(sprintf(
                 'Link from resource provided to %s was incomplete; must contain a URL or a route',
                 __METHOD__
             ));
         }
 
-        $representation = $object->getProps();
+        $representation = $link->getAttributes();
 
-        if ($object->hasUrl()) {
-            $representation['href'] = $object->getUrl();
+        if ($link->hasUrl()) {
+            $representation['href'] = $link->getHref();
 
             return $representation;
         }
 
         $reuseMatchedParams = true;
-        $options = $object->getRouteOptions();
+        $options = $link->getRouteOptions();
         if (isset($options['reuse_matched_params'])) {
             $reuseMatchedParams = (bool) $options['reuse_matched_params'];
             unset($options['reuse_matched_params']);
         }
 
         $representation['href'] = $this->linkUrlBuilder->buildLinkUrl(
-            $object->getRoute(),
-            $object->getRouteParams(),
+            $link->getRoute(),
+            $link->getRouteParams(),
             $options,
             $reuseMatchedParams
         );

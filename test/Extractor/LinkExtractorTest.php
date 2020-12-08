@@ -20,10 +20,13 @@ use Laminas\Router\RouteMatch;
 use Laminas\View\Helper\ServerUrl;
 use Laminas\View\Helper\Url as UrlHelper;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class LinkExtractorTest extends TestCase
 {
-    public function testExtractGivenIncompleteLinkShouldThrowException()
+    use ProphecyTrait;
+
+    public function testExtractGivenIncompleteLinkShouldThrowException(): void
     {
         $linkUrlBuilder = $this->createMock(LinkUrlBuilder::class);
         $linkExtractor = new LinkExtractor($linkUrlBuilder);
@@ -35,7 +38,7 @@ class LinkExtractorTest extends TestCase
         $linkExtractor->extract($link->reveal());
     }
 
-    public function testExtractGivenLinkWithUrlShouldReturnThisOne()
+    public function testExtractGivenLinkWithUrlShouldReturnThisOne(): void
     {
         $linkUrlBuilder = $this->createMock(LinkUrlBuilder::class);
         $linkExtractor = new LinkExtractor($linkUrlBuilder);
@@ -48,10 +51,10 @@ class LinkExtractorTest extends TestCase
 
         $result = $linkExtractor->extract($link);
 
-        $this->assertEquals($params['url'], $result['href']);
+        self::assertEquals($params['url'], $result['href']);
     }
 
-    public function testExtractShouldComposeAnyPropertiesInLink()
+    public function testExtractShouldComposeAnyPropertiesInLink(): void
     {
         $linkUrlBuilder = $this->createMock(LinkUrlBuilder::class);
         $linkExtractor = new LinkExtractor($linkUrlBuilder);
@@ -71,13 +74,13 @@ class LinkExtractorTest extends TestCase
             'version' => 2,
             'latest'  => true,
         ];
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     /**
      * @group 95
      */
-    public function testPassingFalseReuseParamsOptionShouldOmitMatchedParametersInGeneratedLink()
+    public function testPassingFalseReuseParamsOptionShouldOmitMatchedParametersInGeneratedLink(): void
     {
         $serverUrlHelper = $this->createMock(ServerUrl::class);
         $urlHelper       = new UrlHelper();
@@ -87,7 +90,7 @@ class LinkExtractorTest extends TestCase
         $linkExtractor = new LinkExtractor($linkUrlBuilder);
 
         $match = $this->matchUrl('/resource/foo', $urlHelper);
-        $this->assertEquals('foo', $match->getParam('id', false));
+        self::assertEquals('foo', $match->getParam('id', false));
 
         $link = Link::factory([
             'rel' => 'resource',
@@ -101,9 +104,9 @@ class LinkExtractorTest extends TestCase
 
         $result = $linkExtractor->extract($link);
 
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('href', $result);
-        $this->assertEquals('http://localhost.localdomain/resource', $result['href']);
+        self::assertIsArray($result);
+        self::assertArrayHasKey('href', $result);
+        self::assertEquals('http://localhost.localdomain/resource', $result['href']);
     }
 
     private function matchUrl($url, $urlHelper)
@@ -112,7 +115,7 @@ class LinkExtractorTest extends TestCase
         $request = new Request();
         $request->setUri($url);
 
-        $routerClass = class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
+        $routerClass = \class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
         $router = new $routerClass();
 
         $router->addRoute('hostname', [

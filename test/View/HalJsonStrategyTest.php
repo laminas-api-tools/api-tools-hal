@@ -46,7 +46,7 @@ class HalJsonStrategyTest extends TestCase
      */
     protected $strategy;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->response = new Response;
         $this->event    = new ViewEvent;

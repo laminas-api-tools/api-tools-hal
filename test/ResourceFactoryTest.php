@@ -28,7 +28,7 @@ class ResourceFactoryTest extends TestCase
     /**
      * @group 79
      */
-    public function testInjectsLinksFromMetadataWhenCreatingEntity()
+    public function testInjectsLinksFromMetadataWhenCreatingEntity(): void
     {
         $object = new HalPluginTestAsset\Entity('foo', 'Foo');
 
@@ -83,7 +83,7 @@ class ResourceFactoryTest extends TestCase
      * The return value should be used as the route param for the link (in
      * place of the callable).
      */
-    public function testRouteParamsAllowsCallable()
+    public function testRouteParamsAllowsCallable(): void
     {
         $object = new HalPluginTestAsset\Entity('foo', 'Foo');
 
@@ -132,7 +132,7 @@ class ResourceFactoryTest extends TestCase
     /**
      * @group 79
      */
-    public function testInjectsLinksFromMetadataWhenCreatingCollection()
+    public function testInjectsLinksFromMetadataWhenCreatingCollection(): void
     {
         $set = new HalPluginTestAsset\Collection([
             (object) ['id' => 'foo', 'name' => 'foo'],
@@ -170,7 +170,7 @@ class ResourceFactoryTest extends TestCase
         $this->assertEquals('http://example.com/api/help/collection', $link->getUrl());
     }
 
-    private function getResourceFactory(MetadataMap $metadata)
+    private function getResourceFactory(MetadataMap $metadata): ResourceFactory
     {
         $hydratorPluginManager = new HydratorPluginManager(new ServiceManager());
         $entityHydratorManager = new EntityHydratorManager($hydratorPluginManager, $metadata);

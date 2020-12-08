@@ -55,11 +55,11 @@ class Link implements LinkInterface
      * Create a link relation
      *
      * @todo  filtering and/or validation of relation string
-     * @param string $relation
+     * @param string|array $relation
      */
     public function __construct($relation)
     {
-        if (! is_array($relation)) {
+        if (! \is_array($relation)) {
             $relation = [(string) $relation];
         }
 
@@ -79,10 +79,10 @@ class Link implements LinkInterface
      * @return self
      * @throws Exception\InvalidArgumentException if missing a "rel" or invalid route specifications
      */
-    public static function factory(array $spec)
+    public static function factory(array $spec): Link
     {
         if (! isset($spec['rel'])) {
-            throw new Exception\InvalidArgumentException(sprintf(
+            throw new Exception\InvalidArgumentException(\sprintf(
                 '%s requires that the specification array contain a "rel" element; none found',
                 __METHOD__
             ));
@@ -90,7 +90,7 @@ class Link implements LinkInterface
         $link = new static($spec['rel']);
 
         if (isset($spec['props'])
-            && is_array($spec['props'])
+            && \is_array($spec['props'])
         ) {
             $link->setProps($spec['props']);
         }
@@ -108,30 +108,30 @@ class Link implements LinkInterface
 
         if (isset($spec['route'])) {
             $routeInfo = $spec['route'];
-            if (is_string($routeInfo)) {
+            if (\is_string($routeInfo)) {
                 $link->setRoute($routeInfo);
                 return $link;
             }
 
-            if (! is_array($routeInfo)) {
-                throw new Exception\InvalidArgumentException(sprintf(
+            if (! \is_array($routeInfo)) {
+                throw new Exception\InvalidArgumentException(\sprintf(
                     '%s requires that the specification array\'s "route" element be a string or array; received "%s"',
                     __METHOD__,
-                    (is_object($routeInfo) ? get_class($routeInfo) : gettype($routeInfo))
+                    (\is_object($routeInfo) ? \get_class($routeInfo) : \gettype($routeInfo))
                 ));
             }
 
             if (! isset($routeInfo['name'])) {
-                throw new Exception\InvalidArgumentException(sprintf(
+                throw new Exception\InvalidArgumentException(\sprintf(
                     '%s requires that the specification array\'s "route" array contain a "name" element; none found',
                     __METHOD__
                 ));
             }
             $name    = $routeInfo['name'];
-            $params  = isset($routeInfo['params']) && is_array($routeInfo['params'])
+            $params  = isset($routeInfo['params']) && \is_array($routeInfo['params'])
                 ? $routeInfo['params']
                 : [];
-            $options = isset($routeInfo['options']) && is_array($routeInfo['options'])
+            $options = isset($routeInfo['options']) && \is_array($routeInfo['options'])
                 ? $routeInfo['options']
                 : [];
             $link->setRoute($name, $params, $options);
@@ -149,7 +149,7 @@ class Link implements LinkInterface
      * @param array $props
      * @return self
      */
-    public function setProps(array $props)
+    public function setProps(array $props): Link
     {
         if (isset($props['href'])) {
             unset($props['href']);
@@ -169,10 +169,10 @@ class Link implements LinkInterface
      * @return self
      * @throws DomainException
      */
-    public function setRoute($route, $params = null, $options = null)
+    public function setRoute($route, $params = null, $options = null): Link
     {
         if ($this->hasUrl()) {
-            throw new DomainException(sprintf(
+            throw new DomainException(\sprintf(
                 '%s already has a URL set; cannot set route',
                 __CLASS__
             ));
@@ -195,17 +195,17 @@ class Link implements LinkInterface
      * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setRouteOptions($options)
+    public function setRouteOptions($options): Link
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
         }
 
-        if (! is_array($options)) {
-            throw new Exception\InvalidArgumentException(sprintf(
+        if (! \is_array($options)) {
+            throw new Exception\InvalidArgumentException(\sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                (is_object($options) ? get_class($options) : gettype($options))
+                (\is_object($options) ? \get_class($options) : \gettype($options))
             ));
         }
 
@@ -220,17 +220,17 @@ class Link implements LinkInterface
      * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setRouteParams($params)
+    public function setRouteParams($params): Link
     {
         if ($params instanceof Traversable) {
             $params = ArrayUtils::iteratorToArray($params);
         }
 
-        if (! is_array($params)) {
+        if (! \is_array($params)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                (is_object($params) ? get_class($params) : gettype($params))
+                (\is_object($params) ? \get_class($params) : \gettype($params))
             ));
         }
 
@@ -246,10 +246,10 @@ class Link implements LinkInterface
      * @throws DomainException
      * @throws Exception\InvalidArgumentException
      */
-    public function setUrl($href)
+    public function setUrl($href): Link
     {
         if ($this->hasRoute()) {
-            throw new DomainException(sprintf(
+            throw new DomainException(\sprintf(
                 '%s already has a route set; cannot set URL',
                 __CLASS__
             ));
@@ -258,7 +258,7 @@ class Link implements LinkInterface
         try {
             $uri = UriFactory::factory($href);
         } catch (UriException\ExceptionInterface $e) {
-            throw new Exception\InvalidArgumentException(sprintf(
+            throw new Exception\InvalidArgumentException(\sprintf(
                 'Received invalid URL: %s',
                 $e->getMessage()
             ), $e->getCode(), $e);
@@ -305,7 +305,7 @@ class Link implements LinkInterface
      *
      * @return null|string
      */
-    public function getRoute()
+    public function getRoute(): ?string
     {
         return $this->route;
     }
@@ -315,7 +315,7 @@ class Link implements LinkInterface
      *
      * @return array
      */
-    public function getRouteOptions()
+    public function getRouteOptions(): array
     {
         return $this->routeOptions;
     }
@@ -325,7 +325,7 @@ class Link implements LinkInterface
      *
      * @return array
      */
-    public function getRouteParams()
+    public function getRouteParams(): array
     {
         return $this->routeParams;
     }
@@ -347,7 +347,7 @@ class Link implements LinkInterface
      *
      * @return bool
      */
-    public function isComplete()
+    public function isComplete(): bool
     {
         return (! empty($this->href) || ! empty($this->route));
     }
@@ -357,7 +357,7 @@ class Link implements LinkInterface
      *
      * @return bool
      */
-    public function hasRoute()
+    public function hasRoute(): bool
     {
         return ! empty($this->route);
     }
@@ -386,7 +386,7 @@ class Link implements LinkInterface
      *
      * @return string
      */
-    public function getHref()
+    public function getHref(): string
     {
         return (string) $this->href;
     }
@@ -398,7 +398,7 @@ class Link implements LinkInterface
      *     Currently, templated links are not yet supported, so this will
      *     always return false.
      */
-    public function isTemplated()
+    public function isTemplated(): bool
     {
         return false; // api-tools-hal doesn't support this currently
     }
@@ -411,7 +411,7 @@ class Link implements LinkInterface
      *
      * @return string[]
      */
-    public function getRels()
+    public function getRels(): array
     {
         return $this->rels;
     }
@@ -424,7 +424,7 @@ class Link implements LinkInterface
      *    is either a PHP primitive or an array of PHP strings. If no values are
      *    found an empty array MUST be returned.
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }

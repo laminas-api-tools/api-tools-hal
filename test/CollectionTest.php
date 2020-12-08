@@ -17,7 +17,7 @@ use stdClass;
 
 class CollectionTest extends TestCase
 {
-    public function invalidCollections()
+    public function invalidCollections(): array
     {
         return [
             'null'       => [null],
@@ -37,14 +37,14 @@ class CollectionTest extends TestCase
      *
      * @param mixed $collection
      */
-    public function testConstructorRaisesExceptionForNonTraversableCollection($collection)
+    public function testConstructorRaisesExceptionForNonTraversableCollection($collection): void
     {
         $this->expectException(InvalidCollectionException::class);
 
         new Collection($collection, 'collection/route', 'item/route');
     }
 
-    public function testPropertiesAreAccessibleFollowingConstruction()
+    public function testPropertiesAreAccessibleFollowingConstruction(): void
     {
         $hal = new Collection([], 'item/route', ['version' => 1], ['query' => 'format=json']);
 
@@ -54,14 +54,14 @@ class CollectionTest extends TestCase
         $this->assertEquals(['query' => 'format=json'], $hal->getEntityRouteOptions());
     }
 
-    public function testDefaultPageIsOne()
+    public function testDefaultPageIsOne(): void
     {
         $hal = new Collection([], 'item/route');
 
         $this->assertEquals(1, $hal->getPage());
     }
 
-    public function testPageIsMutable()
+    public function testPageIsMutable(): void
     {
         $hal = new Collection([], 'item/route');
         $hal->setPage(5);
@@ -69,14 +69,14 @@ class CollectionTest extends TestCase
         $this->assertEquals(5, $hal->getPage());
     }
 
-    public function testDefaultPageSizeIsThirty()
+    public function testDefaultPageSizeIsThirty(): void
     {
         $hal = new Collection([], 'item/route');
 
         $this->assertEquals(30, $hal->getPageSize());
     }
 
-    public function testPageSizeIsMutable()
+    public function testPageSizeIsMutable(): void
     {
         $hal = new Collection([], 'item/route');
         $hal->setPageSize(3);
@@ -84,7 +84,7 @@ class CollectionTest extends TestCase
         $this->assertEquals(3, $hal->getPageSize());
     }
 
-    public function testPageSizeAllowsNegativeOneAsValue()
+    public function testPageSizeAllowsNegativeOneAsValue(): void
     {
         $hal = new Collection([], 'item/route');
         $hal->setPageSize(-1);
@@ -92,14 +92,14 @@ class CollectionTest extends TestCase
         $this->assertEquals(-1, $hal->getPageSize());
     }
 
-    public function testDefaultCollectionNameIsItems()
+    public function testDefaultCollectionNameIsItems(): void
     {
         $hal = new Collection([], 'item/route');
 
         $this->assertEquals('items', $hal->getCollectionName());
     }
 
-    public function testCollectionNameIsMutable()
+    public function testCollectionNameIsMutable(): void
     {
         $hal = new Collection([], 'item/route');
         $hal->setCollectionName('records');
@@ -107,14 +107,14 @@ class CollectionTest extends TestCase
         $this->assertEquals('records', $hal->getCollectionName());
     }
 
-    public function testDefaultAttributesAreEmpty()
+    public function testDefaultAttributesAreEmpty(): void
     {
         $hal = new Collection([], 'item/route');
 
         $this->assertEquals([], $hal->getAttributes());
     }
 
-    public function testAttributesAreMutable()
+    public function testAttributesAreMutable(): void
     {
         $hal = new Collection([], 'item/route');
         $attributes = [
@@ -126,14 +126,14 @@ class CollectionTest extends TestCase
         $this->assertEquals($attributes, $hal->getAttributes());
     }
 
-    public function testComposesLinkCollectionByDefault()
+    public function testComposesLinkCollectionByDefault(): void
     {
         $hal = new Collection([], 'item/route');
 
         $this->assertInstanceOf(LinkCollection::class, $hal->getLinks());
     }
 
-    public function testLinkCollectionMayBeInjected()
+    public function testLinkCollectionMayBeInjected(): void
     {
         $hal   = new Collection([], 'item/route');
         $links = new LinkCollection();
@@ -142,7 +142,7 @@ class CollectionTest extends TestCase
         $this->assertSame($links, $hal->getLinks());
     }
 
-    public function testAllowsSettingAdditionalEntityLinks()
+    public function testAllowsSettingAdditionalEntityLinks(): void
     {
         $links = new LinkCollection();
         $links->add(new Link('describedby'));

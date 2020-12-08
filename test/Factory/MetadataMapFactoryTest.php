@@ -15,22 +15,25 @@ use Laminas\ApiTools\Hal\Metadata\MetadataMap;
 use Laminas\Hydrator\ObjectProperty;
 use LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class MetadataMapFactoryTest extends TestCase
 {
-    public function testInstantiatesMetadataMapWithEmptyConfig()
+    use ProphecyTrait;
+
+    public function testInstantiatesMetadataMapWithEmptyConfig(): void
     {
         $services = $this->prophesize(ContainerInterface::class);
         $services->get('Laminas\ApiTools\Hal\HalConfig')->willReturn([]);
         $services->has('HydratorManager')->willReturn(false);
 
-        $factory = new MetadataMapFactory();
-        $renderer = $factory($services->reveal());
+        $factory     = new MetadataMapFactory();
+        $metadataMap = $factory($services->reveal(), MetadataMap::class);
 
-        $this->assertInstanceOf(MetadataMap::class, $renderer);
+        self::assertInstanceOf(MetadataMap::class, $metadataMap);
     }
 
-    public function testInstantiatesMetadataMapWithMetadataMapConfig()
+    public function testInstantiatesMetadataMapWithMetadataMapConfig(): void
     {
         $config = [
             'metadata_map' => [
@@ -60,13 +63,11 @@ class MetadataMapFactoryTest extends TestCase
         $services->has('HydratorManager')->willReturn(false);
 
         $factory = new MetadataMapFactory();
-        $metadataMap = $factory($services->reveal());
-
-        $this->assertInstanceOf(MetadataMap::class, $metadataMap);
+        $metadataMap = $factory($services->reveal(), MetadataMap::class);
 
         foreach ($config['metadata_map'] as $key => $value) {
-            $this->assertTrue($metadataMap->has($key));
-            $this->assertInstanceOf(Metadata::class, $metadataMap->get($key));
+            self::assertTrue($metadataMap->has($key));
+            self::assertInstanceOf(Metadata::class, $metadataMap->get($key));
         }
     }
 }

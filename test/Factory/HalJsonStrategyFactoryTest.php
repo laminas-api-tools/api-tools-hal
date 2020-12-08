@@ -16,16 +16,16 @@ use PHPUnit\Framework\TestCase;
 
 class HalJsonStrategyFactoryTest extends TestCase
 {
-    public function testInstantiatesHalJsonStrategy()
+    public function testInstantiatesHalJsonStrategy(): void
     {
         $halJsonRenderer = $this->createMock(HalJsonRenderer::class);
 
         $services = new ServiceManager();
         $services->setService('Laminas\ApiTools\Hal\JsonRenderer', $halJsonRenderer);
 
-        $factory = new HalJsonStrategyFactory();
-        $strategy = $factory($services);
+        $factory  = new HalJsonStrategyFactory();
+        $strategy = $factory($services, HalJsonStrategy::class);
 
-        $this->assertInstanceOf(HalJsonStrategy::class, $strategy);
+        self::assertInstanceOf(HalJsonStrategy::class, $strategy);
     }
 }

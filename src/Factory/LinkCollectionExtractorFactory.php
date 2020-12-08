@@ -8,17 +8,18 @@
 
 namespace Laminas\ApiTools\Hal\Factory;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
 use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class LinkCollectionExtractorFactory
+class LinkCollectionExtractorFactory implements FactoryInterface
 {
-    /**
-     * @param  \Interop\Container\ContainerInterface|\Laminas\ServiceManager\ServiceLocatorInterface $container
-     * @return LinkCollectionExtractor
-     */
-    public function __invoke($container)
-    {
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        array $options = null
+    ): LinkCollectionExtractor {
         return new LinkCollectionExtractor($container->get(LinkExtractor::class));
     }
 }

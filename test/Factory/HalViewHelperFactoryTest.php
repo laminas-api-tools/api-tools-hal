@@ -20,9 +20,12 @@ use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class HalViewHelperFactoryTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var AbstractPluginManager
      */
@@ -32,7 +35,7 @@ class HalViewHelperFactoryTest extends TestCase
      */
     private $services;
 
-    public function setupPluginManager($config = [])
+    public function setupPluginManager($config = []): void
     {
         $services = new ServiceManager();
 
@@ -55,15 +58,14 @@ class HalViewHelperFactoryTest extends TestCase
         $linkCollectionExtractor = $this->createMock(LinkCollectionExtractor::class);
         $services->setService(LinkCollectionExtractor::class, $linkCollectionExtractor);
 
-        $pluginManagerMock = $this->getMockBuilder(AbstractPluginManager::class);
-        $pluginManagerMock->setConstructorArgs([$services]);
-        $this->pluginManager = $pluginManagerMock->getMock();
+        $this->pluginManager = $this->getMockForAbstractClass(AbstractPluginManager::class, [$services]);
+
         $services->setService('ViewHelperManager', $this->pluginManager);
 
         $this->services = $services;
     }
 
-    public function testInstantiatesHalViewHelper()
+    public function testInstantiatesHalViewHelper(): void
     {
         $this->setupPluginManager();
 
@@ -76,9 +78,8 @@ class HalViewHelperFactoryTest extends TestCase
         $this->services->setService('EventManager', $eventManagerMock);
 
         $factory = new HalViewHelperFactory();
-        $plugin = $factory($this->services);
+        $plugin = $factory($this->services, HalPlugin::class);
 
-        $this->assertInstanceOf(HalPlugin::class, $plugin);
-        $this->assertInstanceOf(SharedEventManagerInterface::class, $plugin->getEventManager()->getSharedManager());
+        self::assertInstanceOf(SharedEventManagerInterface::class, $plugin->getEventManager()->getSharedManager());
     }
 }
