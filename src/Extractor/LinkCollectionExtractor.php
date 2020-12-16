@@ -19,16 +19,25 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
      */
     protected $linkExtractor;
 
+    /**
+     * @param LinkExtractorInterface $linkExtractor
+     */
     public function __construct(LinkExtractorInterface $linkExtractor)
     {
         $this->setLinkExtractor($linkExtractor);
     }
 
+    /**
+     * @return LinkExtractorInterface
+     */
     public function getLinkExtractor()
     {
         return $this->linkExtractor;
     }
 
+    /**
+     * @param LinkExtractorInterface $linkExtractor
+     */
     public function setLinkExtractor(LinkExtractorInterface $linkExtractor)
     {
         $this->linkExtractor = $linkExtractor;
