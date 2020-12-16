@@ -79,7 +79,7 @@ class Link implements LinkInterface
      * @return self
      * @throws Exception\InvalidArgumentException if missing a "rel" or invalid route specifications
      */
-    public static function factory(array $spec): Link
+    public static function factory(array $spec)
     {
         if (! isset($spec['rel'])) {
             throw new Exception\InvalidArgumentException(\sprintf(
@@ -149,7 +149,7 @@ class Link implements LinkInterface
      * @param array $props
      * @return self
      */
-    public function setProps(array $props): Link
+    public function setProps(array $props)
     {
         if (isset($props['href'])) {
             unset($props['href']);
@@ -169,7 +169,7 @@ class Link implements LinkInterface
      * @return self
      * @throws DomainException
      */
-    public function setRoute($route, $params = null, $options = null): Link
+    public function setRoute($route, $params = null, $options = null)
     {
         if ($this->hasUrl()) {
             throw new DomainException(\sprintf(
@@ -195,7 +195,7 @@ class Link implements LinkInterface
      * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setRouteOptions($options): Link
+    public function setRouteOptions($options)
     {
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
@@ -220,7 +220,7 @@ class Link implements LinkInterface
      * @return self
      * @throws Exception\InvalidArgumentException
      */
-    public function setRouteParams($params): Link
+    public function setRouteParams($params)
     {
         if ($params instanceof Traversable) {
             $params = ArrayUtils::iteratorToArray($params);
@@ -246,7 +246,7 @@ class Link implements LinkInterface
      * @throws DomainException
      * @throws Exception\InvalidArgumentException
      */
-    public function setUrl($href): Link
+    public function setUrl($href)
     {
         if ($this->hasRoute()) {
             throw new DomainException(\sprintf(
@@ -305,7 +305,7 @@ class Link implements LinkInterface
      *
      * @return null|string
      */
-    public function getRoute(): ?string
+    public function getRoute()
     {
         return $this->route;
     }
@@ -315,7 +315,7 @@ class Link implements LinkInterface
      *
      * @return array
      */
-    public function getRouteOptions(): array
+    public function getRouteOptions()
     {
         return $this->routeOptions;
     }
@@ -325,7 +325,7 @@ class Link implements LinkInterface
      *
      * @return array
      */
-    public function getRouteParams(): array
+    public function getRouteParams()
     {
         return $this->routeParams;
     }
@@ -347,7 +347,7 @@ class Link implements LinkInterface
      *
      * @return bool
      */
-    public function isComplete(): bool
+    public function isComplete()
     {
         return (! empty($this->href) || ! empty($this->route));
     }
@@ -357,7 +357,7 @@ class Link implements LinkInterface
      *
      * @return bool
      */
-    public function hasRoute(): bool
+    public function hasRoute()
     {
         return ! empty($this->route);
     }
@@ -386,7 +386,7 @@ class Link implements LinkInterface
      *
      * @return string
      */
-    public function getHref(): string
+    public function getHref()
     {
         return (string) $this->href;
     }
@@ -398,7 +398,7 @@ class Link implements LinkInterface
      *     Currently, templated links are not yet supported, so this will
      *     always return false.
      */
-    public function isTemplated(): bool
+    public function isTemplated()
     {
         return false; // api-tools-hal doesn't support this currently
     }
@@ -411,7 +411,7 @@ class Link implements LinkInterface
      *
      * @return string[]
      */
-    public function getRels(): array
+    public function getRels()
     {
         return $this->rels;
     }
@@ -424,7 +424,7 @@ class Link implements LinkInterface
      *    is either a PHP primitive or an array of PHP strings. If no values are
      *    found an empty array MUST be returned.
      */
-    public function getAttributes(): array
+    public function getAttributes()
     {
         return $this->attributes;
     }
