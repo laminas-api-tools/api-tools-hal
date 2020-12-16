@@ -34,7 +34,7 @@
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
         "laminas/laminas-filter": "^2.7.1",
         "laminas/laminas-http": "^2.5.4",
-        "laminas/laminas-hydrator": "^3.2.0 || ^4.0.1",
+        "laminas/laminas-hydrator": "^2.4.2 || ^3.2.0 || ^4.0.1",
         "laminas/laminas-mvc": "^2.7.15 || ^3.0.2",
         "laminas/laminas-paginator": "^2.7",
         "laminas/laminas-stdlib": "^2.7.7 || ^3.0.1",
