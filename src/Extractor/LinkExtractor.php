@@ -27,7 +27,7 @@ class LinkExtractor implements LinkExtractorInterface
     /**
      * @inheritDoc
      */
-    public function extract(Link $link): array
+    public function extract(Link $link)
     {
         if (! $link->isComplete()) {
             throw new DomainException(sprintf(

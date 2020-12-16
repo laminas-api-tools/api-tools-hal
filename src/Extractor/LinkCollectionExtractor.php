@@ -24,12 +24,12 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
         $this->setLinkExtractor($linkExtractor);
     }
 
-    public function getLinkExtractor(): LinkExtractorInterface
+    public function getLinkExtractor()
     {
         return $this->linkExtractor;
     }
 
-    public function setLinkExtractor(LinkExtractorInterface $linkExtractor): void
+    public function setLinkExtractor(LinkExtractorInterface $linkExtractor)
     {
         $this->linkExtractor = $linkExtractor;
     }
@@ -37,7 +37,7 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
     /**
      * @inheritDoc
      */
-    public function extract(LinkCollection $collection): array
+    public function extract(LinkCollection $collection)
     {
         $links = [];
         foreach ($collection as $rel => $linkDefinition) {
