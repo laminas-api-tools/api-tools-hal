@@ -10,12 +10,16 @@ namespace Laminas\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\ServerUrl;
 
-class LinkUrlBuilderFactory implements FactoryInterface
+class LinkUrlBuilderFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LinkUrlBuilder
+    /**
+     * @param  ContainerInterface|ServiceLocatorInterface $container
+     * @return LinkUrlBuilder
+     */
+    public function __invoke($container)
     {
         $halConfig = $container->get('Laminas\ApiTools\Hal\HalConfig');
 

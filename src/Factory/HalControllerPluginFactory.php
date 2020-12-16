@@ -11,12 +11,18 @@ namespace Laminas\ApiTools\Hal\Factory;
 use Interop\Container\ContainerInterface;
 use Laminas\ApiTools\Hal\Plugin\Hal;
 use Laminas\ServiceManager\AbstractPluginManager;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class HalControllerPluginFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Hal
+    /**
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param null|array $options
+     * @return Hal
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $helpers = $container->get('ViewHelperManager');
         return $helpers->get('Hal');
@@ -25,10 +31,10 @@ class HalControllerPluginFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface|ContainerInterface $container
+     * @param ServiceLocatorInterface $container
      * @return Hal
      */
-    public function createService(ServiceLocatorInterface $container): Hal
+    public function createService(ServiceLocatorInterface $container)
     {
         if ($container instanceof AbstractPluginManager) {
             $container = $container->getServiceLocator() ?: $container;

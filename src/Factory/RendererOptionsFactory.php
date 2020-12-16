@@ -9,16 +9,26 @@
 namespace Laminas\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use Laminas\ApiTools\Hal\RendererOptions;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
-class RendererOptionsFactory implements FactoryInterface
+class RendererOptionsFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RendererOptions
+    /**
+     * @param  ContainerInterface $container
+     * @return RendererOptions
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs.
+     */
+    public function __invoke(ContainerInterface $container)
     {
         $config = $container->get('Laminas\ApiTools\Hal\HalConfig');
 
-        $rendererConfig = (isset($config['renderer']) && \is_array($config['renderer']))
+        $rendererConfig = (isset($config['renderer']) && is_array($config['renderer']))
             ? $config['renderer']
             : [];
 

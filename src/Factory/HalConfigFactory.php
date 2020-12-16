@@ -9,11 +9,14 @@
 namespace Laminas\ApiTools\Hal\Factory;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class HalConfigFactory implements FactoryInterface
+class HalConfigFactory
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    /**
+     * @param ContainerInterface $container
+     * @return array|\ArrayAccess
+     */
+    public function __invoke(ContainerInterface $container)
     {
         $config = $container->has('config')
             ? $container->get('config')
