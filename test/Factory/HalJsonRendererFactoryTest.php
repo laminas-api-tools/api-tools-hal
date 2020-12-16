@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class HalJsonRendererFactoryTest extends TestCase
 {
-    public function testInstantiatesHalJsonRenderer()
+    public function testInstantiatesHalJsonRenderer(): void
     {
         $viewHelperManager = $this->createMock(HelperPluginManager::class);
 
@@ -28,6 +28,6 @@ class HalJsonRendererFactoryTest extends TestCase
         $factory = new HalJsonRendererFactory();
         $renderer = $factory($services, 'Laminas\ApiTools\Hal\JsonRenderer');
 
-        $this->assertInstanceOf(HalJsonRenderer::class, $renderer);
+        self::assertInstanceOf(HalJsonRenderer::class, $renderer);
     }
 }

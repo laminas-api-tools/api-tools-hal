@@ -47,8 +47,8 @@ class EntityHydratorManagerTest extends TestCase
         $entityHydratorManager->addHydrator(TestAsset\Entity::class, $hydrator);
 
         $entityHydrator = $entityHydratorManager->getHydratorForEntity($entity);
-        $this->assertInstanceOf($hydratorClass, $entityHydrator);
-        $this->assertSame($hydrator, $entityHydrator);
+        self::assertInstanceOf($hydratorClass, $entityHydrator);
+        self::assertSame($hydrator, $entityHydrator);
     }
 
     public function testAddHydratorGivenEntityAndHydratorClassesShouldAssociateThem(): void
@@ -64,7 +64,7 @@ class EntityHydratorManagerTest extends TestCase
 
         $entityHydratorManager->addHydrator(TestAsset\Entity::class, $hydratorClass);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             $hydratorClass,
             $entityHydratorManager->getHydratorForEntity($entity)
         );
@@ -80,7 +80,7 @@ class EntityHydratorManagerTest extends TestCase
 
         $entityHydratorManager->addHydrator(stdClass::class, $this->hydratorClass);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             $this->hydratorClass,
             $entityHydratorManager->getHydratorForEntity(new stdClass())
         );
@@ -102,7 +102,7 @@ class EntityHydratorManagerTest extends TestCase
         $hydratorPluginManager = new HydratorPluginManager(new ServiceManager());
         $entityHydratorManager = new EntityHydratorManager($hydratorPluginManager, $metadataMap);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             $hydratorClass,
             $entityHydratorManager->getHydratorForEntity($entity)
         );
@@ -124,7 +124,7 @@ class EntityHydratorManagerTest extends TestCase
 
         $entityHydrator = $entityHydratorManager->getHydratorForEntity($entity);
 
-        $this->assertSame($defaultHydrator, $entityHydrator);
+        self::assertSame($defaultHydrator, $entityHydrator);
     }
 
     public function testGetHydratorForEntityGivenUnknownEntityAndNoDefaultHydratorDefinedShouldReturnFalse(): void
@@ -139,6 +139,6 @@ class EntityHydratorManagerTest extends TestCase
 
         $hydrator = $entityHydratorManager->getHydratorForEntity($entity);
 
-        $this->assertFalse($hydrator);
+        self::assertFalse($hydrator);
     }
 }

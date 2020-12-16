@@ -52,7 +52,7 @@ class HalJsonRendererTest extends TestCase
     {
         $payload = $this->renderer->render($model);
 
-        $this->assertEquals(
+        self::assertEquals(
             $model->getVariables(),
             json_decode($payload, true)
         );
@@ -80,7 +80,7 @@ class HalJsonRendererTest extends TestCase
 
         $rendered = $this->renderer->render($model);
 
-        $this->assertEquals($entity, json_decode($rendered, true));
+        self::assertEquals($entity, json_decode($rendered, true));
     }
 
     public function testRenderGivenHalJsonModelThatContainsHalCollectionShouldReturnDataInJsonFormat()
@@ -106,7 +106,7 @@ class HalJsonRendererTest extends TestCase
 
         $rendered = $this->renderer->render($model);
 
-        $this->assertEquals($collection, json_decode($rendered, true));
+        self::assertEquals($collection, json_decode($rendered, true));
     }
 
     public function testRenderGivenHalJsonModelReturningApiProblemShouldReturnApiProblemInJsonFormat()
@@ -135,7 +135,7 @@ class HalJsonRendererTest extends TestCase
             'status' => 500,
             'detail' => 'error',
         ];
-        $this->assertEquals($apiProblemData, json_decode($rendered, true));
+        self::assertEquals($apiProblemData, json_decode($rendered, true));
     }
 
     private function getHelperPluginManager()

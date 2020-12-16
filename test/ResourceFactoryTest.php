@@ -59,18 +59,18 @@ class ResourceFactoryTest extends TestCase
             $metadata->get(HalPluginTestAsset\Entity::class)
         );
 
-        $this->assertInstanceOf(Entity::class, $entity);
+        self::assertInstanceOf(Entity::class, $entity);
         $links = $entity->getLinks();
-        $this->assertTrue($links->has('describedby'));
-        $this->assertTrue($links->has('children'));
+        self::assertTrue($links->has('describedby'));
+        self::assertTrue($links->has('children'));
 
         $describedby = $links->get('describedby');
-        $this->assertTrue($describedby->hasUrl());
-        $this->assertEquals('http://example.com/api/help/resource', $describedby->getUrl());
+        self::assertTrue($describedby->hasUrl());
+        self::assertEquals('http://example.com/api/help/resource', $describedby->getUrl());
 
         $children = $links->get('children');
-        $this->assertTrue($children->hasRoute());
-        $this->assertEquals('resource/children', $children->getRoute());
+        self::assertTrue($children->hasRoute());
+        self::assertEquals('resource/children', $children->getRoute());
     }
 
     /**
@@ -114,19 +114,19 @@ class ResourceFactoryTest extends TestCase
             $metadata->get(HalPluginTestAsset\Entity::class)
         );
 
-        $this->assertInstanceOf(Entity::class, $entity);
+        self::assertInstanceOf(Entity::class, $entity);
 
         $links = $entity->getLinks();
-        $this->assertTrue($links->has('self'));
+        self::assertTrue($links->has('self'));
 
         $self = $links->get('self');
         $params = $self->getRouteParams();
 
-        $this->assertArrayHasKey('test-1', $params);
-        $this->assertEquals('callback-param', $params['test-1']);
+        self::assertArrayHasKey('test-1', $params);
+        self::assertEquals('callback-param', $params['test-1']);
 
-        $this->assertArrayHasKey('test-2', $params);
-        $this->assertEquals('closure-param', $params['test-2']);
+        self::assertArrayHasKey('test-2', $params);
+        self::assertEquals('closure-param', $params['test-2']);
     }
 
     /**
@@ -162,12 +162,12 @@ class ResourceFactoryTest extends TestCase
             $metadata->get(HalPluginTestAsset\Collection::class)
         );
 
-        $this->assertInstanceOf(Collection::class, $collection);
+        self::assertInstanceOf(Collection::class, $collection);
         $links = $collection->getLinks();
-        $this->assertTrue($links->has('describedby'));
+        self::assertTrue($links->has('describedby'));
         $link = $links->get('describedby');
-        $this->assertTrue($link->hasUrl());
-        $this->assertEquals('http://example.com/api/help/collection', $link->getUrl());
+        self::assertTrue($link->hasUrl());
+        self::assertEquals('http://example.com/api/help/collection', $link->getUrl());
     }
 
     private function getResourceFactory(MetadataMap $metadata): ResourceFactory

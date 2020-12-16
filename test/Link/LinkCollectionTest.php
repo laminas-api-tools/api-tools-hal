@@ -31,10 +31,10 @@ class LinkCollectionTest extends TestCase
         $this->links->add($describedby);
         $this->links->add($self);
 
-        $this->assertTrue($this->links->has('describedby'));
-        $this->assertSame($describedby, $this->links->get('describedby'));
-        $this->assertTrue($this->links->has('self'));
-        $this->assertSame($self, $this->links->get('self'));
+        self::assertTrue($this->links->has('describedby'));
+        self::assertSame($describedby, $this->links->get('describedby'));
+        self::assertTrue($this->links->has('self'));
+        self::assertSame($self, $this->links->get('self'));
     }
 
     public function testCanAddDuplicateLinkRelations()
@@ -45,20 +45,20 @@ class LinkCollectionTest extends TestCase
         $this->links->add($order1)
                     ->add($order2);
 
-        $this->assertTrue($this->links->has('order'));
+        self::assertTrue($this->links->has('order'));
         $orders = $this->links->get('order');
-        $this->assertIsArray($orders);
-        $this->assertContains($order1, $orders);
-        $this->assertContains($order2, $orders);
+        self::assertIsArray($orders);
+        self::assertContains($order1, $orders);
+        self::assertContains($order2, $orders);
     }
 
     public function testCanRemoveLinkRelations()
     {
         $describedby = new Link('describedby');
         $this->links->add($describedby);
-        $this->assertTrue($this->links->has('describedby'));
+        self::assertTrue($this->links->has('describedby'));
         $this->links->remove('describedby');
-        $this->assertFalse($this->links->has('describedby'));
+        self::assertFalse($this->links->has('describedby'));
     }
 
     public function testCanOverwriteLinkRelations()
@@ -69,9 +69,9 @@ class LinkCollectionTest extends TestCase
         $this->links->add($order1)
                     ->add($order2, true);
 
-        $this->assertTrue($this->links->has('order'));
+        self::assertTrue($this->links->has('order'));
         $orders = $this->links->get('order');
-        $this->assertSame($order2, $orders);
+        self::assertSame($order2, $orders);
     }
 
     public function testCanIterateLinks()
@@ -81,13 +81,13 @@ class LinkCollectionTest extends TestCase
         $this->links->add($describedby);
         $this->links->add($self);
 
-        $this->assertEquals(2, $this->links->count());
+        self::assertEquals(2, $this->links->count());
         $i = 0;
         foreach ($this->links as $link) {
-            $this->assertInstanceOf(Link::class, $link);
+            self::assertInstanceOf(Link::class, $link);
             ++$i;
         }
-        $this->assertEquals(2, $i);
+        self::assertEquals(2, $i);
     }
 
     public function testCannotDuplicateSelf()
@@ -98,8 +98,8 @@ class LinkCollectionTest extends TestCase
         $this->links->add($first)
                     ->add($second);
 
-        $this->assertTrue($this->links->has('self'));
-        $this->assertInstanceOf(Link::class, $this->links->get('self'));
-        $this->assertSame($second, $this->links->get('self'));
+        self::assertTrue($this->links->has('self'));
+        self::assertInstanceOf(Link::class, $this->links->get('self'));
+        self::assertSame($second, $this->links->get('self'));
     }
 }

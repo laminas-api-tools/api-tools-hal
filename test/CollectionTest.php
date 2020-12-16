@@ -48,17 +48,17 @@ class CollectionTest extends TestCase
     {
         $hal = new Collection([], 'item/route', ['version' => 1], ['query' => 'format=json']);
 
-        $this->assertEquals([], $hal->getCollection());
-        $this->assertEquals('item/route', $hal->getEntityRoute());
-        $this->assertEquals(['version' => 1], $hal->getEntityRouteParams());
-        $this->assertEquals(['query' => 'format=json'], $hal->getEntityRouteOptions());
+        self::assertEquals([], $hal->getCollection());
+        self::assertEquals('item/route', $hal->getEntityRoute());
+        self::assertEquals(['version' => 1], $hal->getEntityRouteParams());
+        self::assertEquals(['query' => 'format=json'], $hal->getEntityRouteOptions());
     }
 
     public function testDefaultPageIsOne(): void
     {
         $hal = new Collection([], 'item/route');
 
-        $this->assertEquals(1, $hal->getPage());
+        self::assertEquals(1, $hal->getPage());
     }
 
     public function testPageIsMutable(): void
@@ -66,14 +66,14 @@ class CollectionTest extends TestCase
         $hal = new Collection([], 'item/route');
         $hal->setPage(5);
 
-        $this->assertEquals(5, $hal->getPage());
+        self::assertEquals(5, $hal->getPage());
     }
 
     public function testDefaultPageSizeIsThirty(): void
     {
         $hal = new Collection([], 'item/route');
 
-        $this->assertEquals(30, $hal->getPageSize());
+        self::assertEquals(30, $hal->getPageSize());
     }
 
     public function testPageSizeIsMutable(): void
@@ -81,7 +81,7 @@ class CollectionTest extends TestCase
         $hal = new Collection([], 'item/route');
         $hal->setPageSize(3);
 
-        $this->assertEquals(3, $hal->getPageSize());
+        self::assertEquals(3, $hal->getPageSize());
     }
 
     public function testPageSizeAllowsNegativeOneAsValue(): void
@@ -89,14 +89,14 @@ class CollectionTest extends TestCase
         $hal = new Collection([], 'item/route');
         $hal->setPageSize(-1);
 
-        $this->assertEquals(-1, $hal->getPageSize());
+        self::assertEquals(-1, $hal->getPageSize());
     }
 
     public function testDefaultCollectionNameIsItems(): void
     {
         $hal = new Collection([], 'item/route');
 
-        $this->assertEquals('items', $hal->getCollectionName());
+        self::assertEquals('items', $hal->getCollectionName());
     }
 
     public function testCollectionNameIsMutable(): void
@@ -104,14 +104,14 @@ class CollectionTest extends TestCase
         $hal = new Collection([], 'item/route');
         $hal->setCollectionName('records');
 
-        $this->assertEquals('records', $hal->getCollectionName());
+        self::assertEquals('records', $hal->getCollectionName());
     }
 
     public function testDefaultAttributesAreEmpty(): void
     {
         $hal = new Collection([], 'item/route');
 
-        $this->assertEquals([], $hal->getAttributes());
+        self::assertEquals([], $hal->getAttributes());
     }
 
     public function testAttributesAreMutable(): void
@@ -123,14 +123,14 @@ class CollectionTest extends TestCase
         ];
         $hal->setAttributes($attributes);
 
-        $this->assertEquals($attributes, $hal->getAttributes());
+        self::assertEquals($attributes, $hal->getAttributes());
     }
 
     public function testComposesLinkCollectionByDefault(): void
     {
         $hal = new Collection([], 'item/route');
 
-        $this->assertInstanceOf(LinkCollection::class, $hal->getLinks());
+        self::assertInstanceOf(LinkCollection::class, $hal->getLinks());
     }
 
     public function testLinkCollectionMayBeInjected(): void
@@ -139,7 +139,7 @@ class CollectionTest extends TestCase
         $links = new LinkCollection();
         $hal->setLinks($links);
 
-        $this->assertSame($links, $hal->getLinks());
+        self::assertSame($links, $hal->getLinks());
     }
 
     public function testAllowsSettingAdditionalEntityLinks(): void
@@ -150,6 +150,6 @@ class CollectionTest extends TestCase
         $hal   = new Collection([], 'item/route');
         $hal->setEntityLinks($links);
 
-        $this->assertSame($links, $hal->getEntityLinks());
+        self::assertSame($links, $hal->getEntityLinks());
     }
 }

@@ -683,9 +683,9 @@ class HalTest extends TestCase
         $rendered = $this->plugin->renderEntity($entity);
 
         $this->assertRelationalLinkContains('/users/user', 'self', $rendered);
-        $this->assertArrayHasKey('_embedded', $rendered);
-        $this->assertIsArray($rendered['_embedded']);
-        $this->assertArrayHasKey('contact', $rendered['_embedded']);
+        self::assertArrayHasKey('_embedded', $rendered);
+        self::assertIsArray($rendered['_embedded']);
+        self::assertArrayHasKey('contact', $rendered['_embedded']);
         $contact = $rendered['_embedded']['contact'];
         $this->assertRelationalLinkContains('/contacts/foo', 'self', $contact);
     }
