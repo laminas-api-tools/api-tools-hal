@@ -16,9 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class LinkCollectionExtractorTest extends TestCase
 {
-    /**
-     * @var LinkCollectionExtractor
-     */
+    /** @var LinkCollectionExtractor */
     protected $linkCollectionExtractor;
 
     public function setUp(): void

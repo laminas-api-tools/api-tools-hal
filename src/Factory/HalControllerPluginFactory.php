@@ -17,12 +17,11 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 class HalControllerPluginFactory implements FactoryInterface
 {
     /**
-     * @param ContainerInterface $container
      * @param string $requestedName
      * @param null|array $options
      * @return Hal
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $helpers = $container->get('ViewHelperManager');
         return $helpers->get('Hal');
@@ -31,7 +30,6 @@ class HalControllerPluginFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $container
      * @return Hal
      */
     public function createService(ServiceLocatorInterface $container)

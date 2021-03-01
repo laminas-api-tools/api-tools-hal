@@ -13,7 +13,6 @@ interface SelfLinkInjectorInterface
     /**
      * Inject a "self" relational link based on the route and identifier
      *
-     * @param  LinkCollectionAwareInterface $resource
      * @param  string $route
      * @param  string $routeIdentifier
      */

@@ -73,7 +73,7 @@ class SelfLinkInjectorTest extends TestCase
 
         self::assertTrue($linkCollection->has('self'));
 
-        $selfLink = $linkCollection->get('self');
+        $selfLink        = $linkCollection->get('self');
         $linkRouteParams = $selfLink->getRouteParams();
 
         self::assertArrayHasKey($routeIdentifier, $linkRouteParams);

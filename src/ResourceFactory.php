@@ -10,30 +10,28 @@ namespace Laminas\ApiTools\Hal;
 
 use Closure;
 use Laminas\ApiTools\Hal\Exception;
-use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use laminas\apitools\hal\extractor\entityextractor;
 use Laminas\ApiTools\Hal\Link\Link;
 use Laminas\ApiTools\Hal\Link\LinkCollection;
 use Laminas\ApiTools\Hal\Metadata\Metadata;
 use Laminas\Paginator\Paginator;
 use Traversable;
 
+use function array_merge;
+use function call_user_func_array;
+use function get_class;
+use function is_callable;
+use function sprintf;
+
 class ResourceFactory
 {
-    /**
-     * @var EntityHydratorManager
-     */
+    /** @var EntityHydratorManager */
     protected $entityHydratorManager;
 
-    /**
-     * @var EntityExtractor
-     */
+    /** @var entityextractor */
     protected $entityExtractor;
 
-    /**
-     * @param EntityHydratorManager $entityHydratorManager
-     * @param EntityExtractor $entityExtractor
-     */
-    public function __construct(EntityHydratorManager $entityHydratorManager, EntityExtractor $entityExtractor)
+    public function __construct(EntityHydratorManager $entityHydratorManager, entityextractor $entityExtractor)
     {
         $this->entityHydratorManager = $entityHydratorManager;
         $this->entityExtractor       = $entityExtractor;
@@ -43,7 +41,6 @@ class ResourceFactory
      * Create a entity and/or collection based on a metadata map
      *
      * @param  object|array|Traversable|Paginator $object
-     * @param  Metadata $metadata
      * @param  bool $renderEmbeddedEntities
      * @return Entity|Collection
      * @throws Exception\RuntimeException
@@ -92,7 +89,6 @@ class ResourceFactory
 
     /**
      * @param  array|Traversable|Paginator $object
-     * @param  Metadata $metadata
      * @return Collection
      */
     public function createCollectionFromMetadata($object, Metadata $metadata)
@@ -108,7 +104,8 @@ class ResourceFactory
         $this->marshalMetadataLinks($metadata, $links);
 
         $forceSelfLink = $metadata->getForceSelfLink();
-        if ($forceSelfLink && ! $links->has('self')
+        if (
+            $forceSelfLink && ! $links->has('self')
             && ($metadata->hasUrl() || $metadata->hasRoute())
         ) {
             $link = $this->marshalLinkFromMetadata($metadata, $object);
@@ -121,7 +118,6 @@ class ResourceFactory
     /**
      * Creates a link object, given metadata and a resource
      *
-     * @param  Metadata $metadata
      * @param  object $object
      * @param  null|string $id
      * @param  null|string $routeIdentifierName
@@ -174,9 +170,6 @@ class ResourceFactory
 
     /**
      * Inject any links found in the metadata into the resource's link collection
-     *
-     * @param  Metadata $metadata
-     * @param  LinkCollection $links
      */
     public function marshalMetadataLinks(Metadata $metadata, LinkCollection $links)
     {

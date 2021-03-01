@@ -11,22 +11,17 @@ namespace Laminas\ApiTools\Hal\Link;
 use Laminas\View\Helper\ServerUrl;
 use Laminas\View\Helper\Url;
 
+use function call_user_func;
+use function substr;
+
 class LinkUrlBuilder
 {
-    /**
-     * @var ServerUrl
-     */
+    /** @var ServerUrl */
     protected $serverUrlHelper;
 
-    /**
-     * @var Url
-     */
+    /** @var Url */
     protected $urlHelper;
 
-    /**
-     * @param ServerUrl $serverUrlHelper
-     * @param Url $urlHelper
-     */
     public function __construct(ServerUrl $serverUrlHelper, Url $urlHelper)
     {
         $this->serverUrlHelper = $serverUrlHelper;
@@ -50,7 +45,7 @@ class LinkUrlBuilder
             $reUseMatchedParams
         );
 
-        if (substr($path, 0, 4) == 'http') {
+        if (substr($path, 0, 4) === 'http') {
             return $path;
         }
 

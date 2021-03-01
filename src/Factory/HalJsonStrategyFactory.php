@@ -14,7 +14,6 @@ use Laminas\ApiTools\Hal\View\HalJsonStrategy;
 class HalJsonStrategyFactory
 {
     /**
-     * @param ContainerInterface $container
      * @return HalJsonStrategy
      */
     public function __invoke(ContainerInterface $container)

@@ -13,6 +13,8 @@ use Laminas\ApiTools\Hal\Collection;
 use Laminas\Paginator\Paginator;
 use Laminas\Stdlib\ArrayUtils;
 
+use function count;
+
 class PaginationInjector implements PaginationInjectorInterface
 {
     /**
@@ -85,7 +87,7 @@ class PaginationInjector implements PaginationInjectorInterface
     private function injectPrevLink(Collection $halCollection)
     {
         $page = $halCollection->getPage();
-        $prev = ($page > 1) ? $page - 1 : false;
+        $prev = $page > 1 ? $page - 1 : false;
 
         if ($prev) {
             $link = $this->createPaginationLink('prev', $halCollection, $prev);
@@ -97,7 +99,7 @@ class PaginationInjector implements PaginationInjectorInterface
     {
         $page      = $halCollection->getPage();
         $pageCount = $halCollection->getCollection()->count();
-        $next      = ($page < $pageCount) ? $page + 1 : false;
+        $next      = $page < $pageCount ? $page + 1 : false;
 
         if ($next) {
             $link = $this->createPaginationLink('next', $halCollection, $next);
@@ -105,6 +107,11 @@ class PaginationInjector implements PaginationInjectorInterface
         }
     }
 
+    /**
+     * @param string $relation
+     * @param int $page
+     * @return Link
+     */
     private function createPaginationLink($relation, Collection $halCollection, $page = null)
     {
         $options = ArrayUtils::merge(

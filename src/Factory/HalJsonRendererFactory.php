@@ -15,7 +15,6 @@ use Laminas\ApiTools\Hal\View\HalJsonRenderer;
 class HalJsonRendererFactory
 {
     /**
-     * @param ContainerInterface $container
      * @return HalJsonRenderer
      */
     public function __invoke(ContainerInterface $container)

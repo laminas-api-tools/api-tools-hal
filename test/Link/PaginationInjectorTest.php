@@ -105,7 +105,7 @@ class PaginationInjectorTest extends TestCase
         $halCollection = $this->getHalCollection(5, 6);
 
         $injector = new PaginationInjector();
-        $result = $injector->injectPaginationLinks($halCollection);
+        $result   = $injector->injectPaginationLinks($halCollection);
 
         self::assertInstanceOf(ApiProblem::class, $result);
         self::assertEquals(409, $result->status);

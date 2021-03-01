@@ -22,6 +22,8 @@ use Laminas\View\Helper\Url as UrlHelper;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
+use function class_exists;
+
 class LinkExtractorTest extends TestCase
 {
     use ProphecyTrait;
@@ -29,7 +31,7 @@ class LinkExtractorTest extends TestCase
     public function testExtractGivenIncompleteLinkShouldThrowException(): void
     {
         $linkUrlBuilder = $this->createMock(LinkUrlBuilder::class);
-        $linkExtractor = new LinkExtractor($linkUrlBuilder);
+        $linkExtractor  = new LinkExtractor($linkUrlBuilder);
 
         $link = $this->prophesize(Link::class);
         $link->isComplete()->willReturn(false)->shouldBeCalledTimes(1);
@@ -41,13 +43,13 @@ class LinkExtractorTest extends TestCase
     public function testExtractGivenLinkWithUrlShouldReturnThisOne(): void
     {
         $linkUrlBuilder = $this->createMock(LinkUrlBuilder::class);
-        $linkExtractor = new LinkExtractor($linkUrlBuilder);
+        $linkExtractor  = new LinkExtractor($linkUrlBuilder);
 
         $params = [
             'rel' => 'resource',
             'url' => 'http://api.example.com',
         ];
-        $link = Link::factory($params);
+        $link   = Link::factory($params);
 
         $result = $linkExtractor->extract($link);
 
@@ -57,9 +59,9 @@ class LinkExtractorTest extends TestCase
     public function testExtractShouldComposeAnyPropertiesInLink(): void
     {
         $linkUrlBuilder = $this->createMock(LinkUrlBuilder::class);
-        $linkExtractor = new LinkExtractor($linkUrlBuilder);
+        $linkExtractor  = new LinkExtractor($linkUrlBuilder);
 
-        $link = Link::factory([
+        $link   = Link::factory([
             'rel'   => 'resource',
             'url'   => 'http://api.example.com/foo?version=2',
             'props' => [
@@ -93,9 +95,9 @@ class LinkExtractorTest extends TestCase
         self::assertEquals('foo', $match->getParam('id', false));
 
         $link = Link::factory([
-            'rel' => 'resource',
+            'rel'   => 'resource',
             'route' => [
-                'name' => 'hostname/resource',
+                'name'    => 'hostname/resource',
                 'options' => [
                     'reuse_matched_params' => false,
                 ],
@@ -109,23 +111,28 @@ class LinkExtractorTest extends TestCase
         self::assertEquals('http://localhost.localdomain/resource', $result['href']);
     }
 
+    /**
+     * @param string $url
+     * @param UrlHelper $urlHelper
+     * @return null|RouteMatch|V2RouteMatch
+     */
     private function matchUrl($url, $urlHelper)
     {
         $url     = 'http://localhost.localdomain' . $url;
         $request = new Request();
         $request->setUri($url);
 
-        $routerClass = \class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
-        $router = new $routerClass();
+        $routerClass = class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
+        $router      = new $routerClass();
 
         $router->addRoute('hostname', [
-            'type' => 'hostname',
-            'options' => [
+            'type'         => 'hostname',
+            'options'      => [
                 'route' => 'localhost.localdomain',
             ],
             'child_routes' => [
                 'resource' => [
-                    'type' => 'segment',
+                    'type'    => 'segment',
                     'options' => [
                         'route' => '/resource[/:id]',
                     ],

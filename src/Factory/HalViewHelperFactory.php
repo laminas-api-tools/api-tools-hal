@@ -13,10 +13,13 @@ use Laminas\ApiTools\Hal\Exception;
 use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
 use Laminas\ApiTools\Hal\Link;
 use Laminas\ApiTools\Hal\Plugin;
+use Laminas\ApiTools\Hal\RendererOptions;
 use Laminas\Hydrator\HydratorInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+
+use function sprintf;
 
 class HalViewHelperFactory
 {
@@ -26,16 +29,16 @@ class HalViewHelperFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $container = ($container instanceof AbstractPluginManager)
+        $container = $container instanceof AbstractPluginManager
             ? $container->getServiceLocator()
             : $container;
 
-        /* @var $rendererOptions \Laminas\ApiTools\Hal\RendererOptions */
-        $rendererOptions = $container->get('Laminas\ApiTools\Hal\RendererOptions');
+        /** @var RendererOptions $rendererOptions */
+        $rendererOptions = $container->get(RendererOptions::class);
         $metadataMap     = $container->get('Laminas\ApiTools\Hal\MetadataMap');
 
         /** @var HydratorPluginManager $hydrators */
-        $hydrators       = $metadataMap->getHydratorManager();
+        $hydrators = $metadataMap->getHydratorManager();
 
         $helper = new Plugin\Hal($hydrators);
 
@@ -80,6 +83,7 @@ class HalViewHelperFactory
      * Proxies to __invoke() to provide backwards compatibility.
      *
      * @deprecated since 1.4.0; use __invoke instead.
+     *
      * @param  ServiceLocatorInterface $container
      * @return Plugin\Hal
      */

@@ -12,11 +12,11 @@ use Laminas\ApiTools\ApiProblem\Exception\DomainException;
 use Laminas\ApiTools\Hal\Link\Link;
 use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
 
+use function sprintf;
+
 class LinkExtractor implements LinkExtractorInterface
 {
-    /**
-     * @var LinkUrlBuilder
-     */
+    /** @var LinkUrlBuilder */
     protected $linkUrlBuilder;
 
     public function __construct(LinkUrlBuilder $linkUrlBuilder)
@@ -45,7 +45,7 @@ class LinkExtractor implements LinkExtractorInterface
         }
 
         $reuseMatchedParams = true;
-        $options = $link->getRouteOptions();
+        $options            = $link->getRouteOptions();
         if (isset($options['reuse_matched_params'])) {
             $reuseMatchedParams = (bool) $options['reuse_matched_params'];
             unset($options['reuse_matched_params']);

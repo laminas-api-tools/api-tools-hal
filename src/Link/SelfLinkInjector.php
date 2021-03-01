@@ -11,6 +11,8 @@ namespace Laminas\ApiTools\Hal\Link;
 use Laminas\ApiTools\Hal\Collection;
 use Laminas\ApiTools\Hal\Entity;
 
+use function is_array;
+
 class SelfLinkInjector implements SelfLinkInjectorInterface
 {
     /**
@@ -28,6 +30,12 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
         $links->add($selfLink, true);
     }
 
+    /**
+     * @param null|array|Entity|Collection $resource
+     * @param string|array $route
+     * @param string $routeIdentifier
+     * @return Link
+     */
     private function createSelfLink($resource, $route, $routeIdentifier)
     {
         // build route
@@ -45,14 +53,17 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
 
         // build link
         $spec = [
-            'rel' => 'self',
+            'rel'   => 'self',
             'route' => $route,
         ];
-        $link = Link::factory($spec);
-
-        return $link;
+        return Link::factory($spec);
     }
 
+    /**
+     * @param null|array|Entity|Collection $resource
+     * @param string $routeIdentifier
+     * @return array
+     */
     private function getRouteParams($resource, $routeIdentifier)
     {
         if ($resource instanceof Collection) {
@@ -61,7 +72,8 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
 
         $routeParams = [];
 
-        if ($resource instanceof Entity
+        if (
+            $resource instanceof Entity
             && null !== $resource->getId()
         ) {
             $routeParams = [
@@ -72,6 +84,10 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
         return $routeParams;
     }
 
+    /**
+     * @param null|array|Entity|Collection $resource
+     * @return array
+     */
     private function getRouteOptions($resource)
     {
         if ($resource instanceof Collection) {

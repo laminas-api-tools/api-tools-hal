@@ -12,9 +12,16 @@ use Laminas\Stdlib\ArraySerializableInterface;
 
 class EntityWithProtectedProperties implements ArraySerializableInterface
 {
+    /** @var string */
     protected $id;
+
+    /** @var string */
     protected $name;
 
+    /**
+     * @param string $id
+     * @param string $name
+     */
     public function __construct($id, $name)
     {
         $this->id   = $id;

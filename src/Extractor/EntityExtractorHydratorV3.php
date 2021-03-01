@@ -14,6 +14,8 @@ use Laminas\ApiTools\Hal\EntityHydratorManager;
 use Laminas\Hydrator\ExtractionInterface;
 use SplObjectStorage;
 
+use function get_object_vars;
+
 /**
  * Extract entities.
  *
@@ -22,9 +24,7 @@ use SplObjectStorage;
  */
 class EntityExtractorHydratorV3 implements ExtractionInterface
 {
-    /**
-     * @var EntityHydratorManager
-     */
+    /** @var EntityHydratorManager */
     protected $entityHydratorManager;
 
     /**
@@ -34,9 +34,6 @@ class EntityExtractorHydratorV3 implements ExtractionInterface
      */
     protected $serializedEntities;
 
-    /**
-     * @param EntityHydratorManager $entityHydratorManager
-     */
     public function __construct(EntityHydratorManager $entityHydratorManager)
     {
         $this->entityHydratorManager = $entityHydratorManager;
@@ -46,7 +43,7 @@ class EntityExtractorHydratorV3 implements ExtractionInterface
     /**
      * @inheritDoc
      */
-    public function extract(object $entity) : array
+    public function extract(object $entity): array
     {
         if (isset($this->serializedEntities[$entity])) {
             return $this->serializedEntities[$entity];
@@ -57,7 +54,7 @@ class EntityExtractorHydratorV3 implements ExtractionInterface
         return $this->serializedEntities[$entity];
     }
 
-    private function extractEntity(object $entity) : array
+    private function extractEntity(object $entity): array
     {
         $hydrator = $this->entityHydratorManager->getHydratorForEntity($entity);
 

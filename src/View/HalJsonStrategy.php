@@ -9,8 +9,11 @@
 namespace Laminas\ApiTools\Hal\View;
 
 use Laminas\ApiTools\ApiProblem\View\ApiProblemModel;
+use Laminas\View\Model\ModelInterface;
 use Laminas\View\Strategy\JsonStrategy;
 use Laminas\View\ViewEvent;
+
+use function is_string;
 
 /**
  * Extension of the JSON strategy to handle the HalJsonModel and provide
@@ -23,14 +26,9 @@ use Laminas\View\ViewEvent;
  */
 class HalJsonStrategy extends JsonStrategy
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $contentType = 'application/json';
 
-    /**
-     * @param HalJsonRenderer $renderer
-     */
     public function __construct(HalJsonRenderer $renderer)
     {
         $this->renderer = $renderer;
@@ -39,7 +37,6 @@ class HalJsonStrategy extends JsonStrategy
     /**
      * Detect if we should use the HalJsonRenderer based on model type.
      *
-     * @param  ViewEvent $e
      * @return null|HalJsonRenderer
      */
     public function selectRenderer(ViewEvent $e)
@@ -62,8 +59,6 @@ class HalJsonStrategy extends JsonStrategy
      *
      * Injects the response with the rendered content, and sets the content
      * type based on the detection that occurred during renderer selection.
-     *
-     * @param  ViewEvent $e
      */
     public function injectResponse(ViewEvent $e)
     {
@@ -93,7 +88,7 @@ class HalJsonStrategy extends JsonStrategy
     /**
      * Determine the response content-type to return based on the view model.
      *
-     * @param ApiProblemModel|HalJsonModel|\Laminas\View\Model\ModelInterface $model
+     * @param ApiProblemModel|HalJsonModel|ModelInterface $model
      * @return string The content-type to use.
      */
     private function getContentTypeFromModel($model)
@@ -102,7 +97,8 @@ class HalJsonStrategy extends JsonStrategy
             return 'application/problem+json';
         }
 
-        if ($model instanceof HalJsonModel
+        if (
+            $model instanceof HalJsonModel
             && ($model->isCollection() || $model->isEntity())
         ) {
             return 'application/hal+json';

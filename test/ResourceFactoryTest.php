@@ -15,14 +15,11 @@ use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
 use Laminas\ApiTools\Hal\Metadata\MetadataMap;
 use Laminas\ApiTools\Hal\ResourceFactory;
 use Laminas\Hydrator\HydratorPluginManager;
-use Laminas\Hydrator\ObjectProperty;
+use Laminas\Hydrator\ObjectPropertyHydrator as ObjectProperty;
 use Laminas\ServiceManager\ServiceManager;
 use LaminasTest\ApiTools\Hal\Plugin\TestAsset as HalPluginTestAsset;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @subpackage UnitTest
- */
 class ResourceFactoryTest extends TestCase
 {
     /**
@@ -34,15 +31,15 @@ class ResourceFactoryTest extends TestCase
 
         $metadata = new MetadataMap([
             HalPluginTestAsset\Entity::class => [
-                'hydrator'   => 'Laminas\Hydrator\ObjectProperty',
+                'hydrator'   => ObjectProperty::class,
                 'route_name' => 'hostname/resource',
                 'links'      => [
                     [
-                        'rel' => 'describedby',
+                        'rel'  => 'describedby',
                         'href' => 'http://example.com/api/help/resource',
                     ],
                     [
-                        'rel' => 'children',
+                        'rel'   => 'children',
                         'route' => [
                             'name' => 'resource/children',
                         ],
@@ -119,7 +116,7 @@ class ResourceFactoryTest extends TestCase
         $links = $entity->getLinks();
         self::assertTrue($links->has('self'));
 
-        $self = $links->get('self');
+        $self   = $links->get('self');
         $params = $self->getRouteParams();
 
         self::assertArrayHasKey('test-1', $params);
@@ -142,12 +139,12 @@ class ResourceFactoryTest extends TestCase
 
         $metadata = new MetadataMap([
             HalPluginTestAsset\Collection::class => [
-                'is_collection'       => true,
-                'route_name'          => 'hostname/contacts',
-                'entity_route_name'   => 'hostname/embedded',
-                'links'               => [
+                'is_collection'     => true,
+                'route_name'        => 'hostname/contacts',
+                'entity_route_name' => 'hostname/embedded',
+                'links'             => [
                     [
-                        'rel' => 'describedby',
+                        'rel'  => 'describedby',
                         'href' => 'http://example.com/api/help/collection',
                     ],
                 ],

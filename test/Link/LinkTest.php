@@ -31,7 +31,7 @@ class LinkTest extends TestCase
     public function testCanSetLinkRoute()
     {
         $route = 'api/docs';
-        $link = new Link('describedby');
+        $link  = new Link('describedby');
         $link->setRoute($route);
         self::assertEquals($route, $link->getRoute());
     }
@@ -40,7 +40,7 @@ class LinkTest extends TestCase
     {
         $route  = 'api/docs';
         $params = ['version' => '1.1'];
-        $link = new Link('describedby');
+        $link   = new Link('describedby');
         $link->setRoute($route, $params);
         self::assertEquals($route, $link->getRoute());
         self::assertEquals($params, $link->getRouteParams());
@@ -50,7 +50,7 @@ class LinkTest extends TestCase
     {
         $route   = 'api/docs';
         $options = ['query' => 'version=1.1'];
-        $link = new Link('describedby');
+        $link    = new Link('describedby');
         $link->setRoute($route, null, $options);
         self::assertEquals($route, $link->getRoute());
         self::assertEquals($options, $link->getRouteOptions());
@@ -60,7 +60,7 @@ class LinkTest extends TestCase
     {
         $route  = 'api/docs';
         $params = ['version' => '1.1'];
-        $link = new Link('describedby');
+        $link   = new Link('describedby');
         $link->setRoute($route);
         $link->setRouteParams($params);
         self::assertEquals($route, $link->getRoute());
@@ -71,7 +71,7 @@ class LinkTest extends TestCase
     {
         $route   = 'api/docs';
         $options = ['query' => 'version=1.1'];
-        $link = new Link('describedby');
+        $link    = new Link('describedby');
         $link->setRoute($route);
         $link->setRouteOptions($options);
         self::assertEquals($route, $link->getRoute());
@@ -167,7 +167,7 @@ class LinkTest extends TestCase
         $route   = 'api/docs';
         $params  = ['version' => '1.1'];
         $options = ['query' => 'version=1.1'];
-        $link = Link::factory([
+        $link    = Link::factory([
             'rel'   => $rel,
             'route' => [
                 'name'    => $route,
@@ -185,8 +185,8 @@ class LinkTest extends TestCase
 
     public function testFactoryCanGenerateLinkWithArbitraryProperties()
     {
-        $rel = 'describedby';
-        $url = 'http://example.org/api/foo?version=2';
+        $rel  = 'describedby';
+        $url  = 'http://example.org/api/foo?version=2';
         $link = Link::factory([
             'rel'   => $rel,
             'url'   => $url,

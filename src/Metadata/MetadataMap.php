@@ -13,16 +13,20 @@ use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\Hydrator\HydratorPluginManagerInterface;
 use Laminas\ServiceManager\ServiceManager;
 
+use function array_key_exists;
+use function get_class;
+use function get_parent_class;
+use function gettype;
+use function is_array;
+use function is_object;
+use function sprintf;
+
 class MetadataMap
 {
-    /**
-     * @var HydratorPluginManager|HydratorPluginManagerInterface
-     */
+    /** @var HydratorPluginManager|HydratorPluginManagerInterface */
     protected $hydrators;
 
-    /**
-     * @var Metadata[]
-     */
+    /** @var Metadata[] */
     protected $map = [];
 
     /**
@@ -34,7 +38,7 @@ class MetadataMap
      * @param  null|array $map
      * @param  null|HydratorPluginManager|HydratorPluginManagerInterface $hydrators
      */
-    public function __construct(array $map = null, $hydrators = null)
+    public function __construct(?array $map = null, $hydrators = null)
     {
         if (null !== $hydrators) {
             $this->setHydratorManager($hydrators);
@@ -58,7 +62,7 @@ class MetadataMap
         } else {
             throw new Exception\InvalidArgumentException(sprintf(
                 '$hydrators argument to %s must be an instance of either %s or %s; received %s',
-                __CLASS__,
+                self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
                 is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)
@@ -98,7 +102,7 @@ class MetadataMap
                 throw new Exception\InvalidArgumentException(sprintf(
                     '%s expects each map to be an array or a Laminas\ApiTools\Hal\Metadata instance; received "%s"',
                     __METHOD__,
-                    (is_object($metadata) ? get_class($metadata) : gettype($metadata))
+                    is_object($metadata) ? get_class($metadata) : gettype($metadata)
                 ));
             }
 

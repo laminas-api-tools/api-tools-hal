@@ -8,6 +8,8 @@
 
 namespace Laminas\ApiTools\Hal\Exception;
 
-class DeprecatedMethodException extends \RuntimeException implements ExceptionInterface
+use RuntimeException;
+
+class DeprecatedMethodException extends RuntimeException implements ExceptionInterface
 {
 }

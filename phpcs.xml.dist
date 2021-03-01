@@ -16,7 +16,18 @@
     <file>config</file>
     <file>src</file>
     <file>test</file>
+    <exclude-pattern>src/_autoload.php</exclude-pattern>
+    <exclude-pattern>src/Extractor/EntityExtractorHydratorV2.php</exclude-pattern>
 
     <!-- Include all rules from Laminas Coding Standard -->
     <rule ref="LaminasCodingStandard"/>
+
+    <rule ref="WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid">
+        <exclude-pattern>src/Plugin/Hal.php</exclude-pattern>
+        <exclude-pattern>test/ResourceFactoryTest.php</exclude-pattern>
+    </rule>
+
+    <rule ref="WebimpressCodingStandard.PHP.CorrectClassNameCase.InvalidInPhpDocs">
+        <exclude-pattern>src/Plugin/Hal.php</exclude-pattern>
+    </rule>
 </ruleset>

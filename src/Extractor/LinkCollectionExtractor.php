@@ -12,16 +12,14 @@ use Laminas\ApiTools\ApiProblem\Exception\DomainException;
 use Laminas\ApiTools\Hal\Link\Link;
 use Laminas\ApiTools\Hal\Link\LinkCollection;
 
+use function is_array;
+use function sprintf;
+
 class LinkCollectionExtractor implements LinkCollectionExtractorInterface
 {
-    /**
-     * @var LinkExtractorInterface
-     */
+    /** @var LinkExtractorInterface */
     protected $linkExtractor;
 
-    /**
-     * @param LinkExtractorInterface $linkExtractor
-     */
     public function __construct(LinkExtractorInterface $linkExtractor)
     {
         $this->setLinkExtractor($linkExtractor);
@@ -35,9 +33,6 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
         return $this->linkExtractor;
     }
 
-    /**
-     * @param LinkExtractorInterface $linkExtractor
-     */
     public function setLinkExtractor(LinkExtractorInterface $linkExtractor)
     {
         $this->linkExtractor = $linkExtractor;
@@ -55,8 +50,8 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
                 continue;
             }
 
-            if (! \is_array($linkDefinition)) {
-                throw new DomainException(\sprintf(
+            if (! is_array($linkDefinition)) {
+                throw new DomainException(sprintf(
                     'Link object for relation "%s" in resource was malformed; cannot generate link',
                     $rel
                 ));
@@ -65,7 +60,7 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
             $aggregate = [];
             foreach ($linkDefinition as $subLink) {
                 if (! $subLink instanceof Link) {
-                    throw new DomainException(\sprintf(
+                    throw new DomainException(sprintf(
                         'Link object aggregated for relation "%s" in resource was malformed; cannot generate link',
                         $rel
                     ));

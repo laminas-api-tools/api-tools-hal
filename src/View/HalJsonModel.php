@@ -12,15 +12,18 @@ use Laminas\ApiTools\Hal\Collection;
 use Laminas\ApiTools\Hal\Entity;
 use Laminas\View\Model\JsonModel;
 
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
+
 /**
  * Simple extension to facilitate the specialized JsonStrategy and JsonRenderer
  * in this Module.
  */
 class HalJsonModel extends JsonModel
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $terminate = true;
 
     /**
@@ -31,7 +34,7 @@ class HalJsonModel extends JsonModel
     public function isCollection()
     {
         $payload = $this->getPayload();
-        return ($payload instanceof Collection);
+        return $payload instanceof Collection;
     }
 
     /**
@@ -40,11 +43,12 @@ class HalJsonModel extends JsonModel
      * Deprecated; please use isEntity().
      *
      * @deprecated
+     *
      * @return bool
      */
     public function isResource()
     {
-        trigger_error(sprintf('%s is deprecated; please use %s::isEntity', __METHOD__, __CLASS__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s is deprecated; please use %s::isEntity', __METHOD__, self::class), E_USER_DEPRECATED);
         return self::isEntity();
     }
 
@@ -56,7 +60,7 @@ class HalJsonModel extends JsonModel
     public function isEntity()
     {
         $payload = $this->getPayload();
-        return ($payload instanceof Entity);
+        return $payload instanceof Entity;
     }
 
     /**

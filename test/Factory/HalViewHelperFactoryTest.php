@@ -22,19 +22,20 @@ use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
+use function is_array;
+
 class HalViewHelperFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var AbstractPluginManager
-     */
+    /** @var AbstractPluginManager */
     private $pluginManager;
-    /**
-     * @var ServiceManager
-     */
+    /** @var ServiceManager */
     private $services;
 
+    /**
+     * @param array $config
+     */
     public function setupPluginManager($config = []): void
     {
         $services = new ServiceManager();
@@ -71,14 +72,14 @@ class HalViewHelperFactoryTest extends TestCase
 
         $sharedEventManager = $this->getMockBuilder(SharedEventManagerInterface::class)
             ->getMock();
-        $eventManagerMock = $this->getMockBuilder(EventManagerInterface::class)
+        $eventManagerMock   = $this->getMockBuilder(EventManagerInterface::class)
             ->getMock();
         $eventManagerMock->method('getSharedManager')->willReturn($sharedEventManager);
 
         $this->services->setService('EventManager', $eventManagerMock);
 
         $factory = new HalViewHelperFactory();
-        $plugin = $factory($this->services, HalPlugin::class);
+        $plugin  = $factory($this->services, HalPlugin::class);
 
         self::assertInstanceOf(SharedEventManagerInterface::class, $plugin->getEventManager()->getSharedManager());
     }

@@ -18,16 +18,14 @@ use Laminas\ApiTools\Hal\View\HalJsonRenderer;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @subpackage UnitTest
- */
+use function json_decode;
+
 class HalJsonRendererTest extends TestCase
 {
-    /**
-     * @var HalJsonRenderer
-     */
+    /** @var HalJsonRenderer */
     protected $renderer;
 
     public function setUp(): void
@@ -35,6 +33,9 @@ class HalJsonRendererTest extends TestCase
         $this->renderer = new HalJsonRenderer(new ApiProblemRenderer());
     }
 
+    /**
+     * @return array
+     */
     public function nonHalJsonModels()
     {
         return [
@@ -45,7 +46,6 @@ class HalJsonRendererTest extends TestCase
 
     /**
      * @dataProvider nonHalJsonModels
-     *
      * @param ViewModel $model
      */
     public function testRenderGivenNonHalJsonModelShouldReturnDataInJsonFormat($model)
@@ -60,12 +60,12 @@ class HalJsonRendererTest extends TestCase
 
     public function testRenderGivenHalJsonModelThatContainsHalEntityShouldReturnDataInJsonFormat()
     {
-        $entity = [
+        $entity    = [
             'id'   => 123,
             'name' => 'foo',
         ];
         $halEntity = new Entity($entity, 123);
-        $model = new HalJsonModel(['payload' => $halEntity]);
+        $model     = new HalJsonModel(['payload' => $halEntity]);
 
         $helperPluginManager = $this->getHelperPluginManager();
 
@@ -85,13 +85,13 @@ class HalJsonRendererTest extends TestCase
 
     public function testRenderGivenHalJsonModelThatContainsHalCollectionShouldReturnDataInJsonFormat()
     {
-        $collection = [
+        $collection    = [
             ['id' => 'foo', 'name' => 'foo'],
             ['id' => 'bar', 'name' => 'bar'],
             ['id' => 'baz', 'name' => 'baz'],
         ];
         $halCollection = new Collection($collection);
-        $model = new HalJsonModel(['payload' => $halCollection]);
+        $model         = new HalJsonModel(['payload' => $halCollection]);
 
         $helperPluginManager = $this->getHelperPluginManager();
 
@@ -112,7 +112,7 @@ class HalJsonRendererTest extends TestCase
     public function testRenderGivenHalJsonModelReturningApiProblemShouldReturnApiProblemInJsonFormat()
     {
         $halCollection = new Collection([]);
-        $model = new HalJsonModel(['payload' => $halCollection]);
+        $model         = new HalJsonModel(['payload' => $halCollection]);
 
         $apiProblem = new ApiProblem(500, 'error');
 
@@ -138,10 +138,13 @@ class HalJsonRendererTest extends TestCase
         self::assertEquals($apiProblemData, json_decode($rendered, true));
     }
 
+    /**
+     * @return HelperPluginManager|MockObject
+     */
     private function getHelperPluginManager()
     {
         $helperPluginManager = $this->createMock(HelperPluginManager::class);
-        $halPlugin = $this->createMock(HalPlugin::class);
+        $halPlugin           = $this->createMock(HalPlugin::class);
 
         $helperPluginManager
             ->method('get')

@@ -14,6 +14,11 @@ use Laminas\ApiTools\Hal\Link\LinkCollection;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
+use function restore_error_handler;
+use function set_error_handler;
+
+use const E_USER_DEPRECATED;
+
 class EntityTest extends TestCase
 {
     public function invalidEntities(): array
@@ -32,7 +37,6 @@ class EntityTest extends TestCase
 
     /**
      * @dataProvider invalidEntities
-     *
      * @param mixed $entity
      */
     public function testConstructorRaisesExceptionForNonObjectNonArrayEntity($entity): void
@@ -44,7 +48,7 @@ class EntityTest extends TestCase
 
     public function testPropertiesAreAccessibleAfterConstruction(): void
     {
-        $entity = new stdClass;
+        $entity = new stdClass();
         $hal    = new Entity($entity, 'id');
 
         self::assertSame($entity, $hal->getEntity());
@@ -53,7 +57,7 @@ class EntityTest extends TestCase
 
     public function testComposesLinkCollectionByDefault(): void
     {
-        $entity = new stdClass;
+        $entity = new stdClass();
         $hal    = new Entity($entity, 'id');
 
         self::assertInstanceOf(LinkCollection::class, $hal->getLinks());
@@ -61,7 +65,7 @@ class EntityTest extends TestCase
 
     public function testLinkCollectionMayBeInjected(): void
     {
-        $entity = new stdClass;
+        $entity = new stdClass();
         $hal    = new Entity($entity, 'id');
         $links  = new LinkCollection();
         $hal->setLinks($links);
@@ -75,10 +79,10 @@ class EntityTest extends TestCase
         $hal    = new Entity($entity, 'id');
         self::assertEquals($entity, $hal->getEntity());
 
-        $entity =& $hal->getEntity();
+        $entity        = &$hal->getEntity();
         $entity['foo'] = 'baz';
 
-        $secondRetrieval =& $hal->getEntity();
+        $secondRetrieval = &$hal->getEntity();
         self::assertEquals('baz', $secondRetrieval['foo']);
     }
 
@@ -102,6 +106,7 @@ class EntityTest extends TestCase
     /**
      * @group 99
      * @dataProvider magicProperties
+     * @param string $property
      */
     public function testPropertyRetrievalEmitsDeprecationNotice($property): void
     {
@@ -109,12 +114,12 @@ class EntityTest extends TestCase
         $hal       = new Entity($entity, 'id');
         $triggered = false;
 
-        \set_error_handler(static function ($errno, $errstr) use (&$triggered) {
+        set_error_handler(static function ($errno, $errstr) use (&$triggered) {
             $triggered = true;
             self::assertStringContainsString('Direct property access', $errstr);
         }, E_USER_DEPRECATED);
         $hal->$property;
-        \restore_error_handler();
+        restore_error_handler();
 
         self::assertTrue($triggered, 'Deprecation notice was not triggered!');
     }

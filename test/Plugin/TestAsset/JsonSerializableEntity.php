@@ -12,6 +12,9 @@ use JsonSerializable;
 
 class JsonSerializableEntity extends Entity implements JsonSerializable
 {
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return [

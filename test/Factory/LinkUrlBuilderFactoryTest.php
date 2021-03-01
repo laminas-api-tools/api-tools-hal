@@ -19,15 +19,8 @@ class LinkUrlBuilderFactoryTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var Helper\ServerUrl
-     */
+    /** @var Helper\ServerUrl */
     private $serverUrlHelper;
-
-    /**
-     * @var Helper\Url
-     */
-    private $urlHelper;
 
     public function testInstantiatesLinkUrlBuilder(): void
     {
@@ -41,7 +34,7 @@ class LinkUrlBuilderFactoryTest extends TestCase
 
     public function testOptionUseProxyIfPresentInConfig(): void
     {
-        $options = [
+        $options        = [
             'options' => [
                 'use_proxy' => true,
             ],
@@ -56,6 +49,9 @@ class LinkUrlBuilderFactoryTest extends TestCase
         $factory($serviceManager, LinkUrlBuilder::class);
     }
 
+    /**
+     * @param array $config
+     */
     private function getServiceManager($config = []): ServiceManager
     {
         $serviceManager = new ServiceManager();
@@ -67,7 +63,7 @@ class LinkUrlBuilderFactoryTest extends TestCase
         $this->serverUrlHelper = $serverUrlHelper = $this->prophesize(Helper\ServerUrl::class);
         $viewHelperManager->setService('ServerUrl', $serverUrlHelper->reveal());
 
-        $this->urlHelper = $urlHelper = $this->prophesize(Helper\Url::class);
+        $urlHelper = $this->prophesize(Helper\Url::class);
         $viewHelperManager->setService('Url', $urlHelper->reveal());
 
         return $serviceManager;

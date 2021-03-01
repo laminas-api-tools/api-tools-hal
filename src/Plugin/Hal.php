@@ -44,6 +44,20 @@ use Laminas\Stdlib\DispatchableInterface;
 use Laminas\View\Helper\AbstractHelper;
 use Traversable;
 
+use function array_key_exists;
+use function array_merge;
+use function count;
+use function get_class;
+use function gettype;
+use function is_array;
+use function is_object;
+use function method_exists;
+use function spl_object_hash;
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
+
 /**
  * Generate links for use with HAL payloads
  */
@@ -53,24 +67,16 @@ class Hal extends AbstractHelper implements
 {
     use EventManagerAwareTrait;
 
-    /**
-     * @var DispatchableInterface
-     */
+    /** @var DispatchableInterface */
     protected $controller;
 
-    /**
-     * @var ResourceFactory
-     */
+    /** @var ResourceFactory */
     protected $resourceFactory;
 
-    /**
-     * @var EntityHydratorManager
-     */
+    /** @var EntityHydratorManager */
     protected $entityHydratorManager;
 
-    /**
-     * @var EntityExtractor
-     */
+    /** @var EntityExtractor */
     protected $entityExtractor;
 
     /**
@@ -87,34 +93,22 @@ class Hal extends AbstractHelper implements
      */
     protected $renderCollections = true;
 
-    /**
-     * @var HydratorPluginManager
-     */
+    /** @var HydratorPluginManager */
     protected $hydrators;
 
-    /**
-     * @var MetadataMap
-     */
+    /** @var MetadataMap */
     protected $metadataMap;
 
-    /**
-     * @var PaginationInjectorInterface
-     */
+    /** @var PaginationInjectorInterface */
     protected $paginationInjector;
 
-    /**
-     * @var SelfLinkInjectorInterface
-     */
+    /** @var SelfLinkInjectorInterface */
     protected $selfLinkInjector;
 
-    /**
-     * @var LinkUrlBuilder
-     */
+    /** @var LinkUrlBuilder */
     protected $linkUrlBuilder;
 
-    /**
-     * @var LinkCollectionExtractorInterface
-     */
+    /** @var LinkCollectionExtractorInterface */
     protected $linkCollectionExtractor;
 
     /**
@@ -126,7 +120,7 @@ class Hal extends AbstractHelper implements
 
     /**
      * @param null|HydratorPluginManager|HydratorPluginManagerInterface $hydrators
-     * @throws Exception\InvalidArgumentException if $hydrators is of invalid type.
+     * @throws Exception\InvalidArgumentException If $hydrators is of invalid type.
      */
     public function __construct($hydrators = null)
     {
@@ -139,7 +133,7 @@ class Hal extends AbstractHelper implements
         } else {
             throw new Exception\InvalidArgumentException(sprintf(
                 '$hydrators argument to %s must be an instance of either %s or %s; received %s',
-                __CLASS__,
+                self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
                 is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)
@@ -147,9 +141,6 @@ class Hal extends AbstractHelper implements
         }
     }
 
-    /**
-     * @param DispatchableInterface $controller
-     */
     public function setController(DispatchableInterface $controller)
     {
         $this->controller = $controller;
@@ -166,14 +157,13 @@ class Hal extends AbstractHelper implements
     /**
      * Set the event manager instance
      *
-     * @param  EventManagerInterface $events
      * @return self
      */
     public function setEventManager(EventManagerInterface $events)
     {
         $events->setIdentifiers([
-            __CLASS__,
-            get_class($this),
+            self::class,
+            static::class,
         ]);
         $this->events = $events;
 
@@ -222,7 +212,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  ResourceFactory $factory
      * @return self
      */
     public function setResourceFactory(ResourceFactory $factory)
@@ -247,7 +236,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  EntityHydratorManager $manager
      * @return self
      */
     public function setEntityHydratorManager(EntityHydratorManager $manager)
@@ -271,7 +259,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  EntityExtractor $extractor
      * @return self
      */
     public function setEntityExtractor(EntityExtractor $extractor)
@@ -301,7 +288,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  MetadataMap $map
      * @return self
      */
     public function setMetadataMap(MetadataMap $map)
@@ -311,7 +297,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  LinkUrlBuilder $builder
      * @return self
      */
     public function setLinkUrlBuilder(LinkUrlBuilder $builder)
@@ -322,7 +307,7 @@ class Hal extends AbstractHelper implements
 
     /**
      * @deprecated Since 1.4.0; use setLinkUrlBuilder() instead.
-     * @param callable $helper
+     *
      * @throws Exception\DeprecatedMethodException
      */
     public function setServerUrlHelper(callable $helper)
@@ -332,14 +317,14 @@ class Hal extends AbstractHelper implements
             . 'use %s::setLinkUrlBuilder() instead, providing a configured '
             . '%s instance',
             __METHOD__,
-            __CLASS__,
+            self::class,
             LinkUrlBuilder::class
         ));
     }
 
     /**
      * @deprecated Since 1.4.0; use setLinkUrlBuilder() instead.
-     * @param callable $helper
+     *
      * @throws Exception\DeprecatedMethodException
      */
     public function setUrlHelper(callable $helper)
@@ -349,7 +334,7 @@ class Hal extends AbstractHelper implements
             . 'use %s::setLinkUrlBuilder() instead, providing a configured '
             . '%s instance',
             __METHOD__,
-            __CLASS__,
+            self::class,
             LinkUrlBuilder::class
         ));
     }
@@ -366,7 +351,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  PaginationInjectorInterface $injector
      * @return self
      */
     public function setPaginationInjector(PaginationInjectorInterface $injector)
@@ -387,7 +371,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  SelfLinkInjectorInterface $injector
      * @return self
      */
     public function setSelfLinkInjector(SelfLinkInjectorInterface $injector)
@@ -405,7 +388,6 @@ class Hal extends AbstractHelper implements
     }
 
     /**
-     * @param  LinkCollectionExtractorInterface $extractor
      * @return self
      */
     public function setLinkCollectionExtractor(LinkCollectionExtractorInterface $extractor)
@@ -430,7 +412,6 @@ class Hal extends AbstractHelper implements
     /**
      * Set the default hydrator to use if none specified for a class.
      *
-     * @param  ExtractionInterface $hydrator
      * @return self
      */
     public function setDefaultHydrator(ExtractionInterface $hydrator)
@@ -443,6 +424,7 @@ class Hal extends AbstractHelper implements
      * Set boolean to render embedded entities or just include _embedded data
      *
      * @deprecated
+     *
      * @param  bool $value
      * @return self
      */
@@ -451,7 +433,7 @@ class Hal extends AbstractHelper implements
         trigger_error(sprintf(
             '%s has been deprecated; please use %s::setRenderEmbeddedEntities',
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         $this->renderEmbeddedEntities = $value;
         return $this;
@@ -473,6 +455,7 @@ class Hal extends AbstractHelper implements
      * Get boolean to render embedded resources or just include _embedded data
      *
      * @deprecated
+     *
      * @return bool
      */
     public function getRenderEmbeddedResources()
@@ -480,7 +463,7 @@ class Hal extends AbstractHelper implements
         trigger_error(sprintf(
             '%s has been deprecated; please use %s::getRenderEmbeddedEntities',
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         return $this->renderEmbeddedEntities;
     }
@@ -523,6 +506,7 @@ class Hal extends AbstractHelper implements
      * Please use getHydratorForEntity().
      *
      * @deprecated
+     *
      * @param  object $resource
      * @return ExtractionInterface|false
      */
@@ -531,7 +515,7 @@ class Hal extends AbstractHelper implements
         trigger_error(sprintf(
             '%s is deprecated; please use %s::getHydratorForEntity',
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         return self::getHydratorForEntity($resource);
     }
@@ -579,7 +563,6 @@ class Hal extends AbstractHelper implements
      * $params['routeOptions']['query'] = ['format' => 'json'];
      * </code>
      *
-     * @param  Collection $halCollection
      * @return array|ApiProblem Associative array representing the payload to render;
      *     returns ApiProblem if error in pagination occurs
      */
@@ -601,27 +584,21 @@ class Hal extends AbstractHelper implements
         $maxDepth = is_object($collection) && $metadataMap->has($collection) ?
             $metadataMap->get($collection)->getMaxDepth() : null;
 
-        $payload = $halCollection->getAttributes();
+        $payload              = $halCollection->getAttributes();
         $payload['_links']    = $this->fromResource($halCollection);
         $payload['_embedded'] = [
             $collectionName => $this->extractCollection($halCollection, 0, $maxDepth),
         ];
 
         if ($collection instanceof Paginator) {
-            $payload['page_count']  = isset($payload['page_count'])
-                ? $payload['page_count']
-                : $collection->count();
-            $payload['page_size']   = isset($payload['page_size'])
-                ? $payload['page_size']
-                : $halCollection->getPageSize();
-            $payload['total_items'] = isset($payload['total_items'])
-                ? $payload['total_items']
-                : (int) $collection->getTotalItemCount();
-            $payload['page'] = ($payload['page_count'] > 0)
+            $payload['page_count']  = $payload['page_count'] ?? $collection->count();
+            $payload['page_size']   = $payload['page_size'] ?? $halCollection->getPageSize();
+            $payload['total_items'] = $payload['total_items'] ?? (int) $collection->getTotalItemCount();
+            $payload['page']        = $payload['page_count'] > 0
                 ? $halCollection->getPage()
                 : 0;
         } elseif (is_array($collection) || $collection instanceof Countable) {
-            $payload['total_items'] = isset($payload['total_items']) ? $payload['total_items'] : count($collection);
+            $payload['total_items'] = $payload['total_items'] ?? count($collection);
         }
 
         $payload = new ArrayObject($payload);
@@ -642,8 +619,9 @@ class Hal extends AbstractHelper implements
      * method.
      *
      * @deprecated
-     * @param  Resource $halResource
+     *
      * @param  bool $renderResource
+     * @param  int  $depth
      * @return array
      */
     public function renderResource(Resource $halResource, $renderResource = true, $depth = 0)
@@ -651,7 +629,7 @@ class Hal extends AbstractHelper implements
         trigger_error(sprintf(
             'The method %s is deprecated; please use %s::renderEntity()',
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         $this->getEventManager()->trigger(__FUNCTION__, $this, ['resource' => $halResource]);
 
@@ -666,7 +644,6 @@ class Hal extends AbstractHelper implements
      * "_links" member. If any members of the entity are themselves
      * Entity objects, they are extracted into an "_embedded" hash.
      *
-     * @param  Entity $halEntity
      * @param  bool $renderEntity
      * @param  int $depth           depth of the current rendering recursion
      * @param  int $maxDepth        maximum rendering depth for the current metadata
@@ -801,7 +778,6 @@ class Hal extends AbstractHelper implements
     /**
      * Create a URL from a Link
      *
-     * @param  Link $linkDefinition
      * @return array
      */
     public function fromLink(Link $linkDefinition)
@@ -816,7 +792,6 @@ class Hal extends AbstractHelper implements
     /**
      * Generate HAL links from a LinkCollection
      *
-     * @param  LinkCollection $collection
      * @return array
      */
     public function fromLinkCollection(LinkCollection $collection)
@@ -827,7 +802,6 @@ class Hal extends AbstractHelper implements
     /**
      * Create HAL links "object" from an entity or collection
      *
-     * @param  LinkCollectionAwareInterface $resource
      * @return array
      */
     public function fromResource(LinkCollectionAwareInterface $resource)
@@ -841,8 +815,8 @@ class Hal extends AbstractHelper implements
      * Deprecated; please use createEntityFromMetadata().
      *
      * @deprecated
+     *
      * @param  object $object
-     * @param  Metadata $metadata
      * @param  bool $renderEmbeddedEntities
      * @return Entity|Collection
      */
@@ -851,7 +825,7 @@ class Hal extends AbstractHelper implements
         trigger_error(sprintf(
             '%s is deprecated; please use %s::createEntityFromMetadata',
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         return $this->createEntityFromMetadata($object, $metadata, $renderEmbeddedEntities);
     }
@@ -860,7 +834,6 @@ class Hal extends AbstractHelper implements
      * Create a entity and/or collection based on a metadata map
      *
      * @param  object $object
-     * @param  Metadata $metadata
      * @param  bool $renderEmbeddedEntities
      * @return Entity|Collection
      */
@@ -879,6 +852,7 @@ class Hal extends AbstractHelper implements
      * Deprecated; please use createEntity().
      *
      * @deprecated
+     *
      * @param  Entity|array|object $resource
      * @param  string $route
      * @param  string $routeIdentifierName
@@ -889,7 +863,7 @@ class Hal extends AbstractHelper implements
         trigger_error(sprintf(
             '%s is deprecated; use %s::createEntity instead',
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         return $this->createEntity($resource, $route, $routeIdentifierName);
     }
@@ -912,13 +886,13 @@ class Hal extends AbstractHelper implements
                 $metadataMap->get($entity)
             );
         } elseif (! $entity instanceof Entity) {
-            $id = $this->getIdFromEntity($entity) ?: null;
+            $id        = $this->getIdFromEntity($entity) ?: null;
             $halEntity = new Entity($entity, $id);
         } else {
             $halEntity = $entity;
         }
 
-        $metadata = (! is_array($entity) && $metadataMap->has($entity))
+        $metadata = ! is_array($entity) && $metadataMap->has($entity)
             ? $metadataMap->get($entity)
             : false;
 
@@ -960,7 +934,6 @@ class Hal extends AbstractHelper implements
 
     /**
      * @param  array|Traversable|Paginator $object
-     * @param  Metadata $metadata
      * @return Collection
      */
     public function createCollectionFromMetadata($object, Metadata $metadata)
@@ -971,7 +944,6 @@ class Hal extends AbstractHelper implements
     /**
      * Inject a "self" relational link based on the route and identifier
      *
-     * @param  LinkCollectionAwareInterface $resource
      * @param  string $route
      * @param  string $routeIdentifier
      */
@@ -983,7 +955,6 @@ class Hal extends AbstractHelper implements
     /**
      * Generate HAL links for a paginated collection
      *
-     * @param  Collection $halCollection
      * @return bool|ApiProblem
      */
     protected function injectPaginationLinks(Collection $halCollection)
@@ -1000,7 +971,6 @@ class Hal extends AbstractHelper implements
      *
      * @param  array $parent
      * @param  string $key
-     * @param  Entity $entity
      * @param  int $depth           depth of the current rendering recursion
      * @param  int $maxDepth        maximum rendering depth for the current metadata
      */
@@ -1026,7 +996,6 @@ class Hal extends AbstractHelper implements
      *
      * @param  array      $parent
      * @param  string     $key
-     * @param  Collection $collection
      * @param  int        $depth        depth of the current rendering recursion
      * @param  int        $maxDepth     maximum rendering depth for the current metadata
      */
@@ -1052,21 +1021,19 @@ class Hal extends AbstractHelper implements
      *
      * @todo   Remove 'resource' from event parameters for 1.0.0
      * @todo   Remove trigger of 'renderCollection.resource' for 1.0.0
-     * @param  Collection $halCollection
      * @param  int $depth                   depth of the current rendering recursion
      * @param  int $maxDepth                maximum rendering depth for the current metadata
      * @return array
      */
     protected function extractCollection(Collection $halCollection, $depth = 0, $maxDepth = null)
     {
-        $collection           = [];
-        $events               = $this->getEventManager();
-        $routeIdentifierName  = $halCollection->getRouteIdentifierName();
-        $entityRoute          = $halCollection->getEntityRoute();
-        $entityRouteParams    = $halCollection->getEntityRouteParams();
-        $entityRouteOptions   = $halCollection->getEntityRouteOptions();
-        $metadataMap          = $this->getMetadataMap();
-
+        $collection          = [];
+        $events              = $this->getEventManager();
+        $routeIdentifierName = $halCollection->getRouteIdentifierName();
+        $entityRoute         = $halCollection->getEntityRoute();
+        $entityRouteParams   = $halCollection->getEntityRouteParams();
+        $entityRouteOptions  = $halCollection->getEntityRouteOptions();
+        $metadataMap         = $this->getMetadataMap();
 
         foreach ($halCollection->getCollection() as $entity) {
             $eventParams = new ArrayObject([
@@ -1164,13 +1131,13 @@ class Hal extends AbstractHelper implements
      */
     protected function getIdFromEntity($entity)
     {
-        $params  = [
+        $params = [
             'entity'   => $entity,
             'resource' => $entity,
         ];
 
         $callback = function ($r) {
-            return (null !== $r && false !== $r);
+            return null !== $r && false !== $r;
         };
 
         $results = $this->getEventManager()->triggerEventUntil(
@@ -1211,6 +1178,7 @@ class Hal extends AbstractHelper implements
      * Convert an individual entity to an array
      *
      * @deprecated
+     *
      * @param  object $entity
      * @return array
      */
@@ -1223,7 +1191,7 @@ class Hal extends AbstractHelper implements
      * Creates a link object, given metadata and a resource
      *
      * @deprecated
-     * @param  Metadata $metadata
+     *
      * @param  object $object
      * @param  null|string $id
      * @param  null|string $routeIdentifierName
@@ -1250,8 +1218,6 @@ class Hal extends AbstractHelper implements
      * Inject any links found in the metadata into the resource's link collection
      *
      * @deprecated
-     * @param  Metadata $metadata
-     * @param  LinkCollection $links
      */
     protected function marshalMetadataLinks(Metadata $metadata, LinkCollection $links)
     {
@@ -1264,9 +1230,8 @@ class Hal extends AbstractHelper implements
      * Ensures that the link hasn't been previously injected.
      *
      * @param Link[]|Link $link
-     * @param LinkCollection $links
      * @return LinkCollection
-     * @throws Exception\InvalidArgumentException if a non-link is provided.
+     * @throws Exception\InvalidArgumentException If a non-link is provided.
      */
     protected function injectPropertyAsLink($link, LinkCollection $links)
     {

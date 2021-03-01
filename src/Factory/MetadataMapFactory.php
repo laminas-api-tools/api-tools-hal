@@ -15,17 +15,18 @@ use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
+use function is_array;
+
 class MetadataMapFactory
 {
     /**
      * Create an object
      *
-     * @param  ContainerInterface $container
      * @return Metadata\MetadataMap
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
+     * @throws ServiceNotFoundException If unable to resolve the service.
+     * @throws ServiceNotCreatedException If an exception is raised when
      *     creating a service.
-     * @throws ContainerException if any other error occurs.
+     * @throws ContainerException If any other error occurs.
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -35,7 +36,7 @@ class MetadataMapFactory
             ? $container->get('HydratorManager')
             : new HydratorPluginManager($container);
 
-        $map = (isset($config['metadata_map']) && is_array($config['metadata_map']))
+        $map = isset($config['metadata_map']) && is_array($config['metadata_map'])
             ? $config['metadata_map']
             : [];
 

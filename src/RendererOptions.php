@@ -12,24 +12,16 @@ use Laminas\Stdlib\AbstractOptions;
 
 class RendererOptions extends AbstractOptions
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $defaultHydrator;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $renderEmbeddedEntities = true;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $renderEmbeddedCollections = true;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $hydrators = [];
 
     /**

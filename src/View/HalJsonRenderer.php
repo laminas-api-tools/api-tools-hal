@@ -24,24 +24,15 @@ use Laminas\View\ViewEvent;
  */
 class HalJsonRenderer extends JsonRenderer
 {
-    /**
-     * @var ApiProblemRenderer
-     */
+    /** @var ApiProblemRenderer */
     protected $apiProblemRenderer;
 
-    /**
-     * @var HelperPluginManager
-     */
+    /** @var HelperPluginManager */
     protected $helpers;
 
-    /**
-     * @var ViewEvent
-     */
+    /** @var ViewEvent */
     protected $viewEvent;
 
-    /**
-     * @param ApiProblemRenderer $apiProblemRenderer
-     */
     public function __construct(ApiProblemRenderer $apiProblemRenderer)
     {
         $this->apiProblemRenderer = $apiProblemRenderer;
@@ -51,8 +42,6 @@ class HalJsonRenderer extends JsonRenderer
      * Set helper plugin manager instance.
      *
      * Also ensures that the 'Hal' helper is present.
-     *
-     * @param  HelperPluginManager $helpers
      */
     public function setHelperPluginManager(HelperPluginManager $helpers)
     {
@@ -60,7 +49,6 @@ class HalJsonRenderer extends JsonRenderer
     }
 
     /**
-     * @param  ViewEvent $event
      * @return self
      */
     public function setViewEvent(ViewEvent $event)
@@ -138,7 +126,6 @@ class HalJsonRenderer extends JsonRenderer
      * If a ViewEvent is composed, it passes the ApiProblemModel to it so that
      * the ApiProblemStrategy can be invoked when populating the response.
      *
-     * @param  ApiProblem $problem
      * @return string
      */
     protected function renderApiProblem(ApiProblem $problem)
