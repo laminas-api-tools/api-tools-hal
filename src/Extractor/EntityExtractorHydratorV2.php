@@ -8,6 +8,7 @@
 
 namespace Laminas\ApiTools\Hal\Extractor;
 
+use ArrayObject;
 use JsonSerializable;
 use Laminas\ApiTools\Hal\EntityHydratorManager;
 use Laminas\Hydrator\ExtractionInterface;
@@ -66,6 +67,10 @@ class EntityExtractorHydratorV2 implements ExtractionInterface
 
         if ($entity instanceof JsonSerializable) {
             return $entity->jsonSerialize();
+        }
+
+        if ($entity instanceof ArrayObject) {
+            return $entity->getArrayCopy();
         }
 
         return get_object_vars($entity);

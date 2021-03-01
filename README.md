@@ -1,8 +1,7 @@
 Laminas HAL
 ======
 
-[![Build Status](https://travis-ci.com/laminas-api-tools/api-tools-hal.svg?branch=master)](https://travis-ci.com/laminas-api-tools/api-tools-hal)
-[![Coverage Status](https://coveralls.io/repos/github/laminas-api-tools/api-tools-hal/badge.svg?branch=master)](https://coveralls.io/github/laminas-api-tools/api-tools-hal?branch=master)
+[![Build Status](https://github.com/laminas-api-tools/api-tools-hal/workflows/Continuous%20Integration/badge.svg)](https://github.com/laminas-api-tools/api-tools-hal/actions?query=workflow%3A"Continuous+Integration")
 
 Introduction
 ------------
@@ -12,7 +11,7 @@ Language](http://tools.ietf.org/html/draft-kelly-json-hal-06) JSON representatio
 
 Requirements
 ------------
-  
+
 Please see the [composer.json](composer.json) file.
 
 Installation
@@ -99,8 +98,8 @@ Each class in the metadata map may contain one or more of the following configur
 - `route_params` - an array of route parameters to use for link generation.
 - `route_options` - an array of options to pass to the router during link generation.
 - `url` - specific URL to use with this resource, if not using a route.
-- `max_depth` - integer; limit to what nesting level entities and collections are rendered; if the limit is 
-  reached, only `self` links will be rendered. default value is `null`, which means no limit: if unlimited circular 
+- `max_depth` - integer; limit to what nesting level entities and collections are rendered; if the limit is
+  reached, only `self` links will be rendered. default value is `null`, which means no limit: if unlimited circular
   references are detected, an exception will be thrown to avoid infinite loops.
 - `force_self_link` - boolean; set whether a self-referencing link should be automatically generated for the entity.
   Defaults to `true` (since its recommended).
