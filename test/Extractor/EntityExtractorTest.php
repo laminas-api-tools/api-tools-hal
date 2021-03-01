@@ -8,6 +8,7 @@
 
 namespace LaminasTest\ApiTools\Hal\Extractor;
 
+use ArrayObject;
 use Laminas\ApiTools\Hal\EntityHydratorManager;
 use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
 use Laminas\Hydrator\ObjectProperty;
@@ -69,5 +70,17 @@ class EntityExtractorTest extends TestCase
         $data2 = $extractor->extract($entity);
 
         $this->assertSame($data1, $data2);
+    }
+
+    public function testExtractOfArrayObjectEntityWillExtractCorrectly()
+    {
+        $data   = ['id' => 'foo', 'message' => 'FOO'];
+        $entity = new ArrayObject($data);
+        $entityHydratorManager = $this->prophesize(EntityHydratorManager::class);
+        $entityHydratorManager->getHydratorForEntity($entity)->willReturn(null)->shouldBeCalledTimes(1);
+
+        $extractor = new EntityExtractor($entityHydratorManager->reveal());
+
+        $this->assertSame($data, $extractor->extract($entity));
     }
 }
