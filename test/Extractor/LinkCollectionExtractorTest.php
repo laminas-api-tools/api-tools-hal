@@ -21,7 +21,7 @@ class LinkCollectionExtractorTest extends TestCase
      */
     protected $linkCollectionExtractor;
 
-    public function setUp()
+    public function setUp(): void
     {
         $linkExtractor = $this->createMock(LinkExtractor::class);
 
@@ -46,8 +46,8 @@ class LinkCollectionExtractorTest extends TestCase
 
         $result = $this->linkCollectionExtractor->extract($linkCollection);
 
-        $this->assertInternalType('array', $result);
-        $this->assertCount($linkCollection->count(), $result);
+        self::assertIsArray($result);
+        self::assertCount($linkCollection->count(), $result);
     }
 
     public function testLinkCollectionWithTwoLinksForSameRelationShouldReturnArrayWithOneKeyAggregatingLinks()
@@ -68,9 +68,9 @@ class LinkCollectionExtractorTest extends TestCase
 
         $result = $this->linkCollectionExtractor->extract($linkCollection);
 
-        $this->assertInternalType('array', $result);
-        $this->assertCount(2, $result);
-        $this->assertInternalType('array', $result['foo']);
-        $this->assertCount(2, $result['foo']);
+        self::assertIsArray($result);
+        self::assertCount(2, $result);
+        self::assertIsArray($result['foo']);
+        self::assertCount(2, $result['foo']);
     }
 }

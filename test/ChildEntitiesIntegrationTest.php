@@ -29,12 +29,16 @@ use Laminas\View\Helper\ServerUrl as ServerUrlHelper;
 use Laminas\View\Helper\Url as UrlHelper;
 use Laminas\View\HelperPluginManager;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use stdClass;
 
 /**
  * @subpackage UnitTest
  */
 class ChildEntitiesIntegrationTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var V2TreeRouteStack|TreeRouteStack
      */
@@ -55,14 +59,14 @@ class ChildEntitiesIntegrationTest extends TestCase
      */
     protected $plugins;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setupRouter();
         $this->setupHelpers();
         $this->setupRenderer();
     }
 
-    public function setupHelpers()
+    public function setupHelpers(): void
     {
         if (! $this->router) {
             $this->setupRouter();
@@ -93,7 +97,7 @@ class ChildEntitiesIntegrationTest extends TestCase
         $plugins->setService('Hal', $linksHelper);
     }
 
-    public function setupRenderer()
+    public function setupRenderer(): void
     {
         if (! $this->helpers) {
             $this->setupHelpers();
@@ -102,7 +106,7 @@ class ChildEntitiesIntegrationTest extends TestCase
         $renderer->setHelperPluginManager($this->helpers);
     }
 
-    public function setupRouter()
+    public function setupRouter(): void
     {
         $routes = [
             'parent' => [
@@ -128,21 +132,20 @@ class ChildEntitiesIntegrationTest extends TestCase
             ],
         ];
 
-        $class = class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
+        $class = \class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
 
         $this->router = $router = new $class();
         $router->addRoutes($routes);
     }
 
-    public function setUpParentEntity()
+    public function setUpParentEntity(): Entity
     {
-        $this->parent = (object) [
-            'id'   => 'anakin',
-            'name' => 'Anakin Skywalker',
-        ];
-        $entity = new Entity($this->parent, 'anakin');
+        $parent       = new stdClass();
+        $parent->id   = 'anakin';
+        $parent->name = 'Anakin Skywalker';
+        $entity       = new Entity($parent, 'anakin');
+        $link         = new Link('self');
 
-        $link = new Link('self');
         $link->setRoute('parent');
         $link->setRouteParams(['parent' => 'anakin']);
         $entity->getLinks()->add($link);
@@ -150,15 +153,14 @@ class ChildEntitiesIntegrationTest extends TestCase
         return $entity;
     }
 
-    public function setUpChildEntity($id, $name)
+    public function setUpChildEntity($id, $name): Entity
     {
-        $this->child = (object) [
-            'id'   => $id,
-            'name' => $name,
-        ];
-        $entity = new Entity($this->child, $id);
+        $child       = new stdClass();
+        $child->id   = $id;
+        $child->name = $name;
+        $entity      = new Entity($child, $id);
+        $link        = new Link('self');
 
-        $link = new Link('self');
         $link->setRoute('parent/child');
         $link->setRouteParams(['child' => $id]);
         $entity->getLinks()->add($link);
@@ -166,17 +168,17 @@ class ChildEntitiesIntegrationTest extends TestCase
         return $entity;
     }
 
-    public function setUpChildCollection()
+    public function setUpChildCollection(): Collection
     {
         $children = [
             ['luke', 'Luke Skywalker'],
             ['leia', 'Leia Organa'],
         ];
-        $this->collection = [];
+        $collection1 = [];
         foreach ($children as $info) {
-            $this->collection[] = call_user_func_array([$this, 'setUpChildEntity'], $info);
+            $collection1[] = \call_user_func_array([$this, 'setUpChildEntity'], $info);
         }
-        $collection = new Collection($this->collection);
+        $collection = new Collection($collection1);
         $collection->setCollectionRoute('parent/child');
         $collection->setEntityRoute('parent/child');
         $collection->setPage(1);
@@ -190,16 +192,16 @@ class ChildEntitiesIntegrationTest extends TestCase
         return $collection;
     }
 
-    public function testParentEntityRendersAsExpected()
+    public function testParentEntityRendersAsExpected(): void
     {
         $uri = 'http://localhost.localdomain/api/parent/anakin';
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $routeClass = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
-        $this->assertInstanceOf($routeClass, $matches);
-        $this->assertEquals('anakin', $matches->getParam('parent'));
-        $this->assertEquals('parent', $matches->getMatchedRouteName());
+        $routeClass = \class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
+        self::assertInstanceOf($routeClass, $matches);
+        self::assertEquals('anakin', $matches->getParam('parent'));
+        self::assertEquals('parent', $matches->getMatchedRouteName());
 
         // Emulate url helper factory and inject route matches
         $this->helpers->get('url')->setRouteMatch($matches);
@@ -209,24 +211,24 @@ class ChildEntitiesIntegrationTest extends TestCase
         $model->setPayload($parent);
 
         $json = $this->renderer->render($model);
-        $test = json_decode($json);
-        $this->assertObjectHasAttribute('_links', $test);
-        $this->assertObjectHasAttribute('self', $test->_links);
-        $this->assertObjectHasAttribute('href', $test->_links->self);
-        $this->assertEquals('http://localhost.localdomain/api/parent/anakin', $test->_links->self->href);
+        $test = \json_decode($json, false, 512, \JSON_THROW_ON_ERROR);
+        self::assertObjectHasAttribute('_links', $test);
+        self::assertObjectHasAttribute('self', $test->_links);
+        self::assertObjectHasAttribute('href', $test->_links->self);
+        self::assertEquals('http://localhost.localdomain/api/parent/anakin', $test->_links->self->href);
     }
 
-    public function testChildEntityRendersAsExpected()
+    public function testChildEntityRendersAsExpected(): void
     {
         $uri = 'http://localhost.localdomain/api/parent/anakin/child/luke';
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $routeClass = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
-        $this->assertInstanceOf($routeClass, $matches);
-        $this->assertEquals('anakin', $matches->getParam('parent'));
-        $this->assertEquals('luke', $matches->getParam('child'));
-        $this->assertEquals('parent/child', $matches->getMatchedRouteName());
+        $routeClass = \class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
+        self::assertInstanceOf($routeClass, $matches);
+        self::assertEquals('anakin', $matches->getParam('parent'));
+        self::assertEquals('luke', $matches->getParam('child'));
+        self::assertEquals('parent/child', $matches->getMatchedRouteName());
 
         // Emulate url helper factory and inject route matches
         $this->helpers->get('url')->setRouteMatch($matches);
@@ -236,24 +238,24 @@ class ChildEntitiesIntegrationTest extends TestCase
         $model->setPayload($child);
 
         $json = $this->renderer->render($model);
-        $test = json_decode($json);
-        $this->assertObjectHasAttribute('_links', $test);
-        $this->assertObjectHasAttribute('self', $test->_links);
-        $this->assertObjectHasAttribute('href', $test->_links->self);
-        $this->assertEquals('http://localhost.localdomain/api/parent/anakin/child/luke', $test->_links->self->href);
+        $test = \json_decode($json, false, 512, \JSON_THROW_ON_ERROR);
+        self::assertObjectHasAttribute('_links', $test);
+        self::assertObjectHasAttribute('self', $test->_links);
+        self::assertObjectHasAttribute('href', $test->_links->self);
+        self::assertEquals('http://localhost.localdomain/api/parent/anakin/child/luke', $test->_links->self->href);
     }
 
-    public function testChildCollectionRendersAsExpected()
+    public function testChildCollectionRendersAsExpected(): void
     {
         $uri = 'http://localhost.localdomain/api/parent/anakin/child';
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $routeClass = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
-        $this->assertInstanceOf($routeClass, $matches);
-        $this->assertEquals('anakin', $matches->getParam('parent'));
-        $this->assertNull($matches->getParam('child'));
-        $this->assertEquals('parent/child', $matches->getMatchedRouteName());
+        $routeClass = \class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
+        self::assertInstanceOf($routeClass, $matches);
+        self::assertEquals('anakin', $matches->getParam('parent'));
+        self::assertNull($matches->getParam('child'));
+        self::assertEquals('parent/child', $matches->getMatchedRouteName());
 
         // Emulate url helper factory and inject route matches
         $this->helpers->get('url')->setRouteMatch($matches);
@@ -263,29 +265,30 @@ class ChildEntitiesIntegrationTest extends TestCase
         $model->setPayload($collection);
 
         $json = $this->renderer->render($model);
-        $test = json_decode($json);
-        $this->assertObjectHasAttribute('_links', $test);
-        $this->assertObjectHasAttribute('self', $test->_links);
-        $this->assertObjectHasAttribute('href', $test->_links->self);
-        $this->assertEquals('http://localhost.localdomain/api/parent/anakin/child', $test->_links->self->href);
+        $test = \json_decode($json, false, 512, \JSON_THROW_ON_ERROR);
+        self::assertObjectHasAttribute('_links', $test);
+        self::assertObjectHasAttribute('self', $test->_links);
+        self::assertObjectHasAttribute('href', $test->_links->self);
+        self::assertEquals('http://localhost.localdomain/api/parent/anakin/child', $test->_links->self->href);
 
-        $this->assertObjectHasAttribute('_embedded', $test);
-        $this->assertObjectHasAttribute('child', $test->_embedded);
-        $this->assertInternalType('array', $test->_embedded->child);
-        $this->assertCount(2, $test->_embedded->child);
+        self::assertObjectHasAttribute('_embedded', $test);
+        self::assertObjectHasAttribute('child', $test->_embedded);
+        self::assertIsArray($test->_embedded->child);
+        self::assertCount(2, $test->_embedded->child);
 
         foreach ($test->_embedded->child as $child) {
-            $this->assertObjectHasAttribute('_links', $child);
-            $this->assertObjectHasAttribute('self', $child->_links);
-            $this->assertObjectHasAttribute('href', $child->_links->self);
-            $this->assertRegExp(
+            self::assertObjectHasAttribute('_links', $child);
+            self::assertObjectHasAttribute('self', $child->_links);
+            self::assertObjectHasAttribute('href', $child->_links->self);
+
+            self::assertMatchesRegularExpression(
                 '#^http://localhost.localdomain/api/parent/anakin/child/[^/]+$#',
                 $child->_links->self->href
             );
         }
     }
 
-    public function setUpAlternateRouter()
+    public function setUpAlternateRouter(): void
     {
         $routes = [
             'parent' => [
@@ -311,13 +314,13 @@ class ChildEntitiesIntegrationTest extends TestCase
             ],
         ];
 
-        $class = class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
+        $class = \class_exists(V2TreeRouteStack::class) ? V2TreeRouteStack::class : TreeRouteStack::class;
         $this->router = $router = new $class();
         $router->addRoutes($routes);
         $this->helpers->get('url')->setRouter($router);
     }
 
-    public function testChildEntityObjectIdentifierMapping()
+    public function testChildEntityObjectIdentifierMapping(): void
     {
         $this->setUpAlternateRouter();
 
@@ -325,11 +328,11 @@ class ChildEntitiesIntegrationTest extends TestCase
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $routeClass = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
-        $this->assertInstanceOf($routeClass, $matches);
-        $this->assertEquals('anakin', $matches->getParam('id'));
-        $this->assertEquals('luke', $matches->getParam('child'));
-        $this->assertEquals('parent/child', $matches->getMatchedRouteName());
+        $routeClass = \class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
+        self::assertInstanceOf($routeClass, $matches);
+        self::assertEquals('anakin', $matches->getParam('id'));
+        self::assertEquals('luke', $matches->getParam('child'));
+        self::assertEquals('parent/child', $matches->getMatchedRouteName());
 
         // Emulate url helper factory and inject route matches
         $this->helpers->get('url')->setRouteMatch($matches);
@@ -339,14 +342,14 @@ class ChildEntitiesIntegrationTest extends TestCase
         $model->setPayload($child);
 
         $json = $this->renderer->render($model);
-        $test = json_decode($json);
-        $this->assertObjectHasAttribute('_links', $test);
-        $this->assertObjectHasAttribute('self', $test->_links);
-        $this->assertObjectHasAttribute('href', $test->_links->self);
-        $this->assertEquals('http://localhost.localdomain/api/parent/anakin/child/luke', $test->_links->self->href);
+        $test = \json_decode($json, false, 512, \JSON_THROW_ON_ERROR);
+        self::assertObjectHasAttribute('_links', $test);
+        self::assertObjectHasAttribute('self', $test->_links);
+        self::assertObjectHasAttribute('href', $test->_links->self);
+        self::assertEquals('http://localhost.localdomain/api/parent/anakin/child/luke', $test->_links->self->href);
     }
 
-    public function testChildEntityIdentifierMappingInsideCollection()
+    public function testChildEntityIdentifierMappingInsideCollection(): void
     {
         $this->setUpAlternateRouter();
 
@@ -354,11 +357,11 @@ class ChildEntitiesIntegrationTest extends TestCase
         $request = new Request();
         $request->setUri($uri);
         $matches = $this->router->match($request);
-        $routeClass = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
-        $this->assertInstanceOf($routeClass, $matches);
-        $this->assertEquals('anakin', $matches->getParam('id'));
-        $this->assertNull($matches->getParam('child_id'));
-        $this->assertEquals('parent/child', $matches->getMatchedRouteName());
+        $routeClass = \class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
+        self::assertInstanceOf($routeClass, $matches);
+        self::assertEquals('anakin', $matches->getParam('id'));
+        self::assertNull($matches->getParam('child_id'));
+        self::assertEquals('parent/child', $matches->getMatchedRouteName());
 
         // Emulate url helper factory and inject route matches
         $this->helpers->get('url')->setRouteMatch($matches);
@@ -368,22 +371,22 @@ class ChildEntitiesIntegrationTest extends TestCase
         $model->setPayload($collection);
 
         $json = $this->renderer->render($model);
-        $test = json_decode($json);
-        $this->assertObjectHasAttribute('_links', $test);
-        $this->assertObjectHasAttribute('self', $test->_links);
-        $this->assertObjectHasAttribute('href', $test->_links->self);
-        $this->assertEquals('http://localhost.localdomain/api/parent/anakin/child', $test->_links->self->href);
+        $test = \json_decode($json, false, 512, \JSON_THROW_ON_ERROR);
+        self::assertObjectHasAttribute('_links', $test);
+        self::assertObjectHasAttribute('self', $test->_links);
+        self::assertObjectHasAttribute('href', $test->_links->self);
+        self::assertEquals('http://localhost.localdomain/api/parent/anakin/child', $test->_links->self->href);
 
-        $this->assertObjectHasAttribute('_embedded', $test);
-        $this->assertObjectHasAttribute('child', $test->_embedded);
-        $this->assertInternalType('array', $test->_embedded->child);
-        $this->assertCount(2, $test->_embedded->child);
+        self::assertObjectHasAttribute('_embedded', $test);
+        self::assertObjectHasAttribute('child', $test->_embedded);
+        self::assertIsArray($test->_embedded->child);
+        self::assertCount(2, $test->_embedded->child);
 
         foreach ($test->_embedded->child as $child) {
-            $this->assertObjectHasAttribute('_links', $child);
-            $this->assertObjectHasAttribute('self', $child->_links);
-            $this->assertObjectHasAttribute('href', $child->_links->self);
-            $this->assertRegExp(
+            self::assertObjectHasAttribute('_links', $child);
+            self::assertObjectHasAttribute('self', $child->_links);
+            self::assertObjectHasAttribute('href', $child->_links->self);
+            self::assertMatchesRegularExpression(
                 '#^http://localhost.localdomain/api/parent/anakin/child/[^/]+$#',
                 $child->_links->self->href
             );

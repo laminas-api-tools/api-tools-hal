@@ -15,10 +15,13 @@ use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\HelperPluginManager;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class HalControllerPluginFactoryTest extends TestCase
 {
-    public function testInstantiatesHalJsonRenderer()
+    use ProphecyTrait;
+
+    public function testInstantiatesHalJsonRenderer(): void
     {
         $viewHelperManager = $this->prophesize(HelperPluginManager::class);
         $viewHelperManager->get('Hal')
@@ -31,10 +34,10 @@ class HalControllerPluginFactoryTest extends TestCase
         $factory = new HalControllerPluginFactory();
         $plugin = $factory($services, 'Hal');
 
-        $this->assertInstanceOf(HalPlugin::class, $plugin);
+        self::assertInstanceOf(HalPlugin::class, $plugin);
     }
 
-    public function testInstantiatesHalJsonRendererWithV2()
+    public function testInstantiatesHalJsonRendererWithV2(): void
     {
         $viewHelperManager = $this->prophesize(HelperPluginManager::class);
         $viewHelperManager->get('Hal')
@@ -52,6 +55,6 @@ class HalControllerPluginFactoryTest extends TestCase
         $factory = new HalControllerPluginFactory();
         $plugin = $factory->createService($pluginManager->reveal());
 
-        $this->assertInstanceOf(HalPlugin::class, $plugin);
+        self::assertInstanceOf(HalPlugin::class, $plugin);
     }
 }

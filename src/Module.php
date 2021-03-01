@@ -9,33 +9,25 @@
 namespace Laminas\ApiTools\Hal;
 
 use Laminas\ApiTools\Hal\View\HalJsonStrategy;
+use Laminas\EventManager\EventInterface;
+use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
+use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 use Laminas\Mvc\ApplicationInterface;
 use Laminas\Mvc\MvcEvent;
 
-class Module
+class Module implements BootstrapListenerInterface, ConfigProviderInterface
 {
-    /**
-     * Retrieve module configuration
-     *
-     * @return array
-     */
-    public function getConfig()
+    public function getConfig(): array
     {
         return include __DIR__ . '/../config/module.config.php';
     }
 
-    /**
-     * Listener for bootstrap event
-     *
-     * Attaches a render event.
-     *
-     * @param  MvcEvent $e
-     */
-    public function onBootstrap(MvcEvent $e)
+    public function onBootstrap(EventInterface $e): void
     {
         /** @var ApplicationInterface $application */
         $application = $e->getTarget();
         $events = $application->getEventManager();
+
         $events->attach(MvcEvent::EVENT_RENDER, [$this, 'onRender'], 100);
     }
 
@@ -46,14 +38,14 @@ class Module
      *
      * @param  MvcEvent $e
      */
-    public function onRender(MvcEvent $e)
+    public function onRender(MvcEvent $e): void
     {
         $result = $e->getResult();
         if (! $result instanceof View\HalJsonModel) {
             return;
         }
 
-        /** @var Application $application */
+        /** @var ApplicationInterface $application */
         $application = $e->getTarget();
         $services = $application->getServiceManager();
         $events   = $services->get('View')->getEventManager();

@@ -48,11 +48,11 @@ class PaginationInjectorTest extends TestCase
         $injector->injectPaginationLinks($halCollection);
 
         $links = $halCollection->getLinks();
-        $this->assertTrue($links->has('self'));
-        $this->assertTrue($links->has('first'));
-        $this->assertTrue($links->has('last'));
-        $this->assertTrue($links->has('prev'));
-        $this->assertTrue($links->has('next'));
+        self::assertTrue($links->has('self'));
+        self::assertTrue($links->has('first'));
+        self::assertTrue($links->has('last'));
+        self::assertTrue($links->has('prev'));
+        self::assertTrue($links->has('next'));
     }
 
     public function testInjectPaginationLinksGivenFirstPageShouldInjectLinksExceptForPrevious()
@@ -63,11 +63,11 @@ class PaginationInjectorTest extends TestCase
         $injector->injectPaginationLinks($halCollection);
 
         $links = $halCollection->getLinks();
-        $this->assertTrue($links->has('self'));
-        $this->assertTrue($links->has('first'));
-        $this->assertTrue($links->has('last'));
-        $this->assertFalse($links->has('prev'));
-        $this->assertTrue($links->has('next'));
+        self::assertTrue($links->has('self'));
+        self::assertTrue($links->has('first'));
+        self::assertTrue($links->has('last'));
+        self::assertFalse($links->has('prev'));
+        self::assertTrue($links->has('next'));
     }
 
     public function testInjectPaginationLinksGivenLastPageShouldInjectLinksExceptForNext()
@@ -78,11 +78,11 @@ class PaginationInjectorTest extends TestCase
         $injector->injectPaginationLinks($halCollection);
 
         $links = $halCollection->getLinks();
-        $this->assertTrue($links->has('self'));
-        $this->assertTrue($links->has('first'));
-        $this->assertTrue($links->has('last'));
-        $this->assertTrue($links->has('prev'));
-        $this->assertFalse($links->has('next'));
+        self::assertTrue($links->has('self'));
+        self::assertTrue($links->has('first'));
+        self::assertTrue($links->has('last'));
+        self::assertTrue($links->has('prev'));
+        self::assertFalse($links->has('next'));
     }
 
     public function testInjectPaginationLinksGivenEmptyCollectionShouldNotInjectAnyLink()
@@ -93,11 +93,11 @@ class PaginationInjectorTest extends TestCase
         $injector->injectPaginationLinks($halCollection);
 
         $links = $halCollection->getLinks();
-        $this->assertFalse($links->has('self'));
-        $this->assertFalse($links->has('first'));
-        $this->assertFalse($links->has('last'));
-        $this->assertFalse($links->has('prev'));
-        $this->assertFalse($links->has('next'));
+        self::assertFalse($links->has('self'));
+        self::assertFalse($links->has('first'));
+        self::assertFalse($links->has('last'));
+        self::assertFalse($links->has('prev'));
+        self::assertFalse($links->has('next'));
     }
 
     public function testInjectPaginationLinksGivenPageGreaterThanPageCountShouldReturnApiProblem()
@@ -107,8 +107,8 @@ class PaginationInjectorTest extends TestCase
         $injector = new PaginationInjector();
         $result = $injector->injectPaginationLinks($halCollection);
 
-        $this->assertInstanceOf(ApiProblem::class, $result);
-        $this->assertEquals(409, $result->status);
+        self::assertInstanceOf(ApiProblem::class, $result);
+        self::assertEquals(409, $result->status);
     }
 
     public function testInjectPaginationLinksGivenCollectionRouteNameShouldInjectLinksWithSameRoute()
@@ -121,10 +121,10 @@ class PaginationInjectorTest extends TestCase
         $collectionRoute = $halCollection->getCollectionRoute();
 
         $links = $halCollection->getLinks();
-        $this->assertEquals($collectionRoute, $links->get('self')->getRoute());
-        $this->assertEquals($collectionRoute, $links->get('first')->getRoute());
-        $this->assertEquals($collectionRoute, $links->get('last')->getRoute());
-        $this->assertEquals($collectionRoute, $links->get('prev')->getRoute());
-        $this->assertEquals($collectionRoute, $links->get('next')->getRoute());
+        self::assertEquals($collectionRoute, $links->get('self')->getRoute());
+        self::assertEquals($collectionRoute, $links->get('first')->getRoute());
+        self::assertEquals($collectionRoute, $links->get('last')->getRoute());
+        self::assertEquals($collectionRoute, $links->get('prev')->getRoute());
+        self::assertEquals($collectionRoute, $links->get('next')->getRoute());
     }
 }

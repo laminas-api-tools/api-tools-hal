@@ -19,22 +19,24 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\View;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 use stdClass;
 
 class ModuleTest extends TestCase
 {
+    use ProphecyTrait;
+
     /**
      * @var Module
      */
     private $module;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->module = new Module();
     }
 
-    public function testOnRenderWhenMvcEventResultIsNotHalJsonModel()
+    public function testOnRenderWhenMvcEventResultIsNotHalJsonModel(): void
     {
         $mvcEvent = $this->prophesize(MvcEvent::class);
         $mvcEvent->getResult()->willReturn(new stdClass())->shouldBeCalledTimes(1);
@@ -43,7 +45,7 @@ class ModuleTest extends TestCase
         $this->module->onRender($mvcEvent->reveal());
     }
 
-    public function testOnRenderAttachesJsonStrategy()
+    public function testOnRenderAttachesJsonStrategy(): void
     {
         $strategy = new HalJsonStrategy(new HalJsonRenderer(new ApiProblemRenderer()));
 

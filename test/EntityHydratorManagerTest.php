@@ -25,14 +25,14 @@ class EntityHydratorManagerTest extends TestCase
     /** @var string */
     private $hydratorClass;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->hydratorClass = interface_exists(HydratorPluginManagerInterface::class)
+        $this->hydratorClass = \interface_exists(HydratorPluginManagerInterface::class)
             ? TestAsset\DummyV3Hydrator::class
             : TestAsset\DummyHydrator::class;
     }
 
-    public function testAddHydratorGivenEntityClassAndHydratorInstanceShouldAssociateThem()
+    public function testAddHydratorGivenEntityClassAndHydratorInstanceShouldAssociateThem(): void
     {
         $entity        = new TestAsset\Entity('foo', 'Foo Bar');
         $hydratorClass = $this->hydratorClass;
@@ -47,11 +47,11 @@ class EntityHydratorManagerTest extends TestCase
         $entityHydratorManager->addHydrator(TestAsset\Entity::class, $hydrator);
 
         $entityHydrator = $entityHydratorManager->getHydratorForEntity($entity);
-        $this->assertInstanceOf($hydratorClass, $entityHydrator);
-        $this->assertSame($hydrator, $entityHydrator);
+        self::assertInstanceOf($hydratorClass, $entityHydrator);
+        self::assertSame($hydrator, $entityHydrator);
     }
 
-    public function testAddHydratorGivenEntityAndHydratorClassesShouldAssociateThem()
+    public function testAddHydratorGivenEntityAndHydratorClassesShouldAssociateThem(): void
     {
         $entity        = new TestAsset\Entity('foo', 'Foo Bar');
         $hydratorClass = $this->hydratorClass;
@@ -64,13 +64,13 @@ class EntityHydratorManagerTest extends TestCase
 
         $entityHydratorManager->addHydrator(TestAsset\Entity::class, $hydratorClass);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             $hydratorClass,
             $entityHydratorManager->getHydratorForEntity($entity)
         );
     }
 
-    public function testAddHydratorDoesntFailWithAutoInvokables()
+    public function testAddHydratorDoesntFailWithAutoInvokables(): void
     {
         $metadataMap = new MetadataMap();
         $metadataMap->setHydratorManager(new HydratorPluginManager(new ServiceManager()));
@@ -80,13 +80,13 @@ class EntityHydratorManagerTest extends TestCase
 
         $entityHydratorManager->addHydrator(stdClass::class, $this->hydratorClass);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             $this->hydratorClass,
             $entityHydratorManager->getHydratorForEntity(new stdClass())
         );
     }
 
-    public function testGetHydratorForEntityGivenEntityDefinedInMetadataMapShouldReturnDefaultHydrator()
+    public function testGetHydratorForEntityGivenEntityDefinedInMetadataMapShouldReturnDefaultHydrator(): void
     {
         $entity        = new TestAsset\Entity('foo', 'Foo Bar');
         $hydratorClass = $this->hydratorClass;
@@ -102,13 +102,13 @@ class EntityHydratorManagerTest extends TestCase
         $hydratorPluginManager = new HydratorPluginManager(new ServiceManager());
         $entityHydratorManager = new EntityHydratorManager($hydratorPluginManager, $metadataMap);
 
-        $this->assertInstanceOf(
+        self::assertInstanceOf(
             $hydratorClass,
             $entityHydratorManager->getHydratorForEntity($entity)
         );
     }
 
-    public function testGetHydratorForEntityGivenUnkownEntityShouldReturnDefaultHydrator()
+    public function testGetHydratorForEntityGivenUnknownEntityShouldReturnDefaultHydrator(): void
     {
         $entity          = new TestAsset\Entity('foo', 'Foo Bar');
         $hydratorClass   = $this->hydratorClass;
@@ -124,10 +124,10 @@ class EntityHydratorManagerTest extends TestCase
 
         $entityHydrator = $entityHydratorManager->getHydratorForEntity($entity);
 
-        $this->assertSame($defaultHydrator, $entityHydrator);
+        self::assertSame($defaultHydrator, $entityHydrator);
     }
 
-    public function testGetHydratorForEntityGivenUnknownEntityAndNoDefaultHydratorDefinedShouldReturnFalse()
+    public function testGetHydratorForEntityGivenUnknownEntityAndNoDefaultHydratorDefinedShouldReturnFalse(): void
     {
         $entity = new TestAsset\Entity('foo', 'Foo Bar');
 
@@ -139,6 +139,6 @@ class EntityHydratorManagerTest extends TestCase
 
         $hydrator = $entityHydratorManager->getHydratorForEntity($entity);
 
-        $this->assertFalse($hydrator);
+        self::assertFalse($hydrator);
     }
 }

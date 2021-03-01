@@ -14,10 +14,13 @@ use Laminas\ApiTools\Hal\Link\LinkCollection;
 use Laminas\ApiTools\Hal\Link\SelfLinkInjector;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 class SelfLinkInjectorTest extends TestCase
 {
-    public function testInjectSelfLinkAlreadyAddedShouldBePrevented()
+    use ProphecyTrait;
+
+    public function testInjectSelfLinkAlreadyAddedShouldBePrevented(): void
     {
         $linkCollection = $this->prophesize(LinkCollection::class);
         $linkCollection->has('self')->willReturn(true);
@@ -30,7 +33,7 @@ class SelfLinkInjectorTest extends TestCase
         $injector->injectSelfLink($resource, 'foo');
     }
 
-    public function testInjectEntitySelfLinkShouldAddSelfLinkToLinkCollection()
+    public function testInjectEntitySelfLinkShouldAddSelfLinkToLinkCollection(): void
     {
         $linkCollection = new LinkCollection();
 
@@ -40,10 +43,10 @@ class SelfLinkInjectorTest extends TestCase
         $injector = new SelfLinkInjector();
         $injector->injectSelfLink($resource, 'foo');
 
-        $this->assertTrue($linkCollection->has('self'));
+        self::assertTrue($linkCollection->has('self'));
     }
 
-    public function testInjectCollectionSelfLinkShouldAddSelfLinkToLinkCollection()
+    public function testInjectCollectionSelfLinkShouldAddSelfLinkToLinkCollection(): void
     {
         $linkCollection = new LinkCollection();
 
@@ -53,10 +56,10 @@ class SelfLinkInjectorTest extends TestCase
         $injector = new SelfLinkInjector();
         $injector->injectSelfLink($resource, 'foo');
 
-        $this->assertTrue($linkCollection->has('self'));
+        self::assertTrue($linkCollection->has('self'));
     }
 
-    public function testInjectEntitySelfLinkWithIdentifierShouldAddSelfLinkWithIdentifierRouteParam()
+    public function testInjectEntitySelfLinkWithIdentifierShouldAddSelfLinkWithIdentifierRouteParam(): void
     {
         $routeIdentifier = 'id';
 
@@ -68,11 +71,11 @@ class SelfLinkInjectorTest extends TestCase
         $injector = new SelfLinkInjector();
         $injector->injectSelfLink($resource, 'foo', $routeIdentifier);
 
-        $this->assertTrue($linkCollection->has('self'));
+        self::assertTrue($linkCollection->has('self'));
 
         $selfLink = $linkCollection->get('self');
         $linkRouteParams = $selfLink->getRouteParams();
 
-        $this->assertArrayHasKey($routeIdentifier, $linkRouteParams);
+        self::assertArrayHasKey($routeIdentifier, $linkRouteParams);
     }
 }
