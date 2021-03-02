@@ -15,6 +15,7 @@ interface SelfLinkInjectorInterface
      *
      * @param  string $route
      * @param  string $routeIdentifier
+     * @return void
      */
     public function injectSelfLink(LinkCollectionAwareInterface $resource, $route, $routeIdentifier = 'id');
 }

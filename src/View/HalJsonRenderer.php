@@ -42,6 +42,8 @@ class HalJsonRenderer extends JsonRenderer
      * Set helper plugin manager instance.
      *
      * Also ensures that the 'Hal' helper is present.
+     *
+     * @return void
      */
     public function setHelperPluginManager(HelperPluginManager $helpers)
     {

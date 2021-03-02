@@ -12,6 +12,7 @@ use Laminas\ApiTools\Hal\Collection;
 use Laminas\ApiTools\Hal\Entity;
 use Laminas\ApiTools\Hal\EntityHydratorManager;
 use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
+use Laminas\ApiTools\Hal\Metadata\Metadata;
 use Laminas\ApiTools\Hal\Metadata\MetadataMap;
 use Laminas\ApiTools\Hal\ResourceFactory;
 use Laminas\Hydrator\HydratorPluginManager;
@@ -51,10 +52,10 @@ class ResourceFactoryTest extends TestCase
 
         $resourceFactory = $this->getResourceFactory($metadata);
 
-        $entity = $resourceFactory->createEntityFromMetadata(
-            $object,
-            $metadata->get(HalPluginTestAsset\Entity::class)
-        );
+        $entityMetadata = $metadata->get(HalPluginTestAsset\Entity::class);
+        $this->assertInstanceOf(Metadata::class, $entityMetadata, 'Did not match entity to metadata?');
+
+        $entity = $resourceFactory->createEntityFromMetadata($object, $entityMetadata);
 
         self::assertInstanceOf(Entity::class, $entity);
         $links = $entity->getLinks();
@@ -106,10 +107,10 @@ class ResourceFactoryTest extends TestCase
 
         $resourceFactory = $this->getResourceFactory($metadata);
 
-        $entity = $resourceFactory->createEntityFromMetadata(
-            $object,
-            $metadata->get(HalPluginTestAsset\Entity::class)
-        );
+        $entityMetadata = $metadata->get(HalPluginTestAsset\Entity::class);
+        $this->assertInstanceOf(Metadata::class, $entityMetadata, 'Did not match entity to metadata?');
+
+        $entity = $resourceFactory->createEntityFromMetadata($object, $entityMetadata);
 
         self::assertInstanceOf(Entity::class, $entity);
 
@@ -154,10 +155,10 @@ class ResourceFactoryTest extends TestCase
 
         $resourceFactory = $this->getResourceFactory($metadata);
 
-        $collection = $resourceFactory->createCollectionFromMetadata(
-            $set,
-            $metadata->get(HalPluginTestAsset\Collection::class)
-        );
+        $collectionMetadata = $metadata->get(HalPluginTestAsset\Collection::class);
+        $this->assertInstanceOf(Metadata::class, $collectionMetadata, 'Did not match collection to metadata?');
+
+        $collection = $resourceFactory->createCollectionFromMetadata($set, $collectionMetadata);
 
         self::assertInstanceOf(Collection::class, $collection);
         $links = $collection->getLinks();

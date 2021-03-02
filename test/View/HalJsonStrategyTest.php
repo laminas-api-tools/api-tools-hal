@@ -45,26 +45,26 @@ class HalJsonStrategyTest extends TestCase
         $this->strategy = new HalJsonStrategy($this->renderer);
     }
 
-    public function testSelectRendererReturnsNullIfModelIsNotAHalJsonModel()
+    public function testSelectRendererReturnsNullIfModelIsNotAHalJsonModel(): void
     {
         self::assertNull($this->strategy->selectRenderer($this->event));
     }
 
-    public function testSelectRendererReturnsRendererIfModelIsAHalJsonModel()
+    public function testSelectRendererReturnsRendererIfModelIsAHalJsonModel(): void
     {
         $model = new HalJsonModel();
         $this->event->setModel($model);
         self::assertSame($this->renderer, $this->strategy->selectRenderer($this->event));
     }
 
-    public function testInjectResponseDoesNotSetContentTypeHeaderIfRendererDoesNotMatch()
+    public function testInjectResponseDoesNotSetContentTypeHeaderIfRendererDoesNotMatch(): void
     {
         $this->strategy->injectResponse($this->event);
         $headers = $this->response->getHeaders();
         self::assertFalse($headers->has('Content-Type'));
     }
 
-    public function testInjectResponseDoesNotSetContentTypeHeaderIfResultIsNotString()
+    public function testInjectResponseDoesNotSetContentTypeHeaderIfResultIsNotString(): void
     {
         $this->event->setRenderer($this->renderer);
         $this->event->setResult(['foo']);
@@ -73,7 +73,7 @@ class HalJsonStrategyTest extends TestCase
         self::assertFalse($headers->has('Content-Type'));
     }
 
-    public function testInjectResponseSetsContentTypeHeaderToDefaultIfNotHalModel()
+    public function testInjectResponseSetsContentTypeHeaderToDefaultIfNotHalModel(): void
     {
         $this->event->setRenderer($this->renderer);
         $this->event->setResult('{"foo":"bar"}');
@@ -110,7 +110,7 @@ class HalJsonStrategyTest extends TestCase
      * @dataProvider halObjects
      * @param array $hal
      */
-    public function testInjectResponseSetsContentTypeHeaderToHalForHalModel($hal)
+    public function testInjectResponseSetsContentTypeHeaderToHalForHalModel($hal): void
     {
         $model = new HalJsonModel(['payload' => $hal]);
 
@@ -124,7 +124,7 @@ class HalJsonStrategyTest extends TestCase
         self::assertEquals('application/hal+json', $header->getFieldValue());
     }
 
-    public function testInjectResponseSetsContentTypeHeaderToApiProblemForApiProblemModel()
+    public function testInjectResponseSetsContentTypeHeaderToApiProblemForApiProblemModel(): void
     {
         $problem = new ApiProblem(500, "Error message");
         $model   = new ApiProblemModel($problem);

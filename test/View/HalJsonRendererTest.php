@@ -48,7 +48,7 @@ class HalJsonRendererTest extends TestCase
      * @dataProvider nonHalJsonModels
      * @param ViewModel $model
      */
-    public function testRenderGivenNonHalJsonModelShouldReturnDataInJsonFormat($model)
+    public function testRenderGivenNonHalJsonModelShouldReturnDataInJsonFormat($model): void
     {
         $payload = $this->renderer->render($model);
 
@@ -58,7 +58,7 @@ class HalJsonRendererTest extends TestCase
         );
     }
 
-    public function testRenderGivenHalJsonModelThatContainsHalEntityShouldReturnDataInJsonFormat()
+    public function testRenderGivenHalJsonModelThatContainsHalEntityShouldReturnDataInJsonFormat(): void
     {
         $entity    = [
             'id'   => 123,
@@ -83,7 +83,7 @@ class HalJsonRendererTest extends TestCase
         self::assertEquals($entity, json_decode($rendered, true));
     }
 
-    public function testRenderGivenHalJsonModelThatContainsHalCollectionShouldReturnDataInJsonFormat()
+    public function testRenderGivenHalJsonModelThatContainsHalCollectionShouldReturnDataInJsonFormat(): void
     {
         $collection    = [
             ['id' => 'foo', 'name' => 'foo'],
@@ -109,7 +109,7 @@ class HalJsonRendererTest extends TestCase
         self::assertEquals($collection, json_decode($rendered, true));
     }
 
-    public function testRenderGivenHalJsonModelReturningApiProblemShouldReturnApiProblemInJsonFormat()
+    public function testRenderGivenHalJsonModelReturningApiProblemShouldReturnApiProblemInJsonFormat(): void
     {
         $halCollection = new Collection([]);
         $model         = new HalJsonModel(['payload' => $halCollection]);

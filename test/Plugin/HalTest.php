@@ -19,6 +19,7 @@ use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
 use Laminas\ApiTools\Hal\Link\Link;
 use Laminas\ApiTools\Hal\Link\LinkCollection;
 use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
+use Laminas\ApiTools\Hal\Metadata\Metadata;
 use Laminas\ApiTools\Hal\Metadata\MetadataMap;
 use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
 use Laminas\EventManager\Event;
@@ -1002,7 +1003,7 @@ class HalTest extends TestCase
 
     /**
      * @group 14
-     * @return object
+     * @return ApiProblem|array
      */
     public function testRenderingPaginatorCollectionRendersPaginationAttributes()
     {
@@ -1542,10 +1543,11 @@ class HalTest extends TestCase
 
         $metadata->setHydratorManager(new Hydrator\HydratorPluginManager(new ServiceManager()));
         $this->plugin->setMetadataMap($metadata);
-        $entity = $this->plugin->createEntityFromMetadata(
-            $object,
-            $metadata->get(TestAsset\Entity::class)
-        );
+
+        $entityMetadata = $metadata->get(TestAsset\Entity::class);
+        $this->assertInstanceOf(Metadata::class, $entityMetadata, 'Did not match entity to metadata?');
+
+        $entity = $this->plugin->createEntityFromMetadata($object, $entityMetadata);
         $links  = $entity->getLinks();
         self::assertFalse($links->has('self'));
     }
@@ -1592,10 +1594,10 @@ class HalTest extends TestCase
 
         $this->plugin->setMetadataMap($metadata);
 
-        $collection = $this->plugin->createCollectionFromMetadata(
-            $set,
-            $metadata->get(TestAsset\Collection::class)
-        );
+        $collectionMetadata = $metadata->get(TestAsset\Collection::class);
+        $this->assertInstanceOf(Metadata::class, $collectionMetadata, 'Did not discover metadata for collection?');
+
+        $collection = $this->plugin->createCollectionFromMetadata($set, $collectionMetadata);
         $links      = $collection->getLinks();
         self::assertFalse($links->has('self'));
     }

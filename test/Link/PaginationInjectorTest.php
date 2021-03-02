@@ -40,7 +40,7 @@ class PaginationInjectorTest extends TestCase
         return $halCollection;
     }
 
-    public function testInjectPaginationLinksGivenIntermediatePageShouldInjectAllLinks()
+    public function testInjectPaginationLinksGivenIntermediatePageShouldInjectAllLinks(): void
     {
         $halCollection = $this->getHalCollection(5, 2);
 
@@ -55,7 +55,7 @@ class PaginationInjectorTest extends TestCase
         self::assertTrue($links->has('next'));
     }
 
-    public function testInjectPaginationLinksGivenFirstPageShouldInjectLinksExceptForPrevious()
+    public function testInjectPaginationLinksGivenFirstPageShouldInjectLinksExceptForPrevious(): void
     {
         $halCollection = $this->getHalCollection(5, 1);
 
@@ -70,7 +70,7 @@ class PaginationInjectorTest extends TestCase
         self::assertTrue($links->has('next'));
     }
 
-    public function testInjectPaginationLinksGivenLastPageShouldInjectLinksExceptForNext()
+    public function testInjectPaginationLinksGivenLastPageShouldInjectLinksExceptForNext(): void
     {
         $halCollection = $this->getHalCollection(5, 5);
 
@@ -85,7 +85,7 @@ class PaginationInjectorTest extends TestCase
         self::assertFalse($links->has('next'));
     }
 
-    public function testInjectPaginationLinksGivenEmptyCollectionShouldNotInjectAnyLink()
+    public function testInjectPaginationLinksGivenEmptyCollectionShouldNotInjectAnyLink(): void
     {
         $halCollection = $this->getHalCollection(0, 1);
 
@@ -100,7 +100,7 @@ class PaginationInjectorTest extends TestCase
         self::assertFalse($links->has('next'));
     }
 
-    public function testInjectPaginationLinksGivenPageGreaterThanPageCountShouldReturnApiProblem()
+    public function testInjectPaginationLinksGivenPageGreaterThanPageCountShouldReturnApiProblem(): void
     {
         $halCollection = $this->getHalCollection(5, 6);
 
@@ -111,7 +111,7 @@ class PaginationInjectorTest extends TestCase
         self::assertEquals(409, $result->status);
     }
 
-    public function testInjectPaginationLinksGivenCollectionRouteNameShouldInjectLinksWithSameRoute()
+    public function testInjectPaginationLinksGivenCollectionRouteNameShouldInjectLinksWithSameRoute(): void
     {
         $halCollection = $this->getHalCollection(5, 2);
 

@@ -16,7 +16,7 @@ use function is_array;
 class SelfLinkInjector implements SelfLinkInjectorInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function injectSelfLink(LinkCollectionAwareInterface $resource, $route, $routeIdentifier = 'id')
     {
@@ -62,7 +62,8 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
     /**
      * @param null|array|Entity|Collection $resource
      * @param string $routeIdentifier
-     * @return array
+     * @return array|string
+     * @psalm-return array<empty, empty>|array<array-key, mixed>|string
      */
     private function getRouteParams($resource, $routeIdentifier)
     {
@@ -86,7 +87,8 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
 
     /**
      * @param null|array|Entity|Collection $resource
-     * @return array
+     * @return array|string
+     * @psalm-return array<empty, empty>|array<array-key, mixed>|string
      */
     private function getRouteOptions($resource)
     {
