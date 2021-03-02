@@ -26,6 +26,7 @@ class RendererOptions extends AbstractOptions
 
     /**
      * @param string $hydrator
+     * @return void
      */
     public function setDefaultHydrator($hydrator)
     {
@@ -42,6 +43,7 @@ class RendererOptions extends AbstractOptions
 
     /**
      * @param bool $flag
+     * @return void
      */
     public function setRenderEmbeddedEntities($flag)
     {
@@ -49,7 +51,7 @@ class RendererOptions extends AbstractOptions
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public function getRenderEmbeddedEntities()
     {
@@ -58,6 +60,7 @@ class RendererOptions extends AbstractOptions
 
     /**
      * @param bool $flag
+     * @return void
      */
     public function setRenderEmbeddedCollections($flag)
     {
@@ -65,7 +68,7 @@ class RendererOptions extends AbstractOptions
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public function getRenderEmbeddedCollections()
     {
@@ -74,6 +77,7 @@ class RendererOptions extends AbstractOptions
 
     /**
      * @param array $hydrators
+     * @return void
      */
     public function setHydrators(array $hydrators)
     {

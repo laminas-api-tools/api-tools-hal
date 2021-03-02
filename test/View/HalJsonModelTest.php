@@ -25,12 +25,12 @@ class HalJsonModelTest extends TestCase
         $this->model = new HalJsonModel();
     }
 
-    public function testPayloadIsNullByDefault()
+    public function testPayloadIsNullByDefault(): void
     {
         self::assertNull($this->model->getPayload());
     }
 
-    public function testPayloadIsMutable()
+    public function testPayloadIsMutable(): void
     {
         $this->model->setPayload('foo');
         self::assertEquals('foo', $this->model->getPayload());
@@ -71,13 +71,13 @@ class HalJsonModelTest extends TestCase
      * @dataProvider invalidCollectionPayloads
      * @param mixed $payload
      */
-    public function testIsCollectionReturnsFalseForInvalidValues($payload)
+    public function testIsCollectionReturnsFalseForInvalidValues($payload): void
     {
         $this->model->setPayload($payload);
         self::assertFalse($this->model->isCollection());
     }
 
-    public function testIsCollectionReturnsTrueForCollectionPayload()
+    public function testIsCollectionReturnsTrueForCollectionPayload(): void
     {
         $collection = new Collection([], 'item/route');
         $this->model->setPayload($collection);
@@ -100,20 +100,20 @@ class HalJsonModelTest extends TestCase
      * @dataProvider invalidEntityPayloads
      * @param mixed $payload
      */
-    public function testIsEntityReturnsFalseForInvalidValues($payload)
+    public function testIsEntityReturnsFalseForInvalidValues($payload): void
     {
         $this->model->setPayload($payload);
         self::assertFalse($this->model->isEntity());
     }
 
-    public function testIsEntityReturnsTrueForEntityPayload()
+    public function testIsEntityReturnsTrueForEntityPayload(): void
     {
         $item = new Entity([], 'id');
         $this->model->setPayload($item);
         self::assertTrue($this->model->isEntity());
     }
 
-    public function testIsTerminalByDefault()
+    public function testIsTerminalByDefault(): void
     {
         self::assertTrue($this->model->terminate());
     }
@@ -121,7 +121,7 @@ class HalJsonModelTest extends TestCase
     /**
      * @depends testIsTerminalByDefault
      */
-    public function testTerminalFlagIsNotMutable()
+    public function testTerminalFlagIsNotMutable(): void
     {
         $this->model->setTerminal(false);
         self::assertTrue($this->model->terminate());

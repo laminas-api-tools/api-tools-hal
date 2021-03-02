@@ -170,6 +170,8 @@ class ResourceFactory
 
     /**
      * Inject any links found in the metadata into the resource's link collection
+     *
+     * @return void
      */
     public function marshalMetadataLinks(Metadata $metadata, LinkCollection $links)
     {

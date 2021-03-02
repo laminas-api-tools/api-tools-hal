@@ -45,7 +45,7 @@ class PaginationInjector implements PaginationInjectorInterface
         return true;
     }
 
-    private function configureCollection(Collection $halCollection)
+    private function configureCollection(Collection $halCollection): void
     {
         $collection = $halCollection->getCollection();
         $page       = $halCollection->getPage();
@@ -55,7 +55,7 @@ class PaginationInjector implements PaginationInjectorInterface
         $collection->setCurrentPageNumber($page);
     }
 
-    private function injectLinks(Collection $halCollection)
+    private function injectLinks(Collection $halCollection): void
     {
         $this->injectSelfLink($halCollection);
         $this->injectFirstLink($halCollection);
@@ -64,27 +64,27 @@ class PaginationInjector implements PaginationInjectorInterface
         $this->injectNextLink($halCollection);
     }
 
-    private function injectSelfLink(Collection $halCollection)
+    private function injectSelfLink(Collection $halCollection): void
     {
         $page = $halCollection->getPage();
         $link = $this->createPaginationLink('self', $halCollection, $page);
         $halCollection->getLinks()->add($link, true);
     }
 
-    private function injectFirstLink(Collection $halCollection)
+    private function injectFirstLink(Collection $halCollection): void
     {
         $link = $this->createPaginationLink('first', $halCollection);
         $halCollection->getLinks()->add($link);
     }
 
-    private function injectLastLink(Collection $halCollection)
+    private function injectLastLink(Collection $halCollection): void
     {
         $page = $halCollection->getCollection()->count();
         $link = $this->createPaginationLink('last', $halCollection, $page);
         $halCollection->getLinks()->add($link);
     }
 
-    private function injectPrevLink(Collection $halCollection)
+    private function injectPrevLink(Collection $halCollection): void
     {
         $page = $halCollection->getPage();
         $prev = $page > 1 ? $page - 1 : false;
@@ -95,7 +95,7 @@ class PaginationInjector implements PaginationInjectorInterface
         }
     }
 
-    private function injectNextLink(Collection $halCollection)
+    private function injectNextLink(Collection $halCollection): void
     {
         $page      = $halCollection->getPage();
         $pageCount = $halCollection->getCollection()->count();

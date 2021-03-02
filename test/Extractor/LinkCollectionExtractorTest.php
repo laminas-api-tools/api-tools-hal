@@ -26,7 +26,7 @@ class LinkCollectionExtractorTest extends TestCase
         $this->linkCollectionExtractor = new LinkCollectionExtractor($linkExtractor);
     }
 
-    public function testExtractGivenLinkCollectionShouldReturnArrayWithExtractionOfEachLink()
+    public function testExtractGivenLinkCollectionShouldReturnArrayWithExtractionOfEachLink(): void
     {
         $linkCollection = new LinkCollection();
         $linkCollection->add(Link::factory([
@@ -48,7 +48,7 @@ class LinkCollectionExtractorTest extends TestCase
         self::assertCount($linkCollection->count(), $result);
     }
 
-    public function testLinkCollectionWithTwoLinksForSameRelationShouldReturnArrayWithOneKeyAggregatingLinks()
+    public function testLinkCollectionWithTwoLinksForSameRelationShouldReturnArrayWithOneKeyAggregatingLinks(): void
     {
         $linkCollection = new LinkCollection();
         $linkCollection->add(Link::factory([

@@ -525,7 +525,7 @@ class Collection implements Link\LinkCollectionAwareInterface
     /**
      * Collection Route Options
      *
-     * @return string
+     * @return array
      */
     public function getCollectionRouteOptions()
     {
@@ -535,7 +535,7 @@ class Collection implements Link\LinkCollectionAwareInterface
     /**
      * Collection Route Params
      *
-     * @return string
+     * @return array
      */
     public function getCollectionRouteParams()
     {

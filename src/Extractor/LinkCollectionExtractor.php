@@ -33,6 +33,9 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
         return $this->linkExtractor;
     }
 
+    /**
+     * @return void
+     */
     public function setLinkExtractor(LinkExtractorInterface $linkExtractor)
     {
         $this->linkExtractor = $linkExtractor;

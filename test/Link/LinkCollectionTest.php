@@ -22,7 +22,7 @@ class LinkCollectionTest extends TestCase
         $this->links = new LinkCollection();
     }
 
-    public function testCanAddDiscreteLinkRelations()
+    public function testCanAddDiscreteLinkRelations(): void
     {
         $describedby = new Link('describedby');
         $self        = new Link('self');
@@ -35,7 +35,7 @@ class LinkCollectionTest extends TestCase
         self::assertSame($self, $this->links->get('self'));
     }
 
-    public function testCanAddDuplicateLinkRelations()
+    public function testCanAddDuplicateLinkRelations(): void
     {
         $order1 = new Link('order');
         $order2 = new Link('order');
@@ -50,7 +50,7 @@ class LinkCollectionTest extends TestCase
         self::assertContains($order2, $orders);
     }
 
-    public function testCanRemoveLinkRelations()
+    public function testCanRemoveLinkRelations(): void
     {
         $describedby = new Link('describedby');
         $this->links->add($describedby);
@@ -59,7 +59,7 @@ class LinkCollectionTest extends TestCase
         self::assertFalse($this->links->has('describedby'));
     }
 
-    public function testCanOverwriteLinkRelations()
+    public function testCanOverwriteLinkRelations(): void
     {
         $order1 = new Link('order');
         $order2 = new Link('order');
@@ -72,7 +72,7 @@ class LinkCollectionTest extends TestCase
         self::assertSame($order2, $orders);
     }
 
-    public function testCanIterateLinks()
+    public function testCanIterateLinks(): void
     {
         $describedby = new Link('describedby');
         $self        = new Link('self');
@@ -88,7 +88,7 @@ class LinkCollectionTest extends TestCase
         self::assertEquals(2, $i);
     }
 
-    public function testCannotDuplicateSelf()
+    public function testCannotDuplicateSelf(): void
     {
         $first  = new Link('self');
         $second = new Link('self');

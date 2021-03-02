@@ -622,7 +622,7 @@ class Metadata
      * @param HydratorPluginManager|HydratorPluginManagerInterface $hydrators
      * @throws Exception\InvalidArgumentException If $hydrators is an invaild type.
      */
-    private function setHydrators($hydrators)
+    private function setHydrators($hydrators): void
     {
         if ($hydrators instanceof HydratorPluginManagerInterface) {
             $this->hydrators = $hydrators;

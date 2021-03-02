@@ -1,0 +1,1615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="4.6.2@bca09d74adc704c4eaee36a3c3e9d379e290fc3b">
+  <file src="config/module.config.php">
+    <UndefinedClass occurrences="12">
+      <code>HalConfig</code>
+      <code>HalConfig</code>
+      <code>JsonRenderer</code>
+      <code>JsonRenderer</code>
+      <code>JsonStrategy</code>
+      <code>JsonStrategy</code>
+      <code>MetadataMap</code>
+      <code>MetadataMap</code>
+      <code>\ZF\Hal\HalConfig</code>
+      <code>\ZF\Hal\JsonRenderer</code>
+      <code>\ZF\Hal\JsonStrategy</code>
+      <code>\ZF\Hal\MetadataMap</code>
+    </UndefinedClass>
+  </file>
+  <file src="src/Collection.php">
+    <DocblockTypeContradiction occurrences="7">
+      <code>! is_int($page)</code>
+      <code>! is_int($size)</code>
+      <code>gettype($collection)</code>
+      <code>is_array($options)</code>
+      <code>is_array($options)</code>
+      <code>is_array($params)</code>
+      <code>is_array($params)</code>
+    </DocblockTypeContradiction>
+    <InvalidPropertyAssignmentValue occurrences="1">
+      <code>$collection</code>
+    </InvalidPropertyAssignmentValue>
+    <InvalidReturnStatement occurrences="2">
+      <code>$this-&gt;collectionRouteOptions</code>
+      <code>$this-&gt;collectionRouteParams</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="2">
+      <code>string</code>
+      <code>string</code>
+    </InvalidReturnType>
+    <PropertyNotSetInConstructor occurrences="4">
+      <code>$collectionRoute</code>
+      <code>$entityLinks</code>
+      <code>$entityRoute</code>
+      <code>Collection</code>
+    </PropertyNotSetInConstructor>
+    <RedundantCastGivenDocblockType occurrences="5">
+      <code>(int) $page</code>
+      <code>(int) $size</code>
+      <code>(string) $name</code>
+      <code>(string) $route</code>
+      <code>(string) $route</code>
+    </RedundantCastGivenDocblockType>
+    <RedundantConditionGivenDocblockType occurrences="1">
+      <code>is_object($collection)</code>
+    </RedundantConditionGivenDocblockType>
+  </file>
+  <file src="src/Entity.php">
+    <DocblockTypeContradiction occurrences="1">
+      <code>! is_object($entity) &amp;&amp; ! is_array($entity)</code>
+    </DocblockTypeContradiction>
+    <PropertyNotSetInConstructor occurrences="1">
+      <code>Entity</code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="src/EntityHydratorManager.php">
+    <DocblockTypeContradiction occurrences="1">
+      <code>$hydrator instanceof ExtractionInterface</code>
+    </DocblockTypeContradiction>
+    <MixedArgument occurrences="1">
+      <code>$hydrator</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="1">
+      <code>$hydrator</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>ExtractionInterface|false</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1">
+      <code>$this-&gt;hydratorMap[$classLower]</code>
+    </MixedReturnStatement>
+    <PropertyNotSetInConstructor occurrences="1">
+      <code>$defaultHydrator</code>
+    </PropertyNotSetInConstructor>
+    <RedundantConditionGivenDocblockType occurrences="2">
+      <code>$hydrators instanceof HydratorPluginManager</code>
+      <code>$this-&gt;defaultHydrator instanceof ExtractionInterface</code>
+    </RedundantConditionGivenDocblockType>
+  </file>
+  <file src="src/Extractor/EntityExtractor.php">
+    <MixedInferredReturnType occurrences="2">
+      <code>array</code>
+      <code>array</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="3">
+      <code>$entity-&gt;jsonSerialize()</code>
+      <code>$this-&gt;serializedEntities[$entity]</code>
+      <code>$this-&gt;serializedEntities[$entity]</code>
+    </MixedReturnStatement>
+  </file>
+  <file src="src/Extractor/LinkCollectionExtractor.php">
+    <MissingReturnType occurrences="1">
+      <code>setLinkExtractor</code>
+    </MissingReturnType>
+    <MixedAssignment occurrences="1">
+      <code>$subLink</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Extractor/LinkExtractor.php">
+    <DeprecatedMethod occurrences="1">
+      <code>hasUrl</code>
+    </DeprecatedMethod>
+    <PossiblyNullArgument occurrences="1">
+      <code>$link-&gt;getRoute()</code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="src/Factory/HalConfigFactory.php">
+    <MixedAssignment occurrences="1">
+      <code>$config</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>array|ArrayAccess</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1"/>
+  </file>
+  <file src="src/Factory/HalControllerPluginFactory.php">
+    <DeprecatedInterface occurrences="1">
+      <code>HalControllerPluginFactory</code>
+    </DeprecatedInterface>
+    <DeprecatedMethod occurrences="1">
+      <code>getServiceLocator</code>
+    </DeprecatedMethod>
+    <MixedAssignment occurrences="1">
+      <code>$helpers</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>Hal</code>
+    </MixedInferredReturnType>
+    <MixedMethodCall occurrences="1">
+      <code>get</code>
+    </MixedMethodCall>
+    <MixedReturnStatement occurrences="1">
+      <code>$helpers-&gt;get('Hal')</code>
+    </MixedReturnStatement>
+  </file>
+  <file src="src/Factory/HalJsonRendererFactory.php">
+    <MixedArgument occurrences="2">
+      <code>$apiProblemRenderer</code>
+      <code>$helpers</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="2">
+      <code>$apiProblemRenderer</code>
+      <code>$helpers</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Factory/HalJsonStrategyFactory.php">
+    <MixedArgument occurrences="1">
+      <code>$container-&gt;get('Laminas\ApiTools\Hal\JsonRenderer')</code>
+    </MixedArgument>
+  </file>
+  <file src="src/Factory/HalViewHelperFactory.php">
+    <DeprecatedMethod occurrences="1">
+      <code>getServiceLocator</code>
+    </DeprecatedMethod>
+    <InvalidScalarArgument occurrences="2">
+      <code>$rendererOptions-&gt;getRenderEmbeddedCollections()</code>
+      <code>$rendererOptions-&gt;getRenderEmbeddedEntities()</code>
+    </InvalidScalarArgument>
+    <MixedArgument occurrences="5">
+      <code>$container-&gt;get('EventManager')</code>
+      <code>$hydratorServiceName</code>
+      <code>$linkCollectionExtractor</code>
+      <code>$linkUrlBuilder</code>
+      <code>$metadataMap</code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$class</code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment occurrences="4">
+      <code>$hydratorServiceName</code>
+      <code>$linkCollectionExtractor</code>
+      <code>$linkUrlBuilder</code>
+      <code>$metadataMap</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="1">
+      <code>getHydratorManager</code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Factory/LinkCollectionExtractorFactory.php">
+    <MixedArgument occurrences="1">
+      <code>$container-&gt;get(LinkExtractor::class)</code>
+    </MixedArgument>
+  </file>
+  <file src="src/Factory/LinkExtractorFactory.php">
+    <MixedArgument occurrences="1">
+      <code>$container-&gt;get(LinkUrlBuilder::class)</code>
+    </MixedArgument>
+  </file>
+  <file src="src/Factory/LinkUrlBuilderFactory.php">
+    <MixedArgument occurrences="2">
+      <code>$halConfig['options']['use_proxy']</code>
+      <code>$urlHelper</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="1">
+      <code>$halConfig['options']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="3">
+      <code>$halConfig</code>
+      <code>$urlHelper</code>
+      <code>$viewHelperManager</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="2">
+      <code>get</code>
+      <code>get</code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Factory/MetadataMapFactory.php">
+    <InvalidThrow occurrences="1">
+      <code>ContainerException</code>
+    </InvalidThrow>
+    <MixedArgument occurrences="2">
+      <code>$hydrators</code>
+      <code>$map</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="3">
+      <code>$config</code>
+      <code>$hydrators</code>
+      <code>$map</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Factory/RendererOptionsFactory.php">
+    <InvalidThrow occurrences="1">
+      <code>ContainerException</code>
+    </InvalidThrow>
+    <MixedArgument occurrences="1">
+      <code>$rendererConfig</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="3">
+      <code>$config</code>
+      <code>$rendererConfig</code>
+      <code>$rendererConfig['render_embedded_entities']</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Link/Link.php">
+    <DeprecatedMethod occurrences="1">
+      <code>hasUrl</code>
+    </DeprecatedMethod>
+    <DocblockTypeContradiction occurrences="2">
+      <code>is_array($options)</code>
+      <code>is_array($params)</code>
+    </DocblockTypeContradiction>
+    <InvalidCatch occurrences="1"/>
+    <MixedArgument occurrences="3">
+      <code>$name</code>
+      <code>$spec['rel']</code>
+      <code>$spec['url']</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="1">
+      <code>$name</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>self</code>
+    </MixedInferredReturnType>
+    <MixedPropertyTypeCoercion occurrences="2">
+      <code>$props</code>
+      <code>$relation</code>
+    </MixedPropertyTypeCoercion>
+    <PropertyNotSetInConstructor occurrences="2">
+      <code>$href</code>
+      <code>$route</code>
+    </PropertyNotSetInConstructor>
+    <RedundantCastGivenDocblockType occurrences="3">
+      <code>(string) $relation</code>
+      <code>(string) $route</code>
+      <code>(string) $this-&gt;href</code>
+    </RedundantCastGivenDocblockType>
+    <UnsafeInstantiation occurrences="1">
+      <code>new static($spec['rel'])</code>
+    </UnsafeInstantiation>
+  </file>
+  <file src="src/Link/LinkCollection.php">
+    <DeprecatedMethod occurrences="1">
+      <code>getRelation</code>
+    </DeprecatedMethod>
+    <MixedAssignment occurrences="1">
+      <code>$relationLinks</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>LinkInterface|Link|array|null</code>
+    </MixedInferredReturnType>
+    <MixedReturnStatement occurrences="1">
+      <code>$this-&gt;links[$relation]</code>
+    </MixedReturnStatement>
+  </file>
+  <file src="src/Link/LinkCollectionAwareTrait.php">
+    <DocblockTypeContradiction occurrences="1">
+      <code>$this-&gt;links instanceof LinkCollection</code>
+    </DocblockTypeContradiction>
+  </file>
+  <file src="src/Link/PaginationInjector.php">
+    <DeprecatedMethod occurrences="5">
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+    </DeprecatedMethod>
+    <InvalidArgument occurrences="1">
+      <code>$halCollection-&gt;getCollectionRouteOptions()</code>
+    </InvalidArgument>
+    <MissingReturnType occurrences="7">
+      <code>configureCollection</code>
+      <code>injectFirstLink</code>
+      <code>injectLastLink</code>
+      <code>injectLinks</code>
+      <code>injectNextLink</code>
+      <code>injectPrevLink</code>
+      <code>injectSelfLink</code>
+    </MissingReturnType>
+    <MixedArgument occurrences="1">
+      <code>$page</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="2">
+      <code>$page</code>
+      <code>$pageCount</code>
+    </MixedAssignment>
+    <PossiblyInvalidMethodCall occurrences="4">
+      <code>count</code>
+      <code>count</code>
+      <code>setCurrentPageNumber</code>
+      <code>setItemCountPerPage</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyUndefinedMethod occurrences="4">
+      <code>count</code>
+      <code>count</code>
+      <code>setCurrentPageNumber</code>
+      <code>setItemCountPerPage</code>
+    </PossiblyUndefinedMethod>
+  </file>
+  <file src="src/Link/SelfLinkInjector.php">
+    <ArgumentTypeCoercion occurrences="1">
+      <code>$resource</code>
+    </ArgumentTypeCoercion>
+    <DeprecatedMethod occurrences="1">
+      <code>add</code>
+    </DeprecatedMethod>
+    <InvalidReturnStatement occurrences="2">
+      <code>$resource-&gt;getCollectionRouteOptions()</code>
+      <code>$resource-&gt;getCollectionRouteParams()</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="2">
+      <code>array</code>
+      <code>array</code>
+    </InvalidReturnType>
+    <MissingReturnType occurrences="1">
+      <code>injectSelfLink</code>
+    </MissingReturnType>
+    <RedundantCastGivenDocblockType occurrences="1">
+      <code>(string) $route</code>
+    </RedundantCastGivenDocblockType>
+  </file>
+  <file src="src/Link/SelfLinkInjectorInterface.php">
+    <MissingReturnType occurrences="1">
+      <code>injectSelfLink</code>
+    </MissingReturnType>
+  </file>
+  <file src="src/Metadata/Metadata.php">
+    <DocblockTypeContradiction occurrences="1">
+      <code>null === $this-&gt;entityRoute</code>
+    </DocblockTypeContradiction>
+    <MissingReturnType occurrences="1">
+      <code>setHydrators</code>
+    </MissingReturnType>
+    <MixedAssignment occurrences="6">
+      <code>$filteredKey</code>
+      <code>$hydrator</code>
+      <code>$legacyIdentifierName</code>
+      <code>$this-&gt;entityIdentifierName</code>
+      <code>$this-&gt;routeIdentifierName</code>
+      <code>$value</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="1">
+      <code>new $hydrator()</code>
+    </MixedMethodCall>
+    <MixedOperand occurrences="1">
+      <code>$filteredKey</code>
+    </MixedOperand>
+    <PossiblyNullArgument occurrences="2">
+      <code>$this-&gt;getRoute()</code>
+      <code>$this-&gt;getUrl()</code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor occurrences="8">
+      <code>$entityIdentifierName</code>
+      <code>$entityRoute</code>
+      <code>$hydrator</code>
+      <code>$hydrators</code>
+      <code>$maxDepth</code>
+      <code>$route</code>
+      <code>$routeIdentifierName</code>
+      <code>$url</code>
+    </PropertyNotSetInConstructor>
+    <RedundantCastGivenDocblockType occurrences="2">
+      <code>(bool) $flag</code>
+      <code>(string) $collectionName</code>
+    </RedundantCastGivenDocblockType>
+    <RedundantConditionGivenDocblockType occurrences="5">
+      <code>$hydrators instanceof HydratorPluginManager</code>
+      <code>null !== $this-&gt;hydrator</code>
+      <code>null !== $this-&gt;hydrators</code>
+      <code>null !== $this-&gt;route</code>
+      <code>null !== $this-&gt;url</code>
+    </RedundantConditionGivenDocblockType>
+    <UninitializedProperty occurrences="2">
+      <code>$this-&gt;entityIdentifierName</code>
+      <code>$this-&gt;routeIdentifierName</code>
+    </UninitializedProperty>
+  </file>
+  <file src="src/Metadata/MetadataMap.php">
+    <DocblockTypeContradiction occurrences="1">
+      <code>null === $this-&gt;hydrators</code>
+    </DocblockTypeContradiction>
+    <FalsableReturnStatement occurrences="1">
+      <code>false</code>
+    </FalsableReturnStatement>
+    <InvalidFalsableReturnType occurrences="1">
+      <code>Metadata</code>
+    </InvalidFalsableReturnType>
+    <InvalidPropertyAssignmentValue occurrences="1">
+      <code>$this-&gt;map</code>
+    </InvalidPropertyAssignmentValue>
+    <MixedArgument occurrences="1">
+      <code>$this-&gt;map[$class]</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="1">
+      <code>$options</code>
+    </MixedAssignment>
+    <PropertyNotSetInConstructor occurrences="1">
+      <code>$hydrators</code>
+    </PropertyNotSetInConstructor>
+    <RedundantConditionGivenDocblockType occurrences="2">
+      <code>$hydrators instanceof HydratorPluginManager</code>
+      <code>$this-&gt;map[$class] instanceof Metadata</code>
+    </RedundantConditionGivenDocblockType>
+  </file>
+  <file src="src/Module.php">
+    <MixedArgument occurrences="1">
+      <code>$events</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="1">
+      <code>$events</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>array</code>
+    </MixedInferredReturnType>
+    <MixedMethodCall occurrences="1">
+      <code>getEventManager</code>
+    </MixedMethodCall>
+    <MixedReturnStatement occurrences="1">
+      <code>include __DIR__ . '/../config/module.config.php'</code>
+    </MixedReturnStatement>
+  </file>
+  <file src="src/Plugin/Hal.php">
+    <ArgumentTypeCoercion occurrences="2">
+      <code>$collection</code>
+      <code>$collection</code>
+    </ArgumentTypeCoercion>
+    <DeprecatedClass occurrences="1">
+      <code>Resource</code>
+    </DeprecatedClass>
+    <DeprecatedMethod occurrences="1">
+      <code>add</code>
+    </DeprecatedMethod>
+    <DocblockTypeContradiction occurrences="8">
+      <code>! $metadata</code>
+      <code>$link instanceof Link</code>
+      <code>$this-&gt;entityExtractor instanceof EntityExtractor</code>
+      <code>$this-&gt;entityHydratorManager instanceof EntityHydratorManager</code>
+      <code>$this-&gt;metadataMap instanceof MetadataMap</code>
+      <code>$this-&gt;paginationInjector instanceof PaginationInjectorInterface</code>
+      <code>$this-&gt;resourceFactory instanceof ResourceFactory</code>
+      <code>$this-&gt;selfLinkInjector instanceof SelfLinkInjectorInterface</code>
+    </DocblockTypeContradiction>
+    <ImplementedReturnTypeMismatch occurrences="1">
+      <code>self</code>
+    </ImplementedReturnTypeMismatch>
+    <InvalidReturnStatement occurrences="1">
+      <code>$halEntity</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>Entity</code>
+    </InvalidReturnType>
+    <MissingClosureParamType occurrences="1">
+      <code>$r</code>
+    </MissingClosureParamType>
+    <MissingClosureReturnType occurrences="1">
+      <code>function ($r) {</code>
+    </MissingClosureReturnType>
+    <MissingReturnType occurrences="6">
+      <code>extractEmbeddedCollection</code>
+      <code>extractEmbeddedEntity</code>
+      <code>injectSelfLink</code>
+      <code>marshalMetadataLinks</code>
+      <code>setServerUrlHelper</code>
+      <code>setUrlHelper</code>
+    </MissingReturnType>
+    <MixedArgument occurrences="6">
+      <code>$entity</code>
+      <code>$eventParams</code>
+      <code>$eventParams['route']</code>
+      <code>$eventParams['routeOptions']</code>
+      <code>$eventParams['routeParams']</code>
+      <code>$link</code>
+    </MixedArgument>
+    <MixedArgumentTypeCoercion occurrences="4">
+      <code>$key</code>
+      <code>$key</code>
+      <code>$key</code>
+      <code>$key</code>
+    </MixedArgumentTypeCoercion>
+    <MixedArrayAssignment occurrences="2">
+      <code>$parent['_embedded'][$key]</code>
+      <code>$parent['_embedded'][$key]</code>
+    </MixedArrayAssignment>
+    <MixedArrayOffset occurrences="1">
+      <code>$this-&gt;entityHashStack[$entityHash]</code>
+    </MixedArrayOffset>
+    <MixedAssignment occurrences="12">
+      <code>$entity</code>
+      <code>$entity</code>
+      <code>$eventParams</code>
+      <code>$id</code>
+      <code>$id</code>
+      <code>$link</code>
+      <code>$payload['page_count']</code>
+      <code>$payload['page_size']</code>
+      <code>$payload['total_items']</code>
+      <code>$payload['total_items']</code>
+      <code>$value</code>
+      <code>$value</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="1">
+      <code>getId</code>
+    </MixedMethodCall>
+    <PossiblyInvalidArgument occurrences="4">
+      <code>$entity</code>
+      <code>$eventParams['route']</code>
+      <code>$eventParams['routeOptions']</code>
+      <code>$eventParams['routeParams']</code>
+    </PossiblyInvalidArgument>
+    <PossiblyNullArgument occurrences="1">
+      <code>$route</code>
+    </PossiblyNullArgument>
+    <PropertyNotSetInConstructor occurrences="10">
+      <code>$controller</code>
+      <code>$entityExtractor</code>
+      <code>$entityHydratorManager</code>
+      <code>$linkCollectionExtractor</code>
+      <code>$linkUrlBuilder</code>
+      <code>$metadataMap</code>
+      <code>$paginationInjector</code>
+      <code>$resourceFactory</code>
+      <code>$selfLinkInjector</code>
+      <code>Hal</code>
+    </PropertyNotSetInConstructor>
+    <PropertyTypeCoercion occurrences="1">
+      <code>$hydrators</code>
+    </PropertyTypeCoercion>
+    <RedundantCastGivenDocblockType occurrences="1">
+      <code>(int) $collection-&gt;getTotalItemCount()</code>
+    </RedundantCastGivenDocblockType>
+    <RedundantConditionGivenDocblockType occurrences="3">
+      <code>$hydrators instanceof HydratorPluginManager</code>
+      <code>$metadata</code>
+      <code>$metadata</code>
+    </RedundantConditionGivenDocblockType>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>prepareArgs</code>
+    </UndefinedInterfaceMethod>
+  </file>
+  <file src="src/RendererOptions.php">
+    <InvalidReturnStatement occurrences="2">
+      <code>$this-&gt;renderEmbeddedCollections</code>
+      <code>$this-&gt;renderEmbeddedEntities</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="2">
+      <code>string</code>
+      <code>string</code>
+    </InvalidReturnType>
+    <MissingReturnType occurrences="4">
+      <code>setDefaultHydrator</code>
+      <code>setHydrators</code>
+      <code>setRenderEmbeddedCollections</code>
+      <code>setRenderEmbeddedEntities</code>
+    </MissingReturnType>
+    <PropertyNotSetInConstructor occurrences="1">
+      <code>$defaultHydrator</code>
+    </PropertyNotSetInConstructor>
+    <RedundantCastGivenDocblockType occurrences="2">
+      <code>(bool) $flag</code>
+      <code>(bool) $flag</code>
+    </RedundantCastGivenDocblockType>
+  </file>
+  <file src="src/Resource.php">
+    <PropertyNotSetInConstructor occurrences="1">
+      <code>Resource</code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="src/ResourceFactory.php">
+    <ArgumentTypeCoercion occurrences="1">
+      <code>$object</code>
+    </ArgumentTypeCoercion>
+    <DeprecatedMethod occurrences="3">
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+    </DeprecatedMethod>
+    <InvalidClass occurrences="2">
+      <code>entityextractor</code>
+      <code>entityextractor</code>
+    </InvalidClass>
+    <MissingReturnType occurrences="1">
+      <code>marshalMetadataLinks</code>
+    </MissingReturnType>
+    <MixedArgument occurrences="2">
+      <code>$id</code>
+      <code>$linkData</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="4">
+      <code>$id</code>
+      <code>$linkData</code>
+      <code>$param</code>
+      <code>$params[$key]</code>
+    </MixedAssignment>
+    <PossiblyInvalidArgument occurrences="4">
+      <code>$object</code>
+      <code>$object</code>
+      <code>$object</code>
+      <code>$object</code>
+    </PossiblyInvalidArgument>
+    <PossiblyNullArgument occurrences="4">
+      <code>$metadata-&gt;getEntityRoute()</code>
+      <code>$metadata-&gt;getRoute()</code>
+      <code>$metadata-&gt;getRoute()</code>
+      <code>$metadata-&gt;getUrl()</code>
+    </PossiblyNullArgument>
+  </file>
+  <file src="src/View/HalJsonModel.php">
+    <MixedAssignment occurrences="2">
+      <code>$payload</code>
+      <code>$payload</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/View/HalJsonRenderer.php">
+    <DocblockTypeContradiction occurrences="1">
+      <code>$this-&gt;helpers instanceof HelperPluginManager</code>
+    </DocblockTypeContradiction>
+    <MissingReturnType occurrences="1">
+      <code>setHelperPluginManager</code>
+    </MissingReturnType>
+    <MixedArgument occurrences="5">
+      <code>$nameOrModel</code>
+      <code>$payload</code>
+      <code>$payload</code>
+      <code>$values</code>
+      <code>$values</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="4">
+      <code>$helper</code>
+      <code>$helper</code>
+      <code>$payload</code>
+      <code>$payload</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="2">
+      <code>renderCollection</code>
+      <code>renderEntity</code>
+    </MixedMethodCall>
+    <PropertyNotSetInConstructor occurrences="3">
+      <code>$helpers</code>
+      <code>$viewEvent</code>
+      <code>HalJsonRenderer</code>
+    </PropertyNotSetInConstructor>
+    <RedundantConditionGivenDocblockType occurrences="1">
+      <code>$event</code>
+    </RedundantConditionGivenDocblockType>
+  </file>
+  <file src="src/View/HalJsonStrategy.php">
+    <LessSpecificReturnStatement occurrences="1">
+      <code>$this-&gt;renderer</code>
+    </LessSpecificReturnStatement>
+    <MixedAssignment occurrences="1">
+      <code>$headers</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="1">
+      <code>addHeaderLine</code>
+    </MixedMethodCall>
+    <MoreSpecificReturnType occurrences="1">
+      <code>null|HalJsonRenderer</code>
+    </MoreSpecificReturnType>
+    <PossiblyNullArgument occurrences="1">
+      <code>$model</code>
+    </PossiblyNullArgument>
+    <PossiblyNullReference occurrences="1">
+      <code>setContent</code>
+    </PossiblyNullReference>
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>getHeaders</code>
+    </UndefinedInterfaceMethod>
+    <UndefinedMethod occurrences="1">
+      <code>setViewEvent</code>
+    </UndefinedMethod>
+  </file>
+  <file src="test/ChildEntitiesIntegrationTest.php">
+    <DeprecatedMethod occurrences="3">
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+    </DeprecatedMethod>
+    <DocblockTypeContradiction occurrences="2">
+      <code>$this-&gt;helpers</code>
+      <code>$this-&gt;router</code>
+    </DocblockTypeContradiction>
+    <MixedArgument occurrences="27">
+      <code>$child</code>
+      <code>$child</code>
+      <code>$child-&gt;_links</code>
+      <code>$child-&gt;_links</code>
+      <code>$child-&gt;_links-&gt;self</code>
+      <code>$child-&gt;_links-&gt;self</code>
+      <code>$child-&gt;_links-&gt;self-&gt;href</code>
+      <code>$child-&gt;_links-&gt;self-&gt;href</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test-&gt;_embedded</code>
+      <code>$test-&gt;_embedded</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="8">
+      <code>$child</code>
+      <code>$child</code>
+      <code>$collection1[]</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+      <code>$test</code>
+    </MixedAssignment>
+    <MixedMethodCall occurrences="6">
+      <code>setRouteMatch</code>
+      <code>setRouteMatch</code>
+      <code>setRouteMatch</code>
+      <code>setRouteMatch</code>
+      <code>setRouteMatch</code>
+      <code>setRouter</code>
+    </MixedMethodCall>
+    <MixedPropertyFetch occurrences="25">
+      <code>$child-&gt;_links</code>
+      <code>$child-&gt;_links</code>
+      <code>$child-&gt;_links-&gt;self</code>
+      <code>$child-&gt;_links-&gt;self</code>
+      <code>$child-&gt;_links-&gt;self-&gt;href</code>
+      <code>$child-&gt;_links-&gt;self-&gt;href</code>
+      <code>$test-&gt;_embedded</code>
+      <code>$test-&gt;_embedded</code>
+      <code>$test-&gt;_embedded-&gt;child</code>
+      <code>$test-&gt;_embedded-&gt;child</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self</code>
+      <code>$test-&gt;_links-&gt;self-&gt;href</code>
+      <code>$test-&gt;_links-&gt;self-&gt;href</code>
+      <code>$test-&gt;_links-&gt;self-&gt;href</code>
+      <code>$test-&gt;_links-&gt;self-&gt;href</code>
+      <code>$test-&gt;_links-&gt;self-&gt;href</code>
+    </MixedPropertyFetch>
+    <PossiblyInvalidArgument occurrences="1">
+      <code>$this-&gt;router</code>
+    </PossiblyInvalidArgument>
+    <PossiblyNullReference occurrences="5">
+      <code>getParam</code>
+      <code>getParam</code>
+      <code>getParam</code>
+      <code>getParam</code>
+      <code>getParam</code>
+    </PossiblyNullReference>
+    <UndefinedDocblockClass occurrences="6">
+      <code>$this-&gt;router</code>
+      <code>$this-&gt;router</code>
+      <code>$this-&gt;router</code>
+      <code>$this-&gt;router</code>
+      <code>$this-&gt;router</code>
+      <code>V2TreeRouteStack|TreeRouteStack</code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="test/CollectionTest.php">
+    <DeprecatedMethod occurrences="2">
+      <code>add</code>
+      <code>add</code>
+    </DeprecatedMethod>
+    <InvalidArgument occurrences="1">
+      <code>'item/route'</code>
+    </InvalidArgument>
+    <MixedArgument occurrences="1">
+      <code>$collection</code>
+    </MixedArgument>
+    <MixedInferredReturnType occurrences="1">
+      <code>array</code>
+    </MixedInferredReturnType>
+  </file>
+  <file src="test/EntityHydratorManagerTest.php">
+    <ArgumentTypeCoercion occurrences="6">
+      <code>$defaultHydrator</code>
+      <code>$hydrator</code>
+      <code>$hydratorClass</code>
+      <code>$hydratorClass</code>
+      <code>$hydratorClass</code>
+      <code>$this-&gt;hydratorClass</code>
+    </ArgumentTypeCoercion>
+    <InvalidArgument occurrences="2">
+      <code>$hydratorClass</code>
+      <code>$this-&gt;hydratorClass</code>
+    </InvalidArgument>
+    <InvalidStringClass occurrences="2">
+      <code>new $hydratorClass()</code>
+      <code>new $hydratorClass()</code>
+    </InvalidStringClass>
+  </file>
+  <file src="test/EntityTest.php">
+    <InvalidArgument occurrences="1"/>
+    <MissingClosureParamType occurrences="2">
+      <code>$errno</code>
+      <code>$errstr</code>
+    </MissingClosureParamType>
+    <MixedArgument occurrences="2">
+      <code>$entity</code>
+      <code>$errstr</code>
+    </MixedArgument>
+    <MixedInferredReturnType occurrences="2">
+      <code>array</code>
+      <code>array</code>
+    </MixedInferredReturnType>
+    <PossiblyInvalidArrayAccess occurrences="1">
+      <code>$secondRetrieval['foo']</code>
+    </PossiblyInvalidArrayAccess>
+    <PossiblyInvalidArrayAssignment occurrences="1">
+      <code>$entity['foo']</code>
+    </PossiblyInvalidArrayAssignment>
+  </file>
+  <file src="test/Extractor/EntityExtractorTest.php">
+    <DeprecatedClass occurrences="1">
+      <code>ObjectProperty::class</code>
+    </DeprecatedClass>
+    <InvalidClass occurrences="4">
+      <code>entityextractor</code>
+      <code>entityextractor</code>
+      <code>entityextractor</code>
+      <code>entityextractor</code>
+    </InvalidClass>
+    <InvalidStringClass occurrences="1">
+      <code>new $this-&gt;hydratorClass()</code>
+    </InvalidStringClass>
+    <MissingReturnType occurrences="1">
+      <code>testExtractOfArrayObjectEntityWillExtractCorrectly</code>
+    </MissingReturnType>
+    <MixedMethodCall occurrences="1">
+      <code>extract</code>
+    </MixedMethodCall>
+  </file>
+  <file src="test/Extractor/LinkCollectionExtractorTest.php">
+    <DeprecatedMethod occurrences="6">
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+    </DeprecatedMethod>
+    <MissingReturnType occurrences="2">
+      <code>testExtractGivenLinkCollectionShouldReturnArrayWithExtractionOfEachLink</code>
+      <code>testLinkCollectionWithTwoLinksForSameRelationShouldReturnArrayWithOneKeyAggregatingLinks</code>
+    </MissingReturnType>
+    <RedundantConditionGivenDocblockType occurrences="2">
+      <code>assertIsArray</code>
+      <code>assertIsArray</code>
+    </RedundantConditionGivenDocblockType>
+  </file>
+  <file src="test/Extractor/LinkExtractorTest.php">
+    <MixedAssignment occurrences="1">
+      <code>$match</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>null|RouteMatch|V2RouteMatch</code>
+    </MixedInferredReturnType>
+    <PossiblyNullReference occurrences="1">
+      <code>getParam</code>
+    </PossiblyNullReference>
+    <RedundantConditionGivenDocblockType occurrences="1">
+      <code>assertIsArray</code>
+    </RedundantConditionGivenDocblockType>
+    <UndefinedClass occurrences="1">
+      <code>V2RouteMatch</code>
+    </UndefinedClass>
+    <UndefinedDocblockClass occurrences="2">
+      <code>$match</code>
+      <code>null|RouteMatch|V2RouteMatch</code>
+    </UndefinedDocblockClass>
+  </file>
+  <file src="test/Factory/HalJsonRendererFactoryTest.php">
+    <TooManyArguments occurrences="1">
+      <code>$factory</code>
+    </TooManyArguments>
+  </file>
+  <file src="test/Factory/HalJsonStrategyFactoryTest.php">
+    <TooManyArguments occurrences="1">
+      <code>$factory</code>
+    </TooManyArguments>
+  </file>
+  <file src="test/Factory/HalViewHelperFactoryTest.php">
+    <MissingConstructor occurrences="2">
+      <code>$pluginManager</code>
+      <code>$services</code>
+    </MissingConstructor>
+    <TooManyArguments occurrences="1">
+      <code>$factory</code>
+    </TooManyArguments>
+  </file>
+  <file src="test/Factory/LinkUrlBuilderFactoryTest.php">
+    <InvalidPropertyAssignmentValue occurrences="1">
+      <code>$serverUrlHelper = $this-&gt;prophesize(Helper\ServerUrl::class)</code>
+    </InvalidPropertyAssignmentValue>
+    <MissingConstructor occurrences="1">
+      <code>$serverUrlHelper</code>
+    </MissingConstructor>
+    <TooManyArguments occurrences="2">
+      <code>$factory</code>
+      <code>$factory</code>
+    </TooManyArguments>
+    <UndefinedMethod occurrences="1">
+      <code>shouldBeCalled</code>
+    </UndefinedMethod>
+  </file>
+  <file src="test/Factory/MetadataMapFactoryTest.php">
+    <DeprecatedClass occurrences="3">
+      <code>ObjectProperty::class</code>
+      <code>ObjectProperty::class</code>
+      <code>ObjectProperty::class</code>
+    </DeprecatedClass>
+    <TooManyArguments occurrences="2">
+      <code>$factory</code>
+      <code>$factory</code>
+    </TooManyArguments>
+  </file>
+  <file src="test/Link/LinkCollectionTest.php">
+    <DeprecatedMethod occurrences="11">
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+    </DeprecatedMethod>
+    <MissingReturnType occurrences="6">
+      <code>testCanAddDiscreteLinkRelations</code>
+      <code>testCanAddDuplicateLinkRelations</code>
+      <code>testCanIterateLinks</code>
+      <code>testCanOverwriteLinkRelations</code>
+      <code>testCanRemoveLinkRelations</code>
+      <code>testCannotDuplicateSelf</code>
+    </MissingReturnType>
+  </file>
+  <file src="test/Link/LinkTest.php">
+    <DeprecatedMethod occurrences="9">
+      <code>getProps</code>
+      <code>getRelation</code>
+      <code>getRelation</code>
+      <code>getRelation</code>
+      <code>getRelation</code>
+      <code>getUrl</code>
+      <code>getUrl</code>
+      <code>hasUrl</code>
+      <code>hasUrl</code>
+    </DeprecatedMethod>
+    <MissingReturnType occurrences="19">
+      <code>testCanSetLinkRoute</code>
+      <code>testCanSetLinkUrl</code>
+      <code>testCanSetRouteOptionsSeparately</code>
+      <code>testCanSetRouteOptionsWhenSpecifyingRoute</code>
+      <code>testCanSetRouteParamsSeparately</code>
+      <code>testCanSetRouteParamsWhenSpecifyingRoute</code>
+      <code>testConstructorTakesLinkRelationName</code>
+      <code>testFactoryCanGenerateLinkWithArbitraryProperties</code>
+      <code>testFactoryCanGenerateLinkWithRouteInformation</code>
+      <code>testFactoryCanGenerateLinkWithUrl</code>
+      <code>testHasRouteReturnsFalseWhenRouteIsNotSet</code>
+      <code>testHasRouteReturnsTrueWhenRouteIsSet</code>
+      <code>testHasUrlReturnsFalseWhenUrlIsNotSet</code>
+      <code>testHasUrlReturnsTrueWhenUrlIsSet</code>
+      <code>testIsCompleteReturnsFalseIfNeitherUrlNorRouteIsSet</code>
+      <code>testIsCompleteReturnsTrueWhenRouteIsSet</code>
+      <code>testIsCompleteReturnsTrueWhenUrlIsSet</code>
+      <code>testSettingRouteAfterSettingUrlRaisesException</code>
+      <code>testSettingUrlAfterSettingRouteRaisesException</code>
+    </MissingReturnType>
+  </file>
+  <file src="test/Link/PaginationInjectorTest.php">
+    <MissingReturnType occurrences="6">
+      <code>testInjectPaginationLinksGivenCollectionRouteNameShouldInjectLinksWithSameRoute</code>
+      <code>testInjectPaginationLinksGivenEmptyCollectionShouldNotInjectAnyLink</code>
+      <code>testInjectPaginationLinksGivenFirstPageShouldInjectLinksExceptForPrevious</code>
+      <code>testInjectPaginationLinksGivenIntermediatePageShouldInjectAllLinks</code>
+      <code>testInjectPaginationLinksGivenLastPageShouldInjectLinksExceptForNext</code>
+      <code>testInjectPaginationLinksGivenPageGreaterThanPageCountShouldReturnApiProblem</code>
+    </MissingReturnType>
+    <PossiblyInvalidMethodCall occurrences="5">
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyNullReference occurrences="5">
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+    </PossiblyNullReference>
+    <PossiblyUndefinedMethod occurrences="5">
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+      <code>getRoute</code>
+    </PossiblyUndefinedMethod>
+  </file>
+  <file src="test/Link/SelfLinkInjectorTest.php">
+    <MixedArgument occurrences="1">
+      <code>$linkRouteParams</code>
+    </MixedArgument>
+    <MixedAssignment occurrences="1">
+      <code>$linkRouteParams</code>
+    </MixedAssignment>
+    <PossiblyInvalidMethodCall occurrences="1">
+      <code>getRouteParams</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyNullReference occurrences="1">
+      <code>getRouteParams</code>
+    </PossiblyNullReference>
+    <PossiblyUndefinedMethod occurrences="1">
+      <code>getRouteParams</code>
+    </PossiblyUndefinedMethod>
+  </file>
+  <file src="test/Plugin/HalTest.php">
+    <ArgumentTypeCoercion occurrences="2">
+      <code>new $hydratorClass()</code>
+      <code>new $hydratorClass()</code>
+    </ArgumentTypeCoercion>
+    <DeprecatedClass occurrences="2">
+      <code>Hydrator\ArraySerializable::class</code>
+      <code>Hydrator\ObjectProperty::class</code>
+    </DeprecatedClass>
+    <DeprecatedMethod occurrences="42">
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>add</code>
+      <code>getUrl</code>
+      <code>hasUrl</code>
+      <code>setServerUrlHelper</code>
+      <code>setUrlHelper</code>
+    </DeprecatedMethod>
+    <DocblockTypeContradiction occurrences="2">
+      <code>assertIsArray</code>
+      <code>is_callable($collection)</code>
+    </DocblockTypeContradiction>
+    <InvalidArgument occurrences="22">
+      <code>$contact</code>
+      <code>$contact</code>
+      <code>$contact</code>
+      <code>$first</code>
+      <code>$first</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$second</code>
+      <code>$second</code>
+    </InvalidArgument>
+    <InvalidArrayAccess occurrences="2">
+      <code>$entity['_links']</code>
+      <code>$entity['_links']</code>
+    </InvalidArrayAccess>
+    <InvalidOperand occurrences="3">
+      <code>$key</code>
+      <code>$key</code>
+      <code>$key</code>
+    </InvalidOperand>
+    <InvalidPropertyAssignmentValue occurrences="13">
+      <code>$childCollection</code>
+      <code>$collection</code>
+      <code>$collection</code>
+      <code>new TestAsset\EmbeddedEntity('bar', 'Bar')</code>
+      <code>new TestAsset\EmbeddedEntity('bar', 'Bar')</code>
+      <code>new TestAsset\EmbeddedEntity('bar', 'Bar')</code>
+      <code>new TestAsset\EmbeddedEntityWithBackReference('bar', $object)</code>
+      <code>new TestAsset\EmbeddedEntityWithBackReference('bar', $object1)</code>
+      <code>new TestAsset\EmbeddedEntityWithBackReference('bar', $object1)</code>
+      <code>new TestAsset\EmbeddedEntityWithCustomIdentifier('baz', 'Baz')</code>
+      <code>new TestAsset\EmbeddedEntityWithCustomIdentifier('baz', 'Baz')</code>
+      <code>new TestAsset\EmbeddedProxyEntity('bar', 'Bar')</code>
+      <code>new TestAsset\EmbeddedProxyEntityWithCustomIdentifier('baz', 'Baz')</code>
+    </InvalidPropertyAssignmentValue>
+    <InvalidReturnStatement occurrences="1">
+      <code>$rendered</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>object</code>
+    </InvalidReturnType>
+    <InvalidScalarArgument occurrences="11">
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+      <code>1</code>
+    </InvalidScalarArgument>
+    <InvalidStringClass occurrences="2">
+      <code>new $hydratorClass()</code>
+      <code>new $hydratorClass()</code>
+    </InvalidStringClass>
+    <MissingClosureParamType occurrences="4">
+      <code>$e</code>
+      <code>$e</code>
+      <code>$e</code>
+      <code>$e</code>
+    </MissingClosureParamType>
+    <MixedArgument occurrences="56">
+      <code>$collection</code>
+      <code>$contact</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embedded</code>
+      <code>$embedded</code>
+      <code>$embedded</code>
+      <code>$entity</code>
+      <code>$entity</code>
+      <code>$exception['class']</code>
+      <code>$exception['class']</code>
+      <code>$exception['message']</code>
+      <code>$exception['message']</code>
+      <code>$first</code>
+      <code>$first['href']</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$link</code>
+      <code>$links</code>
+      <code>$links</code>
+      <code>$rendered['_links']</code>
+      <code>$rendered['_links']</code>
+      <code>$rendered['_links']</code>
+      <code>$rendered['_links']</code>
+      <code>$rendered['_links']</code>
+      <code>$rendered['_links']</code>
+      <code>$rendered['_links']</code>
+      <code>$rendered['_links']['arrayLink']</code>
+      <code>$rendered['_links']['embeddedLink']</code>
+      <code>$rendered['_links']['embeddedLink']</code>
+      <code>$rendered['_links']['self']['href']</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="36">
+      <code>$embed['contacts']</code>
+      <code>$embed['contacts']</code>
+      <code>$embed['first_child']</code>
+      <code>$embed['first_child']</code>
+      <code>$embed['resources']</code>
+      <code>$embed['resources']</code>
+      <code>$embed['second_child']</code>
+      <code>$embed['second_child']</code>
+      <code>$embedded['user']</code>
+      <code>$embedded['user']</code>
+      <code>$embedded['user']</code>
+      <code>$entity['_links']</code>
+      <code>$entity['_links'][$relation]</code>
+      <code>$first['href']</code>
+      <code>$item['_embedded']</code>
+      <code>$item['_embedded']</code>
+      <code>$item['foo']</code>
+      <code>$item['foo']</code>
+      <code>$item['foo']</code>
+      <code>$item['id']</code>
+      <code>$item['id']</code>
+      <code>$item['name']</code>
+      <code>$link['href']</code>
+      <code>$links[$relation]</code>
+      <code>$links['first']</code>
+      <code>$rendered['_links']['arrayLink']</code>
+      <code>$rendered['_links']['embeddedLink']</code>
+      <code>$rendered['_links']['embeddedLink']</code>
+      <code>$rendered['_links']['embeddedLink']</code>
+      <code>$rendered['_links']['embeddedLink']</code>
+      <code>$rendered['_links']['self']</code>
+      <code>$result['_embedded']['items']</code>
+      <code>$result['_embedded']['items']</code>
+      <code>$user[$key]</code>
+      <code>$user[$key]</code>
+      <code>$user[$key]</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="35">
+      <code>$collection</code>
+      <code>$collection</code>
+      <code>$collection</code>
+      <code>$collection</code>
+      <code>$contact</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embed</code>
+      <code>$embedded</code>
+      <code>$embedded</code>
+      <code>$embedded</code>
+      <code>$entity</code>
+      <code>$entity</code>
+      <code>$first</code>
+      <code>$href</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$item</code>
+      <code>$link</code>
+      <code>$links</code>
+      <code>$links</code>
+      <code>$params</code>
+      <code>$renderedCollection</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$user</code>
+      <code>$value</code>
+      <code>$value</code>
+      <code>$value</code>
+    </MixedAssignment>
+    <MixedFunctionCall occurrences="1">
+      <code>$collection()</code>
+    </MixedFunctionCall>
+    <MixedInferredReturnType occurrences="3">
+      <code>array</code>
+      <code>array</code>
+      <code>array</code>
+    </MixedInferredReturnType>
+    <MixedMethodCall occurrences="9">
+      <code>get</code>
+      <code>getLinks</code>
+      <code>getParam</code>
+      <code>getParam</code>
+      <code>getParam</code>
+      <code>getParam</code>
+      <code>getParam</code>
+      <code>setAttributes</code>
+      <code>setRouteParams</code>
+    </MixedMethodCall>
+    <MixedOperand occurrences="2">
+      <code>$contact['id']</code>
+      <code>$contact['id']</code>
+    </MixedOperand>
+    <PossiblyInvalidArgument occurrences="17">
+      <code>$expectedExceptionClass</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$result</code>
+      <code>$result</code>
+      <code>$router</code>
+      <code>$router</code>
+    </PossiblyInvalidArgument>
+    <PossiblyInvalidMethodCall occurrences="6">
+      <code>getRoute</code>
+      <code>getRouteOptions</code>
+      <code>getRouteParams</code>
+      <code>getUrl</code>
+      <code>hasRoute</code>
+      <code>hasUrl</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyNullArgument occurrences="11">
+      <code>var_export($item, 1)</code>
+      <code>var_export($item, 1)</code>
+      <code>var_export($item, 1)</code>
+      <code>var_export($item, 1)</code>
+      <code>var_export($link, 1)</code>
+      <code>var_export($links, 1)</code>
+      <code>var_export($links, 1)</code>
+      <code>var_export($result, 1)</code>
+      <code>var_export($result, 1)</code>
+      <code>var_export($result, 1)</code>
+      <code>var_export($result, 1)</code>
+    </PossiblyNullArgument>
+    <PossiblyNullReference occurrences="6">
+      <code>getRoute</code>
+      <code>getRouteOptions</code>
+      <code>getRouteParams</code>
+      <code>getUrl</code>
+      <code>hasRoute</code>
+      <code>hasUrl</code>
+    </PossiblyNullReference>
+    <PossiblyUndefinedMethod occurrences="6">
+      <code>getRoute</code>
+      <code>getRouteOptions</code>
+      <code>getRouteParams</code>
+      <code>getUrl</code>
+      <code>hasRoute</code>
+      <code>hasUrl</code>
+    </PossiblyUndefinedMethod>
+    <RedundantConditionGivenDocblockType occurrences="2">
+      <code>assertIsArray</code>
+      <code>assertIsArray</code>
+    </RedundantConditionGivenDocblockType>
+    <UndefinedDocblockClass occurrences="4">
+      <code>$this-&gt;router</code>
+      <code>$this-&gt;router</code>
+      <code>$this-&gt;router</code>
+      <code>V2TreeRouteStack|TreeRouteStack</code>
+    </UndefinedDocblockClass>
+    <UndefinedMethod occurrences="11">
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$rendered</code>
+      <code>$result</code>
+    </UndefinedMethod>
+    <UndefinedThisPropertyAssignment occurrences="1">
+      <code>$this-&gt;controller</code>
+    </UndefinedThisPropertyAssignment>
+  </file>
+  <file src="test/Plugin/TestAsset/DummyHydrator.php">
+    <DeprecatedClass occurrences="1">
+      <code>ArraySerializable</code>
+    </DeprecatedClass>
+  </file>
+  <file src="test/Plugin/TestAsset/Entity.php">
+    <PropertyNotSetInConstructor occurrences="2">
+      <code>$first_child</code>
+      <code>$second_child</code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="test/Plugin/TestAsset/EntityWithProtectedProperties.php">
+    <MixedAssignment occurrences="3">
+      <code>$this-&gt;id</code>
+      <code>$this-&gt;name</code>
+      <code>$value</code>
+    </MixedAssignment>
+  </file>
+  <file src="test/Plugin/TestAsset/JsonSerializableEntity.php">
+    <PropertyNotSetInConstructor occurrences="2">
+      <code>JsonSerializableEntity</code>
+      <code>JsonSerializableEntity</code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="test/ResourceFactoryTest.php">
+    <DeprecatedMethod occurrences="4">
+      <code>getUrl</code>
+      <code>getUrl</code>
+      <code>hasUrl</code>
+      <code>hasUrl</code>
+    </DeprecatedMethod>
+    <MissingClosureParamType occurrences="1">
+      <code>$expected</code>
+    </MissingClosureParamType>
+    <MixedArgument occurrences="2">
+      <code>$params</code>
+      <code>$params</code>
+    </MixedArgument>
+    <MixedArrayAccess occurrences="2">
+      <code>$params['test-1']</code>
+      <code>$params['test-2']</code>
+    </MixedArrayAccess>
+    <MixedAssignment occurrences="1">
+      <code>$params</code>
+    </MixedAssignment>
+    <PossiblyInvalidMethodCall occurrences="7">
+      <code>getRoute</code>
+      <code>getRouteParams</code>
+      <code>getUrl</code>
+      <code>getUrl</code>
+      <code>hasRoute</code>
+      <code>hasUrl</code>
+      <code>hasUrl</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyNullReference occurrences="7">
+      <code>getRoute</code>
+      <code>getRouteParams</code>
+      <code>getUrl</code>
+      <code>getUrl</code>
+      <code>hasRoute</code>
+      <code>hasUrl</code>
+      <code>hasUrl</code>
+    </PossiblyNullReference>
+    <PossiblyUndefinedMethod occurrences="7">
+      <code>getRoute</code>
+      <code>getRouteParams</code>
+      <code>getUrl</code>
+      <code>getUrl</code>
+      <code>hasRoute</code>
+      <code>hasUrl</code>
+      <code>hasUrl</code>
+    </PossiblyUndefinedMethod>
+    <TypeDoesNotContainType occurrences="1">
+      <code>assertSame</code>
+    </TypeDoesNotContainType>
+  </file>
+  <file src="test/TestAsset/JsonSerializable.php">
+    <DeprecatedInterface occurrences="1">
+      <code>JsonSerializable</code>
+    </DeprecatedInterface>
+  </file>
+  <file src="test/View/HalJsonModelTest.php">
+    <MissingReturnType occurrences="8">
+      <code>testIsCollectionReturnsFalseForInvalidValues</code>
+      <code>testIsCollectionReturnsTrueForCollectionPayload</code>
+      <code>testIsEntityReturnsFalseForInvalidValues</code>
+      <code>testIsEntityReturnsTrueForEntityPayload</code>
+      <code>testIsTerminalByDefault</code>
+      <code>testPayloadIsMutable</code>
+      <code>testPayloadIsNullByDefault</code>
+      <code>testTerminalFlagIsNotMutable</code>
+    </MissingReturnType>
+    <MixedInferredReturnType occurrences="2">
+      <code>array</code>
+      <code>array</code>
+    </MixedInferredReturnType>
+  </file>
+  <file src="test/View/HalJsonRendererTest.php">
+    <MissingReturnType occurrences="4">
+      <code>testRenderGivenHalJsonModelReturningApiProblemShouldReturnApiProblemInJsonFormat</code>
+      <code>testRenderGivenHalJsonModelThatContainsHalCollectionShouldReturnDataInJsonFormat</code>
+      <code>testRenderGivenHalJsonModelThatContainsHalEntityShouldReturnDataInJsonFormat</code>
+      <code>testRenderGivenNonHalJsonModelShouldReturnDataInJsonFormat</code>
+    </MissingReturnType>
+    <MixedAssignment occurrences="3">
+      <code>$halPlugin</code>
+      <code>$halPlugin</code>
+      <code>$halPlugin</code>
+    </MixedAssignment>
+    <MixedInferredReturnType occurrences="1">
+      <code>array</code>
+    </MixedInferredReturnType>
+    <MixedMethodCall occurrences="12">
+      <code>expects</code>
+      <code>expects</code>
+      <code>expects</code>
+      <code>method</code>
+      <code>method</code>
+      <code>method</code>
+      <code>will</code>
+      <code>will</code>
+      <code>will</code>
+      <code>with</code>
+      <code>with</code>
+      <code>with</code>
+    </MixedMethodCall>
+    <PossiblyInvalidArgument occurrences="3">
+      <code>$helperPluginManager</code>
+      <code>$helperPluginManager</code>
+      <code>$helperPluginManager</code>
+    </PossiblyInvalidArgument>
+    <PossiblyUndefinedMethod occurrences="3">
+      <code>get</code>
+      <code>get</code>
+      <code>get</code>
+    </PossiblyUndefinedMethod>
+  </file>
+  <file src="test/View/HalJsonStrategyTest.php">
+    <DeprecatedMethod occurrences="1">
+      <code>add</code>
+    </DeprecatedMethod>
+    <MissingReturnType occurrences="7">
+      <code>testInjectResponseDoesNotSetContentTypeHeaderIfRendererDoesNotMatch</code>
+      <code>testInjectResponseDoesNotSetContentTypeHeaderIfResultIsNotString</code>
+      <code>testInjectResponseSetsContentTypeHeaderToApiProblemForApiProblemModel</code>
+      <code>testInjectResponseSetsContentTypeHeaderToDefaultIfNotHalModel</code>
+      <code>testInjectResponseSetsContentTypeHeaderToHalForHalModel</code>
+      <code>testSelectRendererReturnsNullIfModelIsNotAHalJsonModel</code>
+      <code>testSelectRendererReturnsRendererIfModelIsAHalJsonModel</code>
+    </MissingReturnType>
+    <MixedInferredReturnType occurrences="1">
+      <code>array</code>
+    </MixedInferredReturnType>
+    <PossiblyInvalidMethodCall occurrences="3">
+      <code>getFieldValue</code>
+      <code>getFieldValue</code>
+      <code>getFieldValue</code>
+    </PossiblyInvalidMethodCall>
+    <PossiblyUndefinedMethod occurrences="3">
+      <code>getFieldValue</code>
+      <code>getFieldValue</code>
+      <code>getFieldValue</code>
+    </PossiblyUndefinedMethod>
+    <TooManyArguments occurrences="1"/>
+  </file>
+</files>

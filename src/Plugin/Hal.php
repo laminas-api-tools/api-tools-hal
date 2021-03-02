@@ -309,6 +309,8 @@ class Hal extends AbstractHelper implements
      * @deprecated Since 1.4.0; use setLinkUrlBuilder() instead.
      *
      * @throws Exception\DeprecatedMethodException
+     *
+     * @return void
      */
     public function setServerUrlHelper(callable $helper)
     {
@@ -326,6 +328,8 @@ class Hal extends AbstractHelper implements
      * @deprecated Since 1.4.0; use setLinkUrlBuilder() instead.
      *
      * @throws Exception\DeprecatedMethodException
+     *
+     * @return void
      */
     public function setUrlHelper(callable $helper)
     {
@@ -581,8 +585,10 @@ class Hal extends AbstractHelper implements
 
         $metadataMap = $this->getMetadataMap();
 
-        $maxDepth = is_object($collection) && $metadataMap->has($collection) ?
-            $metadataMap->get($collection)->getMaxDepth() : null;
+        /** @psalm-suppress PossiblyFalseReference */
+        $maxDepth = is_object($collection) && $metadataMap->has($collection)
+            ? $metadataMap->get($collection)->getMaxDepth()
+            : null;
 
         $payload              = $halCollection->getAttributes();
         $payload['_links']    = $this->fromResource($halCollection);
@@ -660,6 +666,7 @@ class Hal extends AbstractHelper implements
 
         if (is_object($entity)) {
             if ($maxDepth === null && $metadataMap->has($entity)) {
+                /** @psalm-suppress PossiblyFalseReference */
                 $maxDepth = $metadataMap->get($entity)->getMaxDepth();
             }
 
@@ -690,6 +697,7 @@ class Hal extends AbstractHelper implements
 
         foreach ($entity as $key => $value) {
             if (is_object($value) && $metadataMap->has($value)) {
+                /** @psalm-suppress PossiblyFalseArgument */
                 $value = $this->getResourceFactory()->createEntityFromMetadata(
                     $value,
                     $metadataMap->get($value),
@@ -856,7 +864,7 @@ class Hal extends AbstractHelper implements
      * @param  Entity|array|object $resource
      * @param  string $route
      * @param  string $routeIdentifierName
-     * @return Entity
+     * @return Collection|Entity
      */
     public function createResource($resource, $route, $routeIdentifierName)
     {
@@ -871,16 +879,17 @@ class Hal extends AbstractHelper implements
     /**
      * Create an Entity instance and inject it with a self relational link if necessary
      *
-     * @param  Entity|array|object $entity
-     * @param  string $route
-     * @param  string $routeIdentifierName
-     * @return Entity
+     * @param Entity|array|object $entity
+     * @param string $route
+     * @param string $routeIdentifierName
+     * @return Collection|Entity
      */
     public function createEntity($entity, $route, $routeIdentifierName)
     {
         $metadataMap = $this->getMetadataMap();
 
         if (is_object($entity) && $metadataMap->has($entity)) {
+            /** @psalm-suppress PossiblyFalseArgument */
             $halEntity = $this->getResourceFactory()->createEntityFromMetadata(
                 $entity,
                 $metadataMap->get($entity)
@@ -914,6 +923,7 @@ class Hal extends AbstractHelper implements
     {
         $metadataMap = $this->getMetadataMap();
         if (is_object($collection) && $metadataMap->has($collection)) {
+            /** @psalm-suppress PossiblyFalseArgument */
             $collection = $this->getResourceFactory()->createCollectionFromMetadata(
                 $collection,
                 $metadataMap->get($collection)
@@ -944,8 +954,9 @@ class Hal extends AbstractHelper implements
     /**
      * Inject a "self" relational link based on the route and identifier
      *
-     * @param  string $route
-     * @param  string $routeIdentifier
+     * @param string $route
+     * @param string $routeIdentifier
+     * @return void
      */
     public function injectSelfLink(LinkCollectionAwareInterface $resource, $route, $routeIdentifier = 'id')
     {
@@ -969,10 +980,11 @@ class Hal extends AbstractHelper implements
      * Removes the key from the parent representation, and creates a
      * representation for the key in the _embedded object.
      *
-     * @param  array $parent
-     * @param  string $key
-     * @param  int $depth           depth of the current rendering recursion
-     * @param  int $maxDepth        maximum rendering depth for the current metadata
+     * @param array $parent
+     * @param string $key
+     * @param int $depth           depth of the current rendering recursion
+     * @param int $maxDepth        maximum rendering depth for the current metadata
+     * @return void
      */
     protected function extractEmbeddedEntity(array &$parent, $key, Entity $entity, $depth = 0, $maxDepth = null)
     {
@@ -994,10 +1006,11 @@ class Hal extends AbstractHelper implements
      * Removes the key from the parent representation, and creates a
      * representation for the key in the _embedded object.
      *
-     * @param  array      $parent
-     * @param  string     $key
-     * @param  int        $depth        depth of the current rendering recursion
-     * @param  int        $maxDepth     maximum rendering depth for the current metadata
+     * @param array      $parent
+     * @param string     $key
+     * @param int        $depth        depth of the current rendering recursion
+     * @param int        $maxDepth     maximum rendering depth for the current metadata
+     * @return void
      */
     protected function extractEmbeddedCollection(
         array &$parent,
@@ -1050,6 +1063,7 @@ class Hal extends AbstractHelper implements
             $entity = $eventParams['entity'];
 
             if (is_object($entity) && $metadataMap->has($entity)) {
+                /** @psalm-suppress PossiblyFalseArgument */
                 $entity = $this->getResourceFactory()->createEntityFromMetadata($entity, $metadataMap->get($entity));
             }
 
@@ -1065,6 +1079,7 @@ class Hal extends AbstractHelper implements
 
             foreach ($entity as $key => $value) {
                 if (is_object($value) && $metadataMap->has($value)) {
+                    /** @psalm-suppress PossiblyFalseArgument */
                     $value = $this->getResourceFactory()->createEntityFromMetadata($value, $metadataMap->get($value));
                 }
 
@@ -1136,6 +1151,10 @@ class Hal extends AbstractHelper implements
             'resource' => $entity,
         ];
 
+        /**
+         * @param mixed $r
+         * @return bool
+         */
         $callback = function ($r) {
             return null !== $r && false !== $r;
         };
@@ -1218,6 +1237,8 @@ class Hal extends AbstractHelper implements
      * Inject any links found in the metadata into the resource's link collection
      *
      * @deprecated
+     *
+     * @return void
      */
     protected function marshalMetadataLinks(Metadata $metadata, LinkCollection $links)
     {

@@ -122,6 +122,7 @@ class EntityHydratorManager
 
         if ($this->metadataMap->has($entity)) {
             $metadata = $this->metadataMap->get($class);
+            /** @psalm-suppress PossiblyFalseReference */
             $hydrator = $metadata->getHydrator();
             if ($hydrator instanceof ExtractionInterface) {
                 $this->addHydrator($class, $hydrator);

@@ -74,7 +74,7 @@ class EntityExtractorTest extends TestCase
         self::assertSame($data1, $data2);
     }
 
-    public function testExtractOfArrayObjectEntityWillExtractCorrectly()
+    public function testExtractOfArrayObjectEntityWillExtractCorrectly(): void
     {
         $data                  = ['id' => 'foo', 'message' => 'FOO'];
         $entity                = new ArrayObject($data);
