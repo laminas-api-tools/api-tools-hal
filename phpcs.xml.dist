@@ -16,8 +16,6 @@
     <file>config</file>
     <file>src</file>
     <file>test</file>
-    <exclude-pattern>src/_autoload.php</exclude-pattern>
-    <exclude-pattern>src/Extractor/EntityExtractorHydratorV2.php</exclude-pattern>
 
     <!-- Include all rules from Laminas Coding Standard -->
     <rule ref="LaminasCodingStandard"/>
