@@ -8,13 +8,15 @@
 
 namespace Laminas\ApiTools\Hal\Factory;
 
+use ArrayAccess;
 use Interop\Container\ContainerInterface;
+
+use function is_array;
 
 class HalConfigFactory
 {
     /**
-     * @param ContainerInterface $container
-     * @return array|\ArrayAccess
+     * @return array|ArrayAccess
      */
     public function __invoke(ContainerInterface $container)
     {
@@ -22,7 +24,7 @@ class HalConfigFactory
             ? $container->get('config')
             : [];
 
-        return (isset($config['api-tools-hal']) && is_array($config['api-tools-hal']))
+        return isset($config['api-tools-hal']) && is_array($config['api-tools-hal'])
             ? $config['api-tools-hal']
             : [];
     }

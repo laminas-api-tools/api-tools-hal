@@ -14,9 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class LinkCollectionTest extends TestCase
 {
-    /**
-     * @var LinkCollection
-     */
+    /** @var LinkCollection */
     protected $links;
 
     public function setUp(): void
@@ -27,7 +25,7 @@ class LinkCollectionTest extends TestCase
     public function testCanAddDiscreteLinkRelations()
     {
         $describedby = new Link('describedby');
-        $self = new Link('self');
+        $self        = new Link('self');
         $this->links->add($describedby);
         $this->links->add($self);
 
@@ -77,7 +75,7 @@ class LinkCollectionTest extends TestCase
     public function testCanIterateLinks()
     {
         $describedby = new Link('describedby');
-        $self = new Link('self');
+        $self        = new Link('self');
         $this->links->add($describedby);
         $this->links->add($self);
 
@@ -92,7 +90,7 @@ class LinkCollectionTest extends TestCase
 
     public function testCannotDuplicateSelf()
     {
-        $first = new Link('self');
+        $first  = new Link('self');
         $second = new Link('self');
 
         $this->links->add($first)

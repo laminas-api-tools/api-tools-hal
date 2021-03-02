@@ -37,22 +37,22 @@ class MetadataMapFactoryTest extends TestCase
     {
         $config = [
             'metadata_map' => [
-                TestAsset\Entity::class => [
-                    'hydrator'   => ObjectProperty::class,
-                    'route_name' => 'hostname/resource',
-                    'route_identifier_name' => 'id',
+                TestAsset\Entity::class                             => [
+                    'hydrator'               => ObjectProperty::class,
+                    'route_name'             => 'hostname/resource',
+                    'route_identifier_name'  => 'id',
                     'entity_identifier_name' => 'id',
                 ],
-                TestAsset\EmbeddedEntity::class => [
-                    'hydrator' => ObjectProperty::class,
-                    'route'    => 'hostname/embedded',
-                    'route_identifier_name' => 'id',
+                TestAsset\EmbeddedEntity::class                     => [
+                    'hydrator'               => ObjectProperty::class,
+                    'route'                  => 'hostname/embedded',
+                    'route_identifier_name'  => 'id',
                     'entity_identifier_name' => 'id',
                 ],
                 TestAsset\EmbeddedEntityWithCustomIdentifier::class => [
-                    'hydrator'        => ObjectProperty::class,
-                    'route'           => 'hostname/embedded_custom',
-                    'route_identifier_name' => 'custom_id',
+                    'hydrator'               => ObjectProperty::class,
+                    'route'                  => 'hostname/embedded_custom',
+                    'route_identifier_name'  => 'custom_id',
                     'entity_identifier_name' => 'custom_id',
                 ],
             ],
@@ -62,7 +62,7 @@ class MetadataMapFactoryTest extends TestCase
         $services->get('Laminas\ApiTools\Hal\HalConfig')->willReturn($config);
         $services->has('HydratorManager')->willReturn(false);
 
-        $factory = new MetadataMapFactory();
+        $factory     = new MetadataMapFactory();
         $metadataMap = $factory($services->reveal(), MetadataMap::class);
 
         foreach ($config['metadata_map'] as $key => $value) {

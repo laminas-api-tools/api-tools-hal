@@ -14,6 +14,17 @@ use Laminas\Hydrator\ExtractionInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\Hydrator\HydratorPluginManagerInterface;
 
+use function class_exists;
+use function get_class;
+use function gettype;
+use function is_object;
+use function is_string;
+use function method_exists;
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
+
 class Metadata
 {
     /**
@@ -37,9 +48,7 @@ class Metadata
      */
     protected $hydrator;
 
-    /**
-     * @var HydratorPluginManager|HydratorPluginManagerInterface
-     */
+    /** @var HydratorPluginManager|HydratorPluginManagerInterface */
     protected $hydrators;
 
     /**
@@ -143,7 +152,7 @@ class Metadata
         if (! class_exists($class)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Class provided to %s must exist; received "%s"',
-                __CLASS__,
+                self::class,
                 $class
             ));
         }
@@ -287,13 +296,14 @@ class Metadata
      * Deprecated; please use getEntityRoute()
      *
      * @deprecated
+     *
      * @return null|string
      */
     public function getResourceRoute()
     {
         trigger_error(sprintf(
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         return $this->getEntityRoute();
     }
@@ -355,7 +365,7 @@ class Metadata
      */
     public function hasHydrator()
     {
-        return (null !== $this->hydrator);
+        return null !== $this->hydrator;
     }
 
     /**
@@ -365,7 +375,7 @@ class Metadata
      */
     public function hasRoute()
     {
-        return (null !== $this->route);
+        return null !== $this->route;
     }
 
     /**
@@ -375,7 +385,7 @@ class Metadata
      */
     public function hasUrl()
     {
-        return (null !== $this->url);
+        return null !== $this->url;
     }
 
     /**
@@ -405,12 +415,13 @@ class Metadata
      *
      * @param  string|ExtractionInterface $hydrator
      * @return self
-     * @throws Exception\InvalidArgumentException if the class or hydrator does not implement ExtractionInterface
+     * @throws Exception\InvalidArgumentException If the class or hydrator does not implement ExtractionInterface.
      */
     public function setHydrator($hydrator)
     {
         if (is_string($hydrator)) {
-            if (null !== $this->hydrators
+            if (
+                null !== $this->hydrators
                 && $this->hydrators->has($hydrator)
             ) {
                 $hydrator = $this->hydrators->get($hydrator);
@@ -511,6 +522,7 @@ class Metadata
      * Deprecated; please use setEntityRoute().
      *
      * @deprecated
+     *
      * @param  string $route
      * @return self
      */
@@ -519,7 +531,7 @@ class Metadata
         trigger_error(sprintf(
             '%s is deprecated; please use %s::setEntityRoute',
             __METHOD__,
-            __CLASS__
+            self::class
         ), E_USER_DEPRECATED);
         return $this->setEntityRoute($route);
     }
@@ -608,7 +620,7 @@ class Metadata
 
     /**
      * @param HydratorPluginManager|HydratorPluginManagerInterface $hydrators
-     * @throws Exception\InvalidArgumentException if $hydrators is an invaild type.
+     * @throws Exception\InvalidArgumentException If $hydrators is an invaild type.
      */
     private function setHydrators($hydrators)
     {
@@ -619,7 +631,7 @@ class Metadata
         } else {
             throw new Exception\InvalidArgumentException(sprintf(
                 '$hydrators argument to %s must be an instance of either %s or %s; received %s',
-                __CLASS__,
+                self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
                 is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)

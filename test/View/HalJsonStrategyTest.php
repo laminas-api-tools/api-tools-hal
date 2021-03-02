@@ -21,35 +21,24 @@ use Laminas\Http\Response;
 use Laminas\View\ViewEvent;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @subpackage UnitTest
- */
 class HalJsonStrategyTest extends TestCase
 {
-    /**
-     * @var ViewEvent
-     */
+    /** @var ViewEvent */
     protected $event;
 
-    /**
-     * @var Response
-     */
+    /** @var Response */
     protected $response;
 
-    /**
-     * @var HalJsonRenderer
-     */
+    /** @var HalJsonRenderer */
     protected $renderer;
 
-    /**
-     * @var HalJsonStrategy
-     */
+    /** @var HalJsonStrategy */
     protected $strategy;
 
     public function setUp(): void
     {
-        $this->response = new Response;
-        $this->event    = new ViewEvent;
+        $this->response = new Response();
+        $this->event    = new ViewEvent();
         $this->event->setResponse($this->response);
 
         $this->renderer = new HalJsonRenderer(new ApiProblemRenderer());
@@ -95,12 +84,15 @@ class HalJsonStrategyTest extends TestCase
         self::assertEquals('application/json', $header->getFieldValue());
     }
 
+    /**
+     * @return array
+     */
     public function halObjects()
     {
         $entity = new Entity([
             'foo' => 'bar',
         ], 'identifier', 'route');
-        $link = new Link('self');
+        $link   = new Link('self');
         $link->setRoute('resource/route')->setRouteParams(['id' => 'identifier']);
         $entity->getLinks()->add($link);
 
@@ -116,6 +108,7 @@ class HalJsonStrategyTest extends TestCase
 
     /**
      * @dataProvider halObjects
+     * @param array $hal
      */
     public function testInjectResponseSetsContentTypeHeaderToHalForHalModel($hal)
     {
@@ -134,7 +127,7 @@ class HalJsonStrategyTest extends TestCase
     public function testInjectResponseSetsContentTypeHeaderToApiProblemForApiProblemModel()
     {
         $problem = new ApiProblem(500, "Error message");
-        $model = new ApiProblemModel($problem);
+        $model   = new ApiProblemModel($problem);
 
         $this->event->setModel($model);
         $this->event->setRenderer($this->renderer);

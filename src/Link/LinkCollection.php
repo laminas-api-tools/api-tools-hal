@@ -14,14 +14,24 @@ use IteratorAggregate;
 use Laminas\ApiTools\ApiProblem\Exception;
 use Psr\Link\LinkInterface;
 
+use function array_diff;
+use function array_intersect;
+use function array_key_exists;
+use function array_keys;
+use function count;
+use function get_class;
+use function gettype;
+use function in_array;
+use function is_array;
+use function is_object;
+use function sprintf;
+
 /**
  * Object describing a collection of link relations
  */
 class LinkCollection implements Countable, IteratorAggregate
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $links = [];
 
     /**
@@ -48,7 +58,7 @@ class LinkCollection implements Countable, IteratorAggregate
      * Add a link
      *
      * @deprecated Since 1.5.0; use idempotentAdd() for PSR-13 and RFC 5988 compliance.
-     * @param  Link $link
+     *
      * @param  bool $overwrite
      * @return self
      * @throws Exception\DomainException
@@ -56,7 +66,7 @@ class LinkCollection implements Countable, IteratorAggregate
     public function add(Link $link, $overwrite = false)
     {
         $relation = $link->getRelation();
-        if (! isset($this->links[$relation]) || $overwrite || 'self' == $relation) {
+        if (! isset($this->links[$relation]) || $overwrite || 'self' === $relation) {
             $this->links[$relation] = $link;
             return $this;
         }
@@ -66,13 +76,13 @@ class LinkCollection implements Countable, IteratorAggregate
         }
 
         if (! is_array($this->links[$relation])) {
-            $type = (is_object($this->links[$relation])
+            $type = is_object($this->links[$relation])
                 ? get_class($this->links[$relation])
-                : gettype($this->links[$relation]));
+                : gettype($this->links[$relation]);
 
             throw new Exception\DomainException(sprintf(
                 '%s::$links should be either a %s\Link or an array; however, it is a "%s"',
-                __CLASS__,
+                self::class,
                 __NAMESPACE__,
                 $type
             ));
@@ -86,13 +96,12 @@ class LinkCollection implements Countable, IteratorAggregate
      * Add a link to the collection and update the collection's relations according to RFC 5988.
      *
      * @todo Rename to "add" after deprecating the current "add" implementation
-     * @param LinkInterface $link
      * @return void
      */
     public function idempotentAdd(LinkInterface $link)
     {
         $existingRels = array_keys($this->links);
-        $linkRels = $link->getRels();
+        $linkRels     = $link->getRels();
 
         // update existing rels
         $intersection = array_intersect($linkRels, $existingRels);
@@ -103,7 +112,7 @@ class LinkCollection implements Countable, IteratorAggregate
             }
 
             if (! in_array($link, $relationLinks, true)) {
-                $relationLinks[] = $link;
+                $relationLinks[]        = $link;
                 $this->links[$relation] = $relationLinks; // inside the if, otherwise it's not really idempotent
             }
         }

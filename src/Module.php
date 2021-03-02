@@ -26,7 +26,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface
     {
         /** @var ApplicationInterface $application */
         $application = $e->getTarget();
-        $events = $application->getEventManager();
+        $events      = $application->getEventManager();
 
         $events->attach(MvcEvent::EVENT_RENDER, [$this, 'onRender'], 100);
     }
@@ -35,8 +35,6 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface
      * Listener for the render event
      *
      * Attaches a rendering/response strategy to the View.
-     *
-     * @param  MvcEvent $e
      */
     public function onRender(MvcEvent $e): void
     {
@@ -47,8 +45,8 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface
 
         /** @var ApplicationInterface $application */
         $application = $e->getTarget();
-        $services = $application->getServiceManager();
-        $events   = $services->get('View')->getEventManager();
+        $services    = $application->getServiceManager();
+        $events      = $services->get('View')->getEventManager();
 
         // register at high priority, to "beat" normal json strategy registered
         // via view manager

@@ -28,13 +28,12 @@ class CollectionTest extends TestCase
             'zero-float' => [0.0],
             'float'      => [1.1],
             'string'     => ['string'],
-            'stdclass'   => [new stdClass],
+            'stdclass'   => [new stdClass()],
         ];
     }
 
     /**
      * @dataProvider invalidCollections
-     *
      * @param mixed $collection
      */
     public function testConstructorRaisesExceptionForNonTraversableCollection($collection): void
@@ -116,7 +115,7 @@ class CollectionTest extends TestCase
 
     public function testAttributesAreMutable(): void
     {
-        $hal = new Collection([], 'item/route');
+        $hal        = new Collection([], 'item/route');
         $attributes = [
             'count' => 1376,
             'order' => 'desc',
@@ -147,7 +146,7 @@ class CollectionTest extends TestCase
         $links = new LinkCollection();
         $links->add(new Link('describedby'));
         $links->add(new Link('orders'));
-        $hal   = new Collection([], 'item/route');
+        $hal = new Collection([], 'item/route');
         $hal->setEntityLinks($links);
 
         self::assertSame($links, $hal->getEntityLinks());

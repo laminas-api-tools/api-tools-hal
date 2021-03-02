@@ -13,16 +13,18 @@ use Laminas\Hydrator\ExtractionInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\Hydrator\HydratorPluginManagerInterface;
 
+use function get_class;
+use function gettype;
+use function is_object;
+use function sprintf;
+use function strtolower;
+
 class EntityHydratorManager
 {
-    /**
-     * @var HydratorPluginManager|HydratorPluginManagerInterface
-     */
+    /** @var HydratorPluginManager|HydratorPluginManagerInterface */
     protected $hydrators;
 
-    /**
-     * @var MetadataMap
-     */
+    /** @var MetadataMap */
     protected $metadataMap;
 
     /**
@@ -41,8 +43,7 @@ class EntityHydratorManager
 
     /**
      * @param HydratorPluginManager|HydratorPluginManagerInterface $hydrators
-     * @param MetadataMap $map
-     * @throws Exception\InvalidArgumentException if $hydrators is of invalid type.
+     * @throws Exception\InvalidArgumentException If $hydrators is of invalid type.
      */
     public function __construct($hydrators, MetadataMap $map)
     {
@@ -53,7 +54,7 @@ class EntityHydratorManager
         } else {
             throw new Exception\InvalidArgumentException(sprintf(
                 '$hydrators argument to %s must be an instance of either %s or %s; received %s',
-                __CLASS__,
+                self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
                 is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)
@@ -84,7 +85,7 @@ class EntityHydratorManager
             $hydrator = $this->hydrators->get($hydrator);
         }
 
-        $filteredClass = strtolower($class);
+        $filteredClass                     = strtolower($class);
         $this->hydratorMap[$filteredClass] = $hydrator;
         return $this;
     }
@@ -92,7 +93,6 @@ class EntityHydratorManager
     /**
      * Set the default hydrator to use if none specified for a class.
      *
-     * @param  ExtractionInterface $hydrator
      * @return self
      */
     public function setDefaultHydrator(ExtractionInterface $hydrator)
@@ -113,7 +113,7 @@ class EntityHydratorManager
      */
     public function getHydratorForEntity($entity)
     {
-        $class = get_class($entity);
+        $class      = get_class($entity);
         $classLower = strtolower($class);
 
         if (isset($this->hydratorMap[$classLower])) {

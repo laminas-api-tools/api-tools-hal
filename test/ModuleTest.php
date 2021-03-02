@@ -26,9 +26,7 @@ class ModuleTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var Module
-     */
+    /** @var Module */
     private $module;
 
     public function setUp(): void

@@ -8,25 +8,21 @@
 
 namespace LaminasTest\ApiTools\Hal\View;
 
+use Exception;
 use Laminas\ApiTools\Hal\Collection;
 use Laminas\ApiTools\Hal\Entity;
 use Laminas\ApiTools\Hal\View\HalJsonModel;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-/**
- * @subpackage UnitTest
- */
 class HalJsonModelTest extends TestCase
 {
-    /**
-     * @var HalJsonModel
-     */
+    /** @var HalJsonModel */
     protected $model;
 
     public function setUp(): void
     {
-        $this->model = new HalJsonModel;
+        $this->model = new HalJsonModel();
     }
 
     public function testPayloadIsNullByDefault()
@@ -40,6 +36,9 @@ class HalJsonModelTest extends TestCase
         self::assertEquals('foo', $this->model->getPayload());
     }
 
+    /**
+     * @return array
+     */
     public function invalidPayloads()
     {
         return [
@@ -52,22 +51,24 @@ class HalJsonModelTest extends TestCase
             'float'      => [1.1],
             'string'     => ['string'],
             'array'      => [[]],
-            'stdclass'   => [new stdClass],
+            'stdclass'   => [new stdClass()],
         ];
     }
 
+    /**
+     * @return array
+     */
     public function invalidCollectionPayloads()
     {
-        $payloads = $this->invalidPayloads();
-        $payloads['exception'] = [new \Exception];
-        $payloads['stdclass']  = [new stdClass];
+        $payloads              = $this->invalidPayloads();
+        $payloads['exception'] = [new Exception()];
+        $payloads['stdclass']  = [new stdClass()];
         $payloads['hal-item']  = [new Entity([], 'id')];
         return $payloads;
     }
 
     /**
      * @dataProvider invalidCollectionPayloads
-     *
      * @param mixed $payload
      */
     public function testIsCollectionReturnsFalseForInvalidValues($payload)
@@ -83,18 +84,20 @@ class HalJsonModelTest extends TestCase
         self::assertTrue($this->model->isCollection());
     }
 
+    /**
+     * @return array
+     */
     public function invalidEntityPayloads()
     {
-        $payloads = $this->invalidPayloads();
-        $payloads['exception']      = [new \Exception];
-        $payloads['stdclass']       = [new stdClass];
+        $payloads                   = $this->invalidPayloads();
+        $payloads['exception']      = [new Exception()];
+        $payloads['stdclass']       = [new stdClass()];
         $payloads['hal-collection'] = [new Collection([], 'item/route')];
         return $payloads;
     }
 
     /**
      * @dataProvider invalidEntityPayloads
-     *
      * @param mixed $payload
      */
     public function testIsEntityReturnsFalseForInvalidValues($payload)

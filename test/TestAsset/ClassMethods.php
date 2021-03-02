@@ -8,11 +8,11 @@
 
 namespace LaminasTest\ApiTools\Hal\TestAsset;
 
-/**
- * @subpackage UnitTest
- */
 class ClassMethods
 {
+    /**
+     * @return string
+     */
     public function getFoo()
     {
         return 'bar';

@@ -8,9 +8,14 @@
 
 namespace Laminas\ApiTools\Hal;
 
+use Laminas\ApiTools\Hal\View\HalJsonModel;
+use ZF\Hal\Extractor\LinkCollectionExtractor;
+use ZF\Hal\Extractor\LinkExtractor;
+use ZF\Hal\Link\LinkUrlBuilder;
+
 return [
     'api-tools-hal' => [
-        'renderer' => [
+        'renderer'     => [
             // 'default_hydrator' => 'Hydrator Service Name',
             // 'hydrators'        => [
             //     class to hydrate/hydrator service name pairs
@@ -41,7 +46,7 @@ return [
             // ],
             // repeat as needed for each resource/collection type
         ],
-        'options' => [
+        'options'      => [
             // Needed for generate valid _link url when you use a proxy
             'use_proxy' => false,
         ],
@@ -50,48 +55,46 @@ return [
     'api-tools-content-negotiation' => [
         'selectors' => [
             'HalJson' => [
-                'Laminas\ApiTools\Hal\View\HalJsonModel' => [
+                HalJsonModel::class => [
                     'application/json',
                     'application/*+json',
                 ],
             ],
         ],
     ],
-    'service_manager' => [
+    'service_manager'               => [
         // Legacy Zend Framework aliases
-        'aliases' => [
-            \ZF\Hal\Extractor\LinkExtractor::class => Extractor\LinkExtractor::class,
-            \ZF\Hal\Extractor\LinkCollectionExtractor::class => Extractor\LinkCollectionExtractor::class,
-            \ZF\Hal\HalConfig::class => HalConfig::class,
-            \ZF\Hal\JsonRenderer::class => JsonRenderer::class,
-            \ZF\Hal\JsonStrategy::class => JsonStrategy::class,
-            \ZF\Hal\Link\LinkUrlBuilder::class => Link\LinkUrlBuilder::class,
-            \ZF\Hal\MetadataMap::class => MetadataMap::class,
+        'aliases'   => [
+            LinkExtractor::class           => Extractor\LinkExtractor::class,
+            LinkCollectionExtractor::class => Extractor\LinkCollectionExtractor::class,
+            \ZF\Hal\HalConfig::class       => HalConfig::class,
+            \ZF\Hal\JsonRenderer::class    => JsonRenderer::class,
+            \ZF\Hal\JsonStrategy::class    => JsonStrategy::class,
+            LinkUrlBuilder::class          => Link\LinkUrlBuilder::class,
+            \ZF\Hal\MetadataMap::class     => MetadataMap::class,
             \ZF\Hal\RendererOptions::class => RendererOptions::class,
         ],
         'factories' => [
-            Extractor\LinkExtractor::class => Factory\LinkExtractorFactory::class,
+            Extractor\LinkExtractor::class           => Factory\LinkExtractorFactory::class,
             Extractor\LinkCollectionExtractor::class => Factory\LinkCollectionExtractorFactory::class,
-            HalConfig::class           => Factory\HalConfigFactory::class,
-            JsonRenderer::class        => Factory\HalJsonRendererFactory::class,
-            JsonStrategy::class        => Factory\HalJsonStrategyFactory::class,
-            Link\LinkUrlBuilder::class => Factory\LinkUrlBuilderFactory::class,
-            MetadataMap::class         => Factory\MetadataMapFactory::class,
-            RendererOptions::class     => Factory\RendererOptionsFactory::class,
+            HalConfig::class                         => Factory\HalConfigFactory::class,
+            JsonRenderer::class                      => Factory\HalJsonRendererFactory::class,
+            JsonStrategy::class                      => Factory\HalJsonStrategyFactory::class,
+            Link\LinkUrlBuilder::class               => Factory\LinkUrlBuilderFactory::class,
+            MetadataMap::class                       => Factory\MetadataMapFactory::class,
+            RendererOptions::class                   => Factory\RendererOptionsFactory::class,
         ],
     ],
-    'view_helpers' => [
+    'view_helpers'                  => [
         // Legacy Zend Framework aliases
-        'aliases' => [
-        ],
+        'aliases'   => [],
         'factories' => [
             'Hal' => Factory\HalViewHelperFactory::class,
         ],
     ],
-    'controller_plugins' => [
+    'controller_plugins'            => [
         // Legacy Zend Framework aliases
-        'aliases' => [
-        ],
+        'aliases'   => [],
         'factories' => [
             'Hal' => Factory\HalControllerPluginFactory::class,
         ],

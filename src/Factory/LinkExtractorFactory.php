@@ -8,13 +8,15 @@
 
 namespace Laminas\ApiTools\Hal\Factory;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
 use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class LinkExtractorFactory
 {
     /**
-     * @param  \Interop\Container\ContainerInterface|\Laminas\ServiceManager\ServiceLocatorInterface $container
+     * @param ContainerInterface|ServiceLocatorInterface $container
      * @return LinkExtractor
      */
     public function __invoke($container)

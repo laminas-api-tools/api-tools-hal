@@ -32,7 +32,7 @@ class HalControllerPluginFactoryTest extends TestCase
         $services->setService('ViewHelperManager', $viewHelperManager->reveal());
 
         $factory = new HalControllerPluginFactory();
-        $plugin = $factory($services, 'Hal');
+        $plugin  = $factory($services, 'Hal');
 
         self::assertInstanceOf(HalPlugin::class, $plugin);
     }
@@ -53,7 +53,7 @@ class HalControllerPluginFactoryTest extends TestCase
             ->shouldBeCalledTimes(1);
 
         $factory = new HalControllerPluginFactory();
-        $plugin = $factory->createService($pluginManager->reveal());
+        $plugin  = $factory->createService($pluginManager->reveal());
 
         self::assertInstanceOf(HalPlugin::class, $plugin);
     }

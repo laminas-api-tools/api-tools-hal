@@ -10,13 +10,10 @@ namespace Laminas\ApiTools\Hal\Link;
 
 trait LinkCollectionAwareTrait
 {
-    /**
-     * @var LinkCollection
-     */
+    /** @var LinkCollection */
     protected $links;
 
     /**
-     * @param  LinkCollection $links
      * @return self
      */
     public function setLinks(LinkCollection $links)

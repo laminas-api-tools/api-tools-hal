@@ -17,9 +17,8 @@ use LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-/**
- * @subpackage UnitTest
- */
+use function interface_exists;
+
 class EntityHydratorManagerTest extends TestCase
 {
     /** @var string */
@@ -27,7 +26,7 @@ class EntityHydratorManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->hydratorClass = \interface_exists(HydratorPluginManagerInterface::class)
+        $this->hydratorClass = interface_exists(HydratorPluginManagerInterface::class)
             ? TestAsset\DummyV3Hydrator::class
             : TestAsset\DummyHydrator::class;
     }
@@ -131,7 +130,7 @@ class EntityHydratorManagerTest extends TestCase
     {
         $entity = new TestAsset\Entity('foo', 'Foo Bar');
 
-        $metadataMap           = new MetadataMap();
+        $metadataMap = new MetadataMap();
         $metadataMap->setHydratorManager(new HydratorPluginManager(new ServiceManager()));
 
         $hydratorPluginManager = new HydratorPluginManager(new ServiceManager());

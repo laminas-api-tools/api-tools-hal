@@ -25,7 +25,7 @@ class HalJsonRendererFactoryTest extends TestCase
         $services->setService('ViewHelperManager', $viewHelperManager);
         $services->setInvokableClass(ApiProblemRenderer::class, ApiProblemRenderer::class);
 
-        $factory = new HalJsonRendererFactory();
+        $factory  = new HalJsonRendererFactory();
         $renderer = $factory($services, 'Laminas\ApiTools\Hal\JsonRenderer');
 
         self::assertInstanceOf(HalJsonRenderer::class, $renderer);
