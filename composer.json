@@ -48,7 +48,9 @@
         "laminas/laminas-modulemanager": "^2.10.1",
         "phpdocumentor/reflection-docblock": "^5.2.2",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.3"
+        "phpunit/phpunit": "^9.3",
+        "psalm/plugin-phpunit": "^0.15.1",
+        "vimeo/psalm": "^4.6"
     },
     "autoload": {
         "psr-4": {
