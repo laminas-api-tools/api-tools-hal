@@ -1,20 +1,18 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 
 use JsonSerializable;
+use ReturnTypeWillChange;
 
 class JsonSerializableEntity extends Entity implements JsonSerializable
 {
     /**
      * @return array
      */
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [

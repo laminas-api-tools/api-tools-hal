@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace LaminasTest\ApiTools\Hal\Plugin;
 
@@ -219,8 +215,8 @@ class HalTest extends TestCase
         $links = $this->plugin->fromResource($entity);
 
         self::assertIsArray($links);
-        self::assertArrayHasKey('self', $links, var_export($links, 1));
-        self::assertArrayHasKey('describedby', $links, var_export($links, 1));
+        self::assertArrayHasKey('self', $links, var_export($links, true));
+        self::assertArrayHasKey('describedby', $links, var_export($links, true));
 
         $selfLink = $links['self'];
         self::assertIsArray($selfLink);
@@ -1680,7 +1676,7 @@ class HalTest extends TestCase
             sprintf(
                 '%s relational link does not have an href; received %s',
                 $relation,
-                var_export($link, 1)
+                var_export($link, true)
             )
         );
         $href = $link['href'];
@@ -1798,7 +1794,7 @@ class HalTest extends TestCase
             $id = $key + 1;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
-            self::assertArrayHasKey('id', $item, var_export($item, 1));
+            self::assertArrayHasKey('id', $item, var_export($item, true));
             self::assertEquals($id, $item['id']);
             self::assertArrayHasKey('foo', $item);
             self::assertEquals('bar', $item['foo']);
@@ -1846,7 +1842,7 @@ class HalTest extends TestCase
             $id = $key + 11;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
-            self::assertArrayHasKey('id', $item, var_export($item, 1));
+            self::assertArrayHasKey('id', $item, var_export($item, true));
             self::assertEquals($id, $item['id']);
             self::assertArrayHasKey('foo', $item);
             self::assertEquals('bar', $item['foo']);
@@ -1889,10 +1885,10 @@ class HalTest extends TestCase
         /** @var ApiProblem $result */
         $result = $this->plugin->renderCollection($collection);
 
-        self::assertInstanceOf(ApiProblem::class, $result, var_export($result, 1));
+        self::assertInstanceOf(ApiProblem::class, $result, var_export($result, true));
 
         $data = $result->toArray();
-        self::assertArrayHasKey('status', $data, var_export($result, 1));
+        self::assertArrayHasKey('status', $data, var_export($result, true));
         self::assertEquals(409, $data['status']);
         self::assertArrayHasKey('detail', $data);
         self::assertEquals('Invalid page provided', $data['detail']);
@@ -1919,7 +1915,7 @@ class HalTest extends TestCase
         $result = $this->plugin->renderCollection($collection);
 
         self::assertIsArray($result);
-        self::assertArrayHasKey('count', $result, var_export($result, 1));
+        self::assertArrayHasKey('count', $result, var_export($result, true));
         self::assertEquals(100, $result['count']);
         self::assertArrayHasKey('type', $result);
         self::assertEquals('foo', $result['type']);
@@ -1956,7 +1952,7 @@ class HalTest extends TestCase
         $result = $this->plugin->renderCollection($collection);
 
         self::assertIsArray($result);
-        self::assertArrayHasKey('count', $result, var_export($result, 1));
+        self::assertArrayHasKey('count', $result, var_export($result, true));
         self::assertEquals(100, $result['count']);
         self::assertArrayHasKey('type', $result);
         self::assertEquals('foo', $result['type']);
@@ -2089,7 +2085,7 @@ class HalTest extends TestCase
         self::assertIsArray($result);
         $collection = $result['_embedded']['items'];
         foreach ($collection as $item) {
-            self::assertArrayHasKey('_embedded', $item, var_export($item, 1));
+            self::assertArrayHasKey('_embedded', $item, var_export($item, true));
             $embedded = $item['_embedded'];
             self::assertArrayHasKey('user', $embedded);
 
@@ -2150,7 +2146,7 @@ class HalTest extends TestCase
             $id = $key + 1;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
-            self::assertArrayHasKey('name', $item, var_export($item, 1));
+            self::assertArrayHasKey('name', $item, var_export($item, true));
             self::assertEquals($id, $item['name']);
             self::assertArrayHasKey('foo', $item);
             self::assertEquals('bar', $item['foo']);

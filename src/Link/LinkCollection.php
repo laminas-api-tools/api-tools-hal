@@ -1,10 +1,6 @@
 <?php
 
-/**
- * @see       https://github.com/laminas-api-tools/api-tools-hal for the canonical source repository
- * @copyright https://github.com/laminas-api-tools/api-tools-hal/blob/master/COPYRIGHT.md
- * @license   https://github.com/laminas-api-tools/api-tools-hal/blob/master/LICENSE.md New BSD License
- */
+declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Link;
 
@@ -13,6 +9,7 @@ use Countable;
 use IteratorAggregate;
 use Laminas\ApiTools\ApiProblem\Exception;
 use Psr\Link\LinkInterface;
+use ReturnTypeWillChange;
 
 use function array_diff;
 use function array_intersect;
@@ -39,6 +36,7 @@ class LinkCollection implements Countable, IteratorAggregate
      *
      * @return int
      */
+    #[ReturnTypeWillChange]
     public function count()
     {
         return count($this->links);
@@ -49,6 +47,7 @@ class LinkCollection implements Countable, IteratorAggregate
      *
      * @return ArrayIterator
      */
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->links);
