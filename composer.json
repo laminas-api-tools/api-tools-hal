@@ -44,7 +44,7 @@
         "psr/link": "^1.0"
     },
     "require-dev": {
-        "laminas/laminas-coding-standard": "^2.1.4",
+        "laminas/laminas-coding-standard": "~2.3.0",
         "laminas/laminas-modulemanager": "^2.10.1",
         "phpdocumentor/reflection-docblock": "^5.2.2",
         "phpspec/prophecy-phpunit": "^2.0",
@@ -70,7 +70,8 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit",
-        "test-coverage": "phpunit --coverage-clover clover.xml"
+        "test-coverage": "phpunit --coverage-clover clover.xml",
+        "static-analysis": "psalm --shepherd --stats --show-info=true"
     },
     "replace": {
         "zfcampus/zf-hal": "^1.6.0"
