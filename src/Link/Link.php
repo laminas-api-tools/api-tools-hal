@@ -40,7 +40,7 @@ class Link implements LinkInterface
     /** @var array */
     protected $routeParams = [];
 
-    /** @var string */
+    /** @var string|null */
     protected $href;
 
     /**
@@ -377,10 +377,8 @@ class Link implements LinkInterface
      * - A URI template as defined by RFC 6570.
      *
      * If a URI template is returned, isTemplated() MUST return True.
-     *
-     * @return string
      */
-    public function getHref()
+    public function getHref(): string
     {
         return (string) $this->href;
     }
@@ -392,7 +390,7 @@ class Link implements LinkInterface
      *     Currently, templated links are not yet supported, so this will
      *     always return false.
      */
-    public function isTemplated()
+    public function isTemplated(): bool
     {
         return false; // api-tools-hal doesn't support this currently
     }
@@ -405,7 +403,7 @@ class Link implements LinkInterface
      *
      * @return string[]
      */
-    public function getRels()
+    public function getRels(): array
     {
         return $this->rels;
     }
@@ -418,7 +416,7 @@ class Link implements LinkInterface
      *    is either a PHP primitive or an array of PHP strings. If no values are
      *    found an empty array MUST be returned.
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
