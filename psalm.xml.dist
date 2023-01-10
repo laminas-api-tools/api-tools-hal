@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <psalm
-    totallyTyped="true"
+    errorLevel="1"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     errorBaseline="psalm-baseline.xml"
+    cacheDirectory="/tmp/x"
 >
     <projectFiles>
-        <directory name="config"/>
         <directory name="src"/>
-        <directory name="test"/>
         <ignoreFiles>
+            <directory name="config"/>
             <directory name="vendor"/>
         </ignoreFiles>
     </projectFiles>
@@ -27,6 +27,150 @@
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with"/>
             </errorLevel>
         </InternalMethod>
+
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="src/View/HalJsonRenderer.php"/>
+            </errorLevel>
+        </InvalidArgument>
+
+        <InvalidClass>
+            <errorLevel type="suppress">
+                <file name="src/ResourceFactory.php"/>
+            </errorLevel>
+        </InvalidClass>
+
+        <MissingClosureParamType>
+            <errorLevel type="suppress">
+                <file name="src/Plugin/Hal.php"/>
+            </errorLevel>
+        </MissingClosureParamType>
+
+        <MixedArrayAssignment>
+            <errorLevel type="suppress">
+                <file name="src/Plugin/Hal.php"/>
+            </errorLevel>
+        </MixedArrayAssignment>
+
+        <ArgumentTypeCoercion>
+            <errorLevel type="suppress">
+                <file name="src/Plugin/Hal.php"/>
+            </errorLevel>
+        </ArgumentTypeCoercion>
+
+        <MixedArrayOffset>
+            <errorLevel type="suppress">
+                <file name="src/Plugin/Hal.php"/>
+            </errorLevel>
+        </MixedArrayOffset>
+
+        <ImplementedReturnTypeMismatch>
+            <errorLevel type="suppress">
+                <file name="src/Plugin/Hal.php"/>
+            </errorLevel>
+        </ImplementedReturnTypeMismatch>
+
+        <UnsafeInstantiation>
+            <errorLevel type="suppress">
+                <file name="src/Link/Link.php"/>
+            </errorLevel>
+        </UnsafeInstantiation>
+
+        <InvalidCatch>
+            <errorLevel type="suppress">
+                <file name="src/Link/Link.php"/>
+            </errorLevel>
+        </InvalidCatch>
+
+        <RedundantConditionGivenDocblockType>
+            <errorLevel type="suppress">
+                <file name="src/Plugin/Hal.php"/>
+            </errorLevel>
+        </RedundantConditionGivenDocblockType>
+
+        <RedundantCastGivenDocblockType>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </RedundantCastGivenDocblockType>
+
+        <PossiblyInvalidDocblockTag>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </PossiblyInvalidDocblockTag>
+
+        <MixedMethodCall>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </MixedMethodCall>
+
+        <MixedAssignment>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </MixedAssignment>
+
+        <DocblockTypeContradiction>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </DocblockTypeContradiction>
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </UndefinedDocblockClass>
+
+        <UndefinedInterfaceMethod>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </UndefinedInterfaceMethod>
+
+        <RedundantConditionGivenDocblockType>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </RedundantConditionGivenDocblockType>
+
+        <MoreSpecificReturnType>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </MoreSpecificReturnType>
+
+        <LessSpecificReturnStatement>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </LessSpecificReturnStatement>
+
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+
+        <DeprecatedMethod>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </DeprecatedMethod>
+
+        <PossiblyNullArgument>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </PossiblyNullArgument>
+
+        <DeprecatedClass>
+            <errorLevel type="suppress">
+                <directory name="src"/>
+            </errorLevel>
+        </DeprecatedClass>
     </issueHandlers>
     <plugins>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>

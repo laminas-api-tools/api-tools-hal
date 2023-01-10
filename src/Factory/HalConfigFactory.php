@@ -16,6 +16,7 @@ class HalConfigFactory
      */
     public function __invoke(ContainerInterface $container)
     {
+        /** @var array<string,mixed> $config */
         $config = $container->has('config')
             ? $container->get('config')
             : [];

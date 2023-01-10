@@ -43,8 +43,7 @@ use Traversable;
 use function array_key_exists;
 use function array_merge;
 use function count;
-use function get_class;
-use function gettype;
+use function intval;
 use function is_array;
 use function is_object;
 use function method_exists;
@@ -123,6 +122,7 @@ class Hal extends AbstractHelper implements
         if (null === $hydrators) {
             $this->hydrators = new HydratorPluginManager(new ServiceManager());
         } elseif ($hydrators instanceof HydratorPluginManagerInterface) {
+            /** @psalm-var HydratorPluginManager $hydrators */
             $this->hydrators = $hydrators;
         } elseif ($hydrators instanceof HydratorPluginManager) {
             $this->hydrators = $hydrators;
@@ -132,7 +132,7 @@ class Hal extends AbstractHelper implements
                 self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
-                is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)
+                $hydrators::class,
             ));
         }
     }
@@ -155,15 +155,16 @@ class Hal extends AbstractHelper implements
      *
      * @return self
      */
-    public function setEventManager(EventManagerInterface $events)
+    public function setEventManager(EventManagerInterface $eventManager)
     {
-        $events->setIdentifiers([
+        $eventManager->setIdentifiers([
             self::class,
             static::class,
         ]);
-        $this->events = $events;
 
-        $events->attach('getIdFromEntity', function (EventInterface $e) {
+        $this->events = $eventManager;
+
+        $eventManager->attach('getIdFromEntity', function (EventInterface $e) {
             $entity = $e->getParam('entity');
 
             // Found id in array
@@ -183,6 +184,7 @@ class Hal extends AbstractHelper implements
 
             // Found public id getter on object
             if (method_exists($entity, 'getid')) {
+                /** @psalm-var Entity $entity */
                 return $entity->getId();
             }
 
@@ -586,6 +588,7 @@ class Hal extends AbstractHelper implements
             ? $metadataMap->get($collection)->getMaxDepth()
             : null;
 
+        /** @var array<string,mixed> $payload */
         $payload              = $halCollection->getAttributes();
         $payload['_links']    = $this->fromResource($halCollection);
         $payload['_embedded'] = [
@@ -593,14 +596,14 @@ class Hal extends AbstractHelper implements
         ];
 
         if ($collection instanceof Paginator) {
-            $payload['page_count']  = $payload['page_count'] ?? $collection->count();
-            $payload['page_size']   = $payload['page_size'] ?? $halCollection->getPageSize();
-            $payload['total_items'] = $payload['total_items'] ?? (int) $collection->getTotalItemCount();
+            $payload['page_count']  = intval($payload['page_count'] ?? $collection->count());
+            $payload['page_size']   = intval($payload['page_size'] ?? $halCollection->getPageSize());
+            $payload['total_items'] = intval($payload['total_items'] ?? $collection->getTotalItemCount());
             $payload['page']        = $payload['page_count'] > 0
                 ? $halCollection->getPage()
                 : 0;
         } elseif (is_array($collection) || $collection instanceof Countable) {
-            $payload['total_items'] = $payload['total_items'] ?? count($collection);
+            $payload['total_items'] = intval($payload['total_items'] ?? count($collection));
         }
 
         $payload = new ArrayObject($payload);
@@ -674,12 +677,12 @@ class Hal extends AbstractHelper implements
                     $this->entityHashStack = [];
                     throw new Exception\CircularReferenceException(sprintf(
                         "Circular reference detected in '%s'. %s",
-                        get_class($entity),
+                        $entity::class,
                         "Either set a 'max_depth' metadata attribute or remove the reference"
                     ));
                 }
 
-                $this->entityHashStack[$entityHash] = get_class($entity);
+                $this->entityHashStack[$entityHash] = $entity::class;
             }
         }
 
@@ -690,7 +693,9 @@ class Hal extends AbstractHelper implements
         if (! is_array($entity)) {
             $entity = $this->getEntityExtractor()->extract($entity);
         }
-
+        /**
+         * @var mixed $value
+         */
         foreach ($entity as $key => $value) {
             if (is_object($value) && $metadataMap->has($value)) {
                 /** @psalm-suppress PossiblyFalseArgument */
@@ -702,10 +707,10 @@ class Hal extends AbstractHelper implements
             }
 
             if ($value instanceof Entity) {
-                $this->extractEmbeddedEntity($entity, $key, $value, $depth + 1, $maxDepth);
+                $this->extractEmbeddedEntity($entity, (string) $key, $value, $depth + 1, $maxDepth);
             }
             if ($value instanceof Collection) {
-                $this->extractEmbeddedCollection($entity, $key, $value, $depth + 1, $maxDepth);
+                $this->extractEmbeddedCollection($entity, (string) $key, $value, $depth + 1, $maxDepth);
             }
             if ($value instanceof Link) {
                 // We have a link; add it to the entity if it's not already present.
@@ -713,6 +718,7 @@ class Hal extends AbstractHelper implements
                 unset($entity[$key]);
             }
             if ($value instanceof LinkCollection) {
+                /** @var Link $link */
                 foreach ($value as $link) {
                     $entityLinks = $this->injectPropertyAsLink($link, $entityLinks);
                 }
@@ -761,7 +767,8 @@ class Hal extends AbstractHelper implements
             $params['id'] = $id;
         }
 
-        $events      = $this->getEventManager();
+        $events = $this->getEventManager();
+        /** @var array<array-key, mixed>|object $eventParams */
         $eventParams = $events->prepareArgs([
             'route'    => $route,
             'id'       => $id,
@@ -891,6 +898,7 @@ class Hal extends AbstractHelper implements
                 $metadataMap->get($entity)
             );
         } elseif (! $entity instanceof Entity) {
+            /** @var mixed $id */
             $id        = $this->getIdFromEntity($entity) ?: null;
             $halEntity = new Entity($entity, $id);
         } else {
@@ -929,7 +937,6 @@ class Hal extends AbstractHelper implements
         if (! $collection instanceof Collection) {
             $collection = new Collection($collection);
         }
-
         $metadata = $metadataMap->get($collection);
         if (! $metadata || ($metadata && $metadata->getForceSelfLink())) {
             $this->injectSelfLink($collection, $route);
@@ -1044,18 +1051,21 @@ class Hal extends AbstractHelper implements
         $entityRouteOptions  = $halCollection->getEntityRouteOptions();
         $metadataMap         = $this->getMetadataMap();
 
+        /** @var mixed $entity */
         foreach ($halCollection->getCollection() as $entity) {
-            $eventParams = new ArrayObject([
+            /** @psalm-var array<string,mixed> $eventParams */
+            $eventParams = [
                 'collection'   => $halCollection,
                 'entity'       => $entity,
                 'resource'     => $entity,
                 'route'        => $entityRoute,
                 'routeParams'  => $entityRouteParams,
                 'routeOptions' => $entityRouteOptions,
-            ]);
+            ];
             $events->trigger('renderCollection.resource', $this, $eventParams);
             $events->trigger('renderCollection.entity', $this, $eventParams);
 
+            /** @var object $entity */
             $entity = $eventParams['entity'];
 
             if (is_object($entity) && $metadataMap->has($entity)) {
@@ -1073,6 +1083,7 @@ class Hal extends AbstractHelper implements
                 $entity = $this->getEntityExtractor()->extract($entity);
             }
 
+            /** @var mixed $value */
             foreach ($entity as $key => $value) {
                 if (is_object($value) && $metadataMap->has($value)) {
                     /** @psalm-suppress PossiblyFalseArgument */
@@ -1080,14 +1091,15 @@ class Hal extends AbstractHelper implements
                 }
 
                 if ($value instanceof Entity) {
-                    $this->extractEmbeddedEntity($entity, $key, $value, $depth + 1, $maxDepth);
+                    $this->extractEmbeddedEntity($entity, (string) $key, $value, $depth + 1, $maxDepth);
                 }
 
                 if ($value instanceof Collection) {
-                    $this->extractEmbeddedCollection($entity, $key, $value, $depth + 1, $maxDepth);
+                    $this->extractEmbeddedCollection($entity, (string) $key, $value, $depth + 1, $maxDepth);
                 }
             }
 
+            /** @var mixed $id */
             $id = $this->getIdFromEntity($entity);
 
             if ($id === false) {
@@ -1111,10 +1123,13 @@ class Hal extends AbstractHelper implements
                by default (at the moment) and should be removed manually if not required. But at some point it should
                be discussed if it makes sense to force self links in this particular use-case.  */
             $selfLink = new Link('self');
+
+            /** @var null|array $routeOptions */
+            $routeOptions = $eventParams['routeOptions'] ?? null;
             $selfLink->setRoute(
-                $eventParams['route'],
-                array_merge($eventParams['routeParams'], [$routeIdentifierName => $id]),
-                $eventParams['routeOptions']
+                (string) $eventParams['route'],
+                array_merge((array) $eventParams['routeParams'], [$routeIdentifierName => $id]),
+                $routeOptions
             );
             $links->add($selfLink);
 
@@ -1149,9 +1164,8 @@ class Hal extends AbstractHelper implements
 
         /**
          * @param mixed $r
-         * @return bool
          */
-        $callback = function ($r) {
+        $callback = function ($r): bool {
             return null !== $r && false !== $r;
         };
 

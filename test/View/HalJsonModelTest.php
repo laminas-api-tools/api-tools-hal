@@ -52,7 +52,7 @@ class HalJsonModelTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string,array<array-key,mixed>>
      */
     public function invalidCollectionPayloads()
     {
@@ -81,7 +81,7 @@ class HalJsonModelTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string,array<array-key,mixed>>
      */
     public function invalidEntityPayloads()
     {

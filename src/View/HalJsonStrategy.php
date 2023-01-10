@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Laminas\ApiTools\Hal\View;
 
 use Laminas\ApiTools\ApiProblem\View\ApiProblemModel;
+use Laminas\Http\Response;
 use Laminas\View\Model\ModelInterface;
 use Laminas\View\Strategy\JsonStrategy;
 use Laminas\View\ViewEvent;
 
 use function is_string;
+use function method_exists;
 
 /**
  * Extension of the JSON strategy to handle the HalJsonModel and provide
@@ -45,7 +47,9 @@ class HalJsonStrategy extends JsonStrategy
         }
 
         // JsonModel found
-        $this->renderer->setViewEvent($e);
+        if (method_exists($this->renderer, 'setViewEvent')) {
+            $this->renderer->setViewEvent($e);
+        }
 
         return $this->renderer;
     }
@@ -72,6 +76,13 @@ class HalJsonStrategy extends JsonStrategy
 
         $model    = $e->getModel();
         $response = $e->getResponse();
+
+        if (null === $response) {
+            // There is no response
+            return;
+        }
+
+        /** @psalm-var Response $response */
         $response->setContent($result);
 
         $headers = $response->getHeaders();
@@ -84,7 +95,7 @@ class HalJsonStrategy extends JsonStrategy
     /**
      * Determine the response content-type to return based on the view model.
      *
-     * @param ApiProblemModel|HalJsonModel|ModelInterface $model
+     * @param null|ApiProblemModel|HalJsonModel|ModelInterface $model
      * @return string The content-type to use.
      */
     private function getContentTypeFromModel($model)

@@ -27,13 +27,14 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
     }
 
     /**
-     * @param null|array|Entity|Collection $resource
+     * @param null|array|Entity|Collection|LinkCollectionAwareInterface $resource
      * @param string|array $route
      * @param string $routeIdentifier
      * @return Link
      */
     private function createSelfLink($resource, $route, $routeIdentifier)
     {
+        /** @psalm-var array|Collection|Entity|null $resource */
         // build route
         if (! is_array($route)) {
             $route = ['name' => (string) $route];

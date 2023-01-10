@@ -7,6 +7,7 @@ namespace Laminas\ApiTools\Hal\Factory;
 use Interop\Container\ContainerInterface;
 use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
 use Laminas\ApiTools\Hal\View\HalJsonRenderer;
+use Laminas\View\HelperPluginManager;
 
 class HalJsonRendererFactory
 {
@@ -15,7 +16,9 @@ class HalJsonRendererFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $helpers            = $container->get('ViewHelperManager');
+        /** @var HelperPluginManager $helpers */
+        $helpers = $container->get('ViewHelperManager');
+        /** @var ApiProblemRenderer $apiProblemRenderer */
         $apiProblemRenderer = $container->get(ApiProblemRenderer::class);
 
         $renderer = new HalJsonRenderer($apiProblemRenderer);

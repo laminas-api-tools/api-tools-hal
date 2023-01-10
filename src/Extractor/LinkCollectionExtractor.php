@@ -57,6 +57,7 @@ class LinkCollectionExtractor implements LinkCollectionExtractorInterface
             }
 
             $aggregate = [];
+            /** @var mixed $subLink */
             foreach ($linkDefinition as $subLink) {
                 if (! $subLink instanceof Link) {
                     throw new DomainException(sprintf(

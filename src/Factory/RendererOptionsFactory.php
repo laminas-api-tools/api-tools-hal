@@ -9,6 +9,7 @@ use Interop\Container\Exception\ContainerException;
 use Laminas\ApiTools\Hal\RendererOptions;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Traversable;
 
 use function is_array;
 
@@ -36,6 +37,7 @@ class RendererOptionsFactory
             $rendererConfig['render_embedded_entities'] = $rendererConfig['render_embedded_resources'];
         }
 
+        /** @psalm-var Traversable|array<array-key, mixed>|null $rendererConfig */
         return new RendererOptions($rendererConfig);
     }
 }

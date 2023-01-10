@@ -58,10 +58,13 @@ class MetadataMapFactoryTest extends TestCase
         $services->get('Laminas\ApiTools\Hal\HalConfig')->willReturn($config);
         $services->has('HydratorManager')->willReturn(false);
 
-        $factory     = new MetadataMapFactory();
-        $metadataMap = $factory($services->reveal(), MetadataMap::class);
+        $factory = new MetadataMapFactory();
+        /** @var ContainerInterface $revealed */
+        $revealed    = $services->reveal();
+        $metadataMap = $factory($revealed, MetadataMap::class);
 
         foreach ($config['metadata_map'] as $key => $value) {
+            self::assertIsArray($value);
             self::assertTrue($metadataMap->has($key));
             self::assertInstanceOf(Metadata::class, $metadataMap->get($key));
         }

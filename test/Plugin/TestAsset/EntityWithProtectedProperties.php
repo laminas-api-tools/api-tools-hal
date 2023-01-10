@@ -27,7 +27,7 @@ class EntityWithProtectedProperties implements ArraySerializableInterface
     /**
      * Exchange internal values from provided array
      *
-     * @param  array $array
+     * @param  array<string,string> $array
      */
     public function exchangeArray(array $array)
     {

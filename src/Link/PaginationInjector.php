@@ -43,6 +43,7 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function configureCollection(Collection $halCollection): void
     {
+        /** @var Paginator $collection */
         $collection = $halCollection->getCollection();
         $page       = $halCollection->getPage();
         $pageSize   = $halCollection->getPageSize();
@@ -75,8 +76,10 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function injectLastLink(Collection $halCollection): void
     {
-        $page = $halCollection->getCollection()->count();
-        $link = $this->createPaginationLink('last', $halCollection, $page);
+        /** @var Paginator $collection */
+        $collection = $halCollection->getCollection();
+        $page       = $collection->count();
+        $link       = $this->createPaginationLink('last', $halCollection, $page);
         $halCollection->getLinks()->add($link);
     }
 
@@ -93,9 +96,11 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function injectNextLink(Collection $halCollection): void
     {
-        $page      = $halCollection->getPage();
-        $pageCount = $halCollection->getCollection()->count();
-        $next      = $page < $pageCount ? $page + 1 : false;
+        $page = $halCollection->getPage();
+        /** @var Paginator $collection */
+        $collection = $halCollection->getCollection();
+        $pageCount  = $collection->count();
+        $next       = $page < $pageCount ? $page + 1 : false;
 
         if ($next) {
             $link = $this->createPaginationLink('next', $halCollection, $next);

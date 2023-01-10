@@ -29,6 +29,7 @@ class HalJsonModel extends JsonModel
      */
     public function isCollection()
     {
+        /** @var mixed $payload */
         $payload = $this->getPayload();
         return $payload instanceof Collection;
     }
@@ -55,6 +56,7 @@ class HalJsonModel extends JsonModel
      */
     public function isEntity()
     {
+        /** @var mixed $payload */
         $payload = $this->getPayload();
         return $payload instanceof Entity;
     }
@@ -86,12 +88,12 @@ class HalJsonModel extends JsonModel
     /**
      * Override setTerminal()
      *
-     * Does nothing; does not allow re-setting "terminate" flag.
+     * Does nothing; does not allow re-setting "terminate" terminate.
      *
-     * @param  bool $flag
+     * @param  bool $terminate
      * @return self
      */
-    public function setTerminal($flag = true)
+    public function setTerminal($terminate = true)
     {
         return $this;
     }

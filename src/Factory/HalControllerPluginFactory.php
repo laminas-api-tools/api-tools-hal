@@ -20,6 +20,7 @@ class HalControllerPluginFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $helpers = $container->get('ViewHelperManager');
+        /** @psalm-var Hal */
         return $helpers->get('Hal');
     }
 
@@ -28,11 +29,12 @@ class HalControllerPluginFactory implements FactoryInterface
      *
      * @return Hal
      */
-    public function createService(ServiceLocatorInterface $container)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        if ($container instanceof AbstractPluginManager) {
-            $container = $container->getServiceLocator() ?: $container;
+        if ($serviceLocator instanceof AbstractPluginManager) {
+            $serviceLocator = $serviceLocator->getServiceLocator() ?: $serviceLocator;
         }
-        return $this($container, Hal::class);
+        /** @psalm-var Hal */
+        return $this($serviceLocator, Hal::class);
     }
 }

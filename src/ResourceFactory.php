@@ -15,7 +15,6 @@ use Traversable;
 
 use function array_merge;
 use function call_user_func_array;
-use function get_class;
 use function is_callable;
 use function sprintf;
 
@@ -25,12 +24,12 @@ class ResourceFactory
     protected $entityHydratorManager;
 
     /** @var entityextractor */
-    protected $entityExtractor;
+    protected $entityextractor;
 
-    public function __construct(EntityHydratorManager $entityHydratorManager, entityextractor $entityExtractor)
+    public function __construct(EntityHydratorManager $entityHydratorManager, entityextractor $entityextractor)
     {
         $this->entityHydratorManager = $entityHydratorManager;
-        $this->entityExtractor       = $entityExtractor;
+        $this->entityextractor       = $entityextractor;
     }
 
     /**
@@ -44,20 +43,24 @@ class ResourceFactory
     public function createEntityFromMetadata($object, Metadata $metadata, $renderEmbeddedEntities = true)
     {
         if ($metadata->isCollection()) {
+            /** @psalm-var Paginator<int, mixed>|Traversable|array<array-key, mixed> $object */
             return $this->createCollectionFromMetadata($object, $metadata);
         }
 
-        $data = $this->entityExtractor->extract($object);
+        /** @psalm-var object $object */
+        $data = $this->entityextractor->extract($object);
 
         $entityIdentifierName = $metadata->getEntityIdentifierName();
         if ($entityIdentifierName && ! isset($data[$entityIdentifierName])) {
             throw new Exception\RuntimeException(sprintf(
                 'Unable to determine entity identifier for object of type "%s"; no fields matching "%s"',
-                get_class($object),
+                $object::class,
                 $entityIdentifierName
             ));
         }
 
+        /** @psalm-var array<string,mixed> $data */
+        /** @var string|null $id */
         $id = $entityIdentifierName ? $data[$entityIdentifierName] : null;
 
         if (! $renderEmbeddedEntities) {
@@ -114,7 +117,7 @@ class ResourceFactory
     /**
      * Creates a link object, given metadata and a resource
      *
-     * @param  object $object
+     * @param  Paginator<int, mixed>|iterable<array-key|mixed, mixed>|object $object
      * @param  null|string $id
      * @param  null|string $routeIdentifierName
      * @param  string $relation
@@ -137,22 +140,26 @@ class ResourceFactory
         if (! $metadata->hasRoute()) {
             throw new Exception\RuntimeException(sprintf(
                 'Unable to create a self link for resource of type "%s"; metadata does not contain a route or a href',
-                get_class($object)
+                $object::class
             ));
         }
 
         $params = $metadata->getRouteParams();
 
         // process any callbacks
+        /** @var mixed $param */
         foreach ($params as $key => $param) {
             // bind to the object
             if ($param instanceof Closure) {
+                /** @psalm-var object $object */
                 $param = $param->bindTo($object);
             }
 
             // pass the object for callbacks
             if (is_callable($param)) {
-                $params[$key] = call_user_func_array($param, [$object]);
+                /** @var mixed $value */
+                $value        = call_user_func_array($param, [$object]);
+                $params[$key] = $value;
             }
         }
 

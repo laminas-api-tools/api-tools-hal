@@ -117,10 +117,10 @@ class PaginationInjectorTest extends TestCase
         $collectionRoute = $halCollection->getCollectionRoute();
 
         $links = $halCollection->getLinks();
-        self::assertEquals($collectionRoute, $links->get('self')->getRoute());
-        self::assertEquals($collectionRoute, $links->get('first')->getRoute());
-        self::assertEquals($collectionRoute, $links->get('last')->getRoute());
-        self::assertEquals($collectionRoute, $links->get('prev')->getRoute());
-        self::assertEquals($collectionRoute, $links->get('next')->getRoute());
+        self::assertEquals($collectionRoute, $links->get('self')?->getRoute());
+        self::assertEquals($collectionRoute, $links->get('first')?->getRoute());
+        self::assertEquals($collectionRoute, $links->get('last')?->getRoute());
+        self::assertEquals($collectionRoute, $links->get('prev')?->getRoute());
+        self::assertEquals($collectionRoute, $links->get('next')?->getRoute());
     }
 }

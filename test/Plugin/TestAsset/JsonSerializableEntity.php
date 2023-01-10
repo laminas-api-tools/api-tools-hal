@@ -10,10 +10,10 @@ use ReturnTypeWillChange;
 class JsonSerializableEntity extends Entity implements JsonSerializable
 {
     /**
-     * @return array
+     * @return array<string,string>
      */
     #[ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'id' => $this->id,

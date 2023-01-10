@@ -36,15 +36,17 @@ class EntityExtractor implements ExtractionInterface
     /**
      * @inheritDoc
      */
-    public function extract(object $entity): array
+    public function extract(object $object): array
     {
-        if (isset($this->serializedEntities[$entity])) {
-            return $this->serializedEntities[$entity];
+        if (isset($this->serializedEntities[$object])) {
+            /** @psalm-var array<array-key, mixed> */
+            return $this->serializedEntities[$object];
         }
 
-        $this->serializedEntities[$entity] = $this->extractEntity($entity);
+        $this->serializedEntities[$object] = $this->extractEntity($object);
 
-        return $this->serializedEntities[$entity];
+        /** @psalm-var array<array-key, mixed> */
+        return $this->serializedEntities[$object];
     }
 
     private function extractEntity(object $entity): array
@@ -56,6 +58,7 @@ class EntityExtractor implements ExtractionInterface
         }
 
         if ($entity instanceof JsonSerializable) {
+            /** @psalm-var array<array-key, mixed> */
             return $entity->jsonSerialize();
         }
 

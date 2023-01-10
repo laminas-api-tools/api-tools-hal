@@ -12,7 +12,6 @@ use Laminas\Uri\UriFactory;
 use Psr\Link\LinkInterface;
 use Traversable;
 
-use function get_class;
 use function gettype;
 use function is_array;
 use function is_object;
@@ -37,7 +36,7 @@ class Link implements LinkInterface
     /** @var array */
     protected $routeOptions = [];
 
-    /** @var array */
+    /** @var array<string,mixed> */
     protected $routeParams = [];
 
     /** @var string|null */
@@ -47,7 +46,7 @@ class Link implements LinkInterface
      * Create a link relation
      *
      * @todo  filtering and/or validation of relation string
-     * @param string|array $relation
+     * @param string|array<array-key, string> $relation
      */
     public function __construct($relation)
     {
@@ -62,7 +61,7 @@ class Link implements LinkInterface
      * Factory for creating links
      *
      * @param array $spec {
-     *      @var string $rel Required.
+     *      @var string|array $rel Required.
      *      @var array $props Optional.
      *      @var string $href Optional.
      *      @var string|array $route Optional.
@@ -79,18 +78,24 @@ class Link implements LinkInterface
                 __METHOD__
             ));
         }
-        $link = new static($spec['rel']);
+        /** @var array<array-key, string>|string $relation */
+        $relation = $spec['rel'];
+        $link     = new static($relation);
 
         if (
             isset($spec['props'])
             && is_array($spec['props'])
         ) {
-            $link->setProps($spec['props']);
+            /** @var array<string, mixed> $props */
+            $props = $spec['props'];
+            $link->setProps($props);
         }
 
         // deprecated since 1.5.0; use 'href' instead
         if (isset($spec['url'])) {
-            $link->setUrl($spec['url']);
+            /** @var string $url */
+            $url = $spec['url'];
+            $link->setUrl($url);
             return $link;
         }
 
@@ -110,7 +115,7 @@ class Link implements LinkInterface
                 throw new Exception\InvalidArgumentException(sprintf(
                     '%s requires that the specification array\'s "route" element be a string or array; received "%s"',
                     __METHOD__,
-                    is_object($routeInfo) ? get_class($routeInfo) : gettype($routeInfo)
+                    is_object($routeInfo) ? $routeInfo::class : gettype($routeInfo)
                 ));
             }
 
@@ -127,7 +132,7 @@ class Link implements LinkInterface
             $options = isset($routeInfo['options']) && is_array($routeInfo['options'])
                 ? $routeInfo['options']
                 : [];
-            $link->setRoute($name, $params, $options);
+            $link->setRoute((string) $name, $params, $options);
             return $link;
         }
 
@@ -139,7 +144,7 @@ class Link implements LinkInterface
      *
      * "href" will be ignored.
      *
-     * @param array $props
+     * @param array<string, mixed> $props
      * @return self
      */
     public function setProps(array $props)
@@ -171,8 +176,9 @@ class Link implements LinkInterface
             ));
         }
 
-        $this->route = (string) $route;
+        $this->route = $route;
         if ($params) {
+            /** @psalm-var array<string,mixed> $params */
             $this->setRouteParams($params);
         }
         if ($options) {
@@ -184,7 +190,7 @@ class Link implements LinkInterface
     /**
      * Set route assembly options
      *
-     * @param  array|Traversable $options
+     * @param  mixed|array|Traversable $options
      * @return self
      * @throws Exception\InvalidArgumentException
      */
@@ -198,7 +204,7 @@ class Link implements LinkInterface
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($options) ? get_class($options) : gettype($options)
+                is_object($options) ? $options::class : gettype($options)
             ));
         }
 
@@ -209,7 +215,7 @@ class Link implements LinkInterface
     /**
      * Set route assembly parameters/substitutions
      *
-     * @param  array|Traversable $params
+     * @param  array<string, mixed>|Traversable $params
      * @return self
      * @throws Exception\InvalidArgumentException
      */
@@ -223,10 +229,10 @@ class Link implements LinkInterface
             throw new Exception\InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($params) ? get_class($params) : gettype($params)
+                is_object($params) ? $params::class : gettype($params)
             ));
         }
-
+        /** @psalm-var array<string, mixed> $params */
         $this->routeParams = $params;
         return $this;
     }
@@ -254,7 +260,7 @@ class Link implements LinkInterface
             throw new Exception\InvalidArgumentException(sprintf(
                 'Received invalid URL: %s',
                 $e->getMessage()
-            ), $e->getCode(), $e);
+            ), (int) $e->getCode(), $e);
         }
 
         if (! $uri->isValid()) {
@@ -316,7 +322,7 @@ class Link implements LinkInterface
     /**
      * Retrieve route assembly parameters/substitutions, if any
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function getRouteParams()
     {

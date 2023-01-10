@@ -10,7 +10,6 @@ use Laminas\Hydrator\HydratorPluginManagerInterface;
 use Laminas\ServiceManager\ServiceManager;
 
 use function array_key_exists;
-use function get_class;
 use function get_parent_class;
 use function gettype;
 use function is_array;
@@ -19,7 +18,7 @@ use function sprintf;
 
 class MetadataMap
 {
-    /** @var HydratorPluginManager|HydratorPluginManagerInterface */
+    /** @var null|HydratorPluginManager|HydratorPluginManagerInterface */
     protected $hydrators;
 
     /** @var Metadata[] */
@@ -61,7 +60,7 @@ class MetadataMap
                 self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
-                is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)
+                is_object($hydrators) ? $hydrators::class : gettype($hydrators)
             ));
         }
 
@@ -74,8 +73,10 @@ class MetadataMap
     public function getHydratorManager()
     {
         if (null === $this->hydrators) {
-            $this->setHydratorManager(new HydratorPluginManager(new ServiceManager()));
+            $this->setHydratorManager($hydrators = new HydratorPluginManager(new ServiceManager()));
+            return $hydrators;
         }
+
         return $this->hydrators;
     }
 
@@ -92,16 +93,20 @@ class MetadataMap
      */
     public function setMap(array $map)
     {
+        /**
+         * @psalm-var class-string $class
+         * @var array|Metadata $options
+         */
         foreach ($map as $class => $options) {
             $metadata = $options;
             if (! is_array($metadata) && ! $metadata instanceof Metadata) {
                 throw new Exception\InvalidArgumentException(sprintf(
                     '%s expects each map to be an array or a Laminas\ApiTools\Hal\Metadata instance; received "%s"',
                     __METHOD__,
-                    is_object($metadata) ? get_class($metadata) : gettype($metadata)
+                    is_object($metadata) ? $metadata::class : gettype($metadata)
                 ));
             }
-
+            /** @psalm-var Metadata $metadata */
             $this->map[$class] = $metadata;
         }
 
@@ -117,11 +122,11 @@ class MetadataMap
     public function has($class)
     {
         if (is_object($class)) {
-            $className = get_class($class);
+            $className = $class::class;
         } else {
             $className = $class;
         }
-
+        /** @psalm-var class-string $className */
         if (array_key_exists($className, $this->map)) {
             return true;
         }
@@ -144,11 +149,11 @@ class MetadataMap
     public function get($class)
     {
         if (is_object($class)) {
-            $className = get_class($class);
+            $className = $class::class;
         } else {
             $className = $class;
         }
-
+        /** @psalm-var class-string $className */
         if (isset($this->map[$className])) {
             return $this->getMetadataInstance($className);
         }
@@ -163,7 +168,7 @@ class MetadataMap
     /**
      * Retrieve a metadata instance.
      *
-     * @param string $class
+     * @psalm-param class-string $class
      * @return Metadata
      */
     private function getMetadataInstance($class)
@@ -171,8 +176,9 @@ class MetadataMap
         if ($this->map[$class] instanceof Metadata) {
             return $this->map[$class];
         }
-
-        $this->map[$class] = new Metadata($class, $this->map[$class], $this->getHydratorManager());
+        /** @var array<mixed> $options */
+        $options           = $this->map[$class];
+        $this->map[$class] = new Metadata($class, $options, $this->getHydratorManager());
         return $this->map[$class];
     }
 }

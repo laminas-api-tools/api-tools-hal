@@ -9,9 +9,7 @@ use Laminas\Hydrator\ExtractionInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\Hydrator\HydratorPluginManagerInterface;
 
-use function get_class;
-use function gettype;
-use function is_object;
+use function is_string;
 use function sprintf;
 use function strtolower;
 
@@ -53,7 +51,7 @@ class EntityHydratorManager
                 self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
-                is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)
+                $hydrators::class
             ));
         }
         $this->hydrators   = $hydrators;
@@ -72,13 +70,15 @@ class EntityHydratorManager
      * Map an entity class to a specific hydrator instance
      *
      * @param  string $class
-     * @param  ExtractionInterface $hydrator
+     * @param  ExtractionInterface|string $hydrator
      * @return self
      */
     public function addHydrator($class, $hydrator)
     {
-        if (! $hydrator instanceof ExtractionInterface) {
-            $hydrator = $this->hydrators->get($hydrator);
+        if (is_string($hydrator)) {
+            /** @var ExtractionInterface $hydratorInstance */
+            $hydratorInstance = $this->hydrators->get($hydrator);
+            $hydrator         = $hydratorInstance;
         }
 
         $filteredClass                     = strtolower($class);
@@ -109,7 +109,7 @@ class EntityHydratorManager
      */
     public function getHydratorForEntity($entity)
     {
-        $class      = get_class($entity);
+        $class      = $entity::class;
         $classLower = strtolower($class);
 
         if (isset($this->hydratorMap[$classLower])) {

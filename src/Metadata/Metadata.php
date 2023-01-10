@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Laminas\ApiTools\Hal\Metadata;
 
 use Laminas\ApiTools\Hal\Exception;
+use Laminas\Filter\Exception\ExceptionInterface;
 use Laminas\Filter\FilterChain;
 use Laminas\Hydrator\ExtractionInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\Hydrator\HydratorPluginManagerInterface;
 
 use function class_exists;
-use function get_class;
 use function gettype;
 use function is_object;
 use function is_string;
@@ -78,7 +78,7 @@ class Metadata
     /**
      * Collection of additional relational links to inject in entity
      *
-     * @var array
+     * @var array<array-key,array<mixed>>
      */
     protected $links = [];
 
@@ -107,7 +107,7 @@ class Metadata
     /**
      * Additional route parameters to use when generating a self link for this entity
      *
-     * @var array
+     * @var array<string,mixed>
      */
     protected $routeParams = [];
 
@@ -134,10 +134,11 @@ class Metadata
      *
      * If the class does not exist, raises an exception.
      *
-     * @param  string $class
-     * @param  array $options
-     * @param  null|HydratorPluginManager|HydratorPluginManagerInterface $hydrators
+     * @param string $class
+     * @param array $options
+     * @param null|HydratorPluginManager|HydratorPluginManagerInterface $hydrators
      * @throws Exception\InvalidArgumentException
+     * @throws ExceptionInterface
      */
     public function __construct($class, array $options = [], $hydrators = null)
     {
@@ -158,9 +159,15 @@ class Metadata
             $this->setHydrators($hydrators);
         }
 
+        /** @var string|bool $legacyIdentifierName */
         $legacyIdentifierName = false;
 
+        /**
+         * @var string $key
+         * @var string $value
+         */
         foreach ($options as $key => $value) {
+            /** @var string $filteredKey */
             $filteredKey = $filter($key);
 
             if ($filteredKey === 'class') {
@@ -185,7 +192,6 @@ class Metadata
                 $legacyIdentifierName = $value;
                 continue;
             }
-
             $method = 'set' . $filteredKey;
             if (method_exists($this, $method)) {
                 $this->$method($value);
@@ -197,12 +203,12 @@ class Metadata
                 ));
             }
         }
-
-        if ($legacyIdentifierName && ! $this->routeIdentifierName) {
+        /** @psalm-var string $legacyIdentifierName */
+        if ($legacyIdentifierName && (! isset($this->routeIdentifierName) || ! $this->routeIdentifierName)) {
             $this->setRouteIdentifierName($legacyIdentifierName);
         }
 
-        if ($legacyIdentifierName && ! $this->entityIdentifierName) {
+        if ($legacyIdentifierName && (! isset($this->entityIdentifierName) || ! $this->entityIdentifierName)) {
             $this->setEntityIdentifierName($legacyIdentifierName);
         }
     }
@@ -260,7 +266,7 @@ class Metadata
     /**
      * Retrieve set of relational links to inject, if any
      *
-     * @return array
+     * @return array<array-key,array<mixed>>
      */
     public function getLinks()
     {
@@ -327,7 +333,7 @@ class Metadata
     /**
      * Retrieve any route parameters to use in URL generation
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function getRouteParams()
     {
@@ -422,12 +428,13 @@ class Metadata
             ) {
                 $hydrator = $this->hydrators->get($hydrator);
             } elseif (class_exists($hydrator)) {
+                /** @var ExtractionInterface $hydrator */
                 $hydrator = new $hydrator();
             }
         }
         if (! $hydrator instanceof ExtractionInterface) {
             if (is_object($hydrator)) {
-                $type = get_class($hydrator);
+                $type = $hydrator::class;
             } elseif (is_string($hydrator)) {
                 $type = $hydrator;
             } else {
@@ -445,7 +452,7 @@ class Metadata
     /**
      * Set the entity identifier name
      *
-     * @param  string|mixed $identifier
+     * @param  string $identifier
      * @return self
      */
     public function setEntityIdentifierName($identifier)
@@ -457,7 +464,7 @@ class Metadata
     /**
      * Set the route identifier name
      *
-     * @param  string|mixed $identifier
+     * @param  string $identifier
      * @return self
      */
     public function setRouteIdentifierName($identifier)
@@ -469,12 +476,11 @@ class Metadata
     /**
      * Set the flag indicating collection status
      *
-     * @param  bool $flag
      * @return self
      */
-    public function setIsCollection($flag)
+    public function setIsCollection(bool $flag)
     {
-        $this->isCollection = (bool) $flag;
+        $this->isCollection = $flag;
         return $this;
     }
 
@@ -491,7 +497,7 @@ class Metadata
      *   "params" (optional; additional parameters to inject), and "options"
      *   (optional; additional options to pass to the router for assembly)
      *
-     * @param  array $links
+     * @param  array<array-key, array<array-key, mixed>> $links
      * @return self
      */
     public function setLinks(array $links)
@@ -559,7 +565,7 @@ class Metadata
     /**
      * Set route parameters for URL generation
      *
-     * @param  array $params
+     * @param  array<string,mixed> $params
      * @return self
      */
     public function setRouteParams(array $params)
@@ -630,7 +636,7 @@ class Metadata
                 self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
-                is_object($hydrators) ? get_class($hydrators) : gettype($hydrators)
+                is_object($hydrators) ? $hydrators::class : gettype($hydrators)
             ));
         }
     }

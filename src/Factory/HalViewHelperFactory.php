@@ -8,8 +8,10 @@ use Interop\Container\ContainerInterface;
 use Laminas\ApiTools\Hal\Exception;
 use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
 use Laminas\ApiTools\Hal\Link;
+use Laminas\ApiTools\Hal\Metadata\MetadataMap;
 use Laminas\ApiTools\Hal\Plugin;
 use Laminas\ApiTools\Hal\RendererOptions;
+use Laminas\EventManager\EventManagerInterface;
 use Laminas\Hydrator\HydratorInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\ServiceManager\AbstractPluginManager;
@@ -31,7 +33,8 @@ class HalViewHelperFactory
 
         /** @var RendererOptions $rendererOptions */
         $rendererOptions = $container->get(RendererOptions::class);
-        $metadataMap     = $container->get('Laminas\ApiTools\Hal\MetadataMap');
+        /** @var MetadataMap $metadataMap */
+        $metadataMap = $container->get('Laminas\ApiTools\Hal\MetadataMap');
 
         /** @var HydratorPluginManager $hydrators */
         $hydrators = $metadataMap->getHydratorManager();
@@ -39,14 +42,17 @@ class HalViewHelperFactory
         $helper = new Plugin\Hal($hydrators);
 
         if ($container->has('EventManager')) {
-            $helper->setEventManager($container->get('EventManager'));
+            /** @var EventManagerInterface $eventManager */
+            $eventManager = $container->get('EventManager');
+            $helper->setEventManager($eventManager);
         }
 
         $helper->setMetadataMap($metadataMap);
-
+        /** @var Link\LinkUrlBuilder $linkUrlBuilder */
         $linkUrlBuilder = $container->get(Link\LinkUrlBuilder::class);
         $helper->setLinkUrlBuilder($linkUrlBuilder);
 
+        /** @var LinkCollectionExtractor $linkCollectionExtractor */
         $linkCollectionExtractor = $container->get(LinkCollectionExtractor::class);
         $helper->setLinkCollectionExtractor($linkCollectionExtractor);
 
