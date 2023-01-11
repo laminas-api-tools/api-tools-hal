@@ -75,7 +75,7 @@
             "@cs-check",
             "@test"
         ],
-        "cs-check": "phpcs -s",
+        "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit",
         "test-coverage": "phpunit --coverage-clover clover.xml",
