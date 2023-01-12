@@ -77,12 +77,11 @@ class HalJsonStrategy extends JsonStrategy
         $model    = $e->getModel();
         $response = $e->getResponse();
 
-        if (null === $response) {
+        if (! $response instanceof Response) {
             // There is no response
             return;
         }
 
-        /** @psalm-var Response $response */
         $response->setContent($result);
 
         $headers = $response->getHeaders();

@@ -21,8 +21,19 @@
     <rule ref="LaminasCodingStandard"/>
 
     <rule ref="WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid">
-        <exclude-pattern>./src/*</exclude-pattern>
-        <exclude-pattern>./test/*</exclude-pattern>
+        <exclude-pattern>src/Plugin/Hal.php</exclude-pattern>
+        <exclude-pattern>test/ResourceFactoryTest.php</exclude-pattern>
+        <exclude-pattern>src/Factory/HalJsonRendererFactory.php</exclude-pattern>
+        <exclude-pattern>test/Factory/MetadataMapFactoryTest.php</exclude-pattern>
+        <exclude-pattern>src/Factory/HalViewHelperFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/LinkUrlBuilderFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/RendererOptionsFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/MetadataMapFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/HalJsonStrategyFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/LinkCollectionExtractorFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/HalControllerPluginFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/LinkExtractorFactory.php</exclude-pattern>
+        <exclude-pattern>src/Factory/HalConfigFactory.php</exclude-pattern>
     </rule>
 
     <rule ref="WebimpressCodingStandard.PHP.CorrectClassNameCase.InvalidInPhpDocs">

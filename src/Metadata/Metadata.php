@@ -12,6 +12,7 @@ use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\Hydrator\HydratorPluginManagerInterface;
 
 use function class_exists;
+use function get_debug_type;
 use function gettype;
 use function is_object;
 use function is_string;
@@ -78,7 +79,13 @@ class Metadata
     /**
      * Collection of additional relational links to inject in entity
      *
-     * @var array<array-key,array<mixed>>
+     * @var array<array-key,array{
+     *     rel: string|array<array-key,string>,
+     *     props?: array<array-key,mixed>,
+     *     href?: string,
+     *     route?: string|array{name:string,params:string|array<array-key,mixed>,options:string|array<array-key,mixed>},
+     *     url?: string
+     * }>
      */
     protected $links = [];
 
@@ -135,7 +142,7 @@ class Metadata
      * If the class does not exist, raises an exception.
      *
      * @param string $class
-     * @param array $options
+     * @param array<string,string> $options
      * @param null|HydratorPluginManager|HydratorPluginManagerInterface $hydrators
      * @throws Exception\InvalidArgumentException
      * @throws ExceptionInterface
@@ -162,10 +169,6 @@ class Metadata
         /** @var string|bool $legacyIdentifierName */
         $legacyIdentifierName = false;
 
-        /**
-         * @var string $key
-         * @var string $value
-         */
         foreach ($options as $key => $value) {
             /** @var string $filteredKey */
             $filteredKey = $filter($key);
@@ -266,7 +269,13 @@ class Metadata
     /**
      * Retrieve set of relational links to inject, if any
      *
-     * @return array<array-key,array<mixed>>
+     * @return array<array-key,array{
+     *     rel: string|array<array-key,string>,
+     *     props?: array<array-key,mixed>,
+     *     href?: string,
+     *     route?: string|array{name:string,params:string|array<array-key,mixed>,options:string|array<array-key,mixed>},
+     *     url?: string
+     * }>
      */
     public function getLinks()
     {
@@ -497,7 +506,13 @@ class Metadata
      *   "params" (optional; additional parameters to inject), and "options"
      *   (optional; additional options to pass to the router for assembly)
      *
-     * @param  array<array-key, array<array-key, mixed>> $links
+     * @psalm-param array<array-key,array{
+     *     rel: string|array<array-key,string>,
+     *     props?: array<array-key,mixed>,
+     *     href?: string,
+     *     route?: string|array{name:string,params:string|array<array-key,mixed>,options:string|array<array-key,mixed>},
+     *     url?: string
+     * }> $links
      * @return self
      */
     public function setLinks(array $links)
@@ -636,7 +651,7 @@ class Metadata
                 self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
-                is_object($hydrators) ? $hydrators::class : gettype($hydrators)
+                get_debug_type($hydrators)
             ));
         }
     }

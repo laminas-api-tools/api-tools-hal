@@ -1862,7 +1862,7 @@ class HalTest extends TestCase
         }
     }
 
-    /** @psalm-return array{-1: array{-1}, 1000: array{1000}} */
+    /** @return array<int, array{0: int}> */
     public function invalidPages(): array
     {
         return [

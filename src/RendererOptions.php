@@ -38,11 +38,12 @@ class RendererOptions extends AbstractOptions
     }
 
     /**
+     * @param bool $flag
      * @return void
      */
-    public function setRenderEmbeddedEntities(bool $flag)
+    public function setRenderEmbeddedEntities($flag)
     {
-        $this->renderEmbeddedEntities = $flag;
+        $this->renderEmbeddedEntities = (bool) $flag;
     }
 
     /**
@@ -54,11 +55,12 @@ class RendererOptions extends AbstractOptions
     }
 
     /**
+     * @param bool $flag
      * @return void
      */
-    public function setRenderEmbeddedCollections(bool $flag)
+    public function setRenderEmbeddedCollections($flag)
     {
-        $this->renderEmbeddedCollections = $flag;
+        $this->renderEmbeddedCollections = (bool) $flag;
     }
 
     /**

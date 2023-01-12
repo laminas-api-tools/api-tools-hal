@@ -5,7 +5,6 @@
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
     errorBaseline="psalm-baseline.xml"
-    cacheDirectory="/tmp/x"
 >
     <projectFiles>
         <directory name="src"/>
@@ -27,6 +26,12 @@
                 <referencedMethod name="PHPUnit\Framework\MockObject\Builder\InvocationMocker::with"/>
             </errorLevel>
         </InternalMethod>
+
+        <PossiblyInvalidPropertyAssignmentValue>
+            <errorLevel type="suppress">
+                <file name="src/Collection.php"/>
+            </errorLevel>
+        </PossiblyInvalidPropertyAssignmentValue>
 
         <InvalidArgument>
             <errorLevel type="suppress">

@@ -6,7 +6,7 @@ namespace Laminas\ApiTools\Hal;
 
 use Closure;
 use Laminas\ApiTools\Hal\Exception;
-use laminas\apitools\hal\extractor\entityextractor;
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
 use Laminas\ApiTools\Hal\Link\Link;
 use Laminas\ApiTools\Hal\Link\LinkCollection;
 use Laminas\ApiTools\Hal\Metadata\Metadata;
@@ -15,6 +15,7 @@ use Traversable;
 
 use function array_merge;
 use function call_user_func_array;
+use function get_debug_type;
 use function is_callable;
 use function sprintf;
 
@@ -23,19 +24,19 @@ class ResourceFactory
     /** @var EntityHydratorManager */
     protected $entityHydratorManager;
 
-    /** @var entityextractor */
-    protected $entityextractor;
+    /** @var EntityExtractor */
+    protected $entityExtractor;
 
-    public function __construct(EntityHydratorManager $entityHydratorManager, entityextractor $entityextractor)
+    public function __construct(EntityHydratorManager $entityHydratorManager, EntityExtractor $entityExtractor)
     {
         $this->entityHydratorManager = $entityHydratorManager;
-        $this->entityextractor       = $entityextractor;
+        $this->entityExtractor       = $entityExtractor;
     }
 
     /**
      * Create a entity and/or collection based on a metadata map
      *
-     * @param  object|array|Traversable|Paginator $object
+     * @param  Paginator<int, mixed>|Traversable|array<array-key, mixed> $object
      * @param  bool $renderEmbeddedEntities
      * @return Entity|Collection
      * @throws Exception\RuntimeException
@@ -43,23 +44,21 @@ class ResourceFactory
     public function createEntityFromMetadata($object, Metadata $metadata, $renderEmbeddedEntities = true)
     {
         if ($metadata->isCollection()) {
-            /** @psalm-var Paginator<int, mixed>|Traversable|array<array-key, mixed> $object */
             return $this->createCollectionFromMetadata($object, $metadata);
         }
 
-        /** @psalm-var object $object */
-        $data = $this->entityextractor->extract($object);
+        /** @psalm-var array<string,mixed> $data */
+        $data = $this->entityExtractor->extract($object);
 
         $entityIdentifierName = $metadata->getEntityIdentifierName();
         if ($entityIdentifierName && ! isset($data[$entityIdentifierName])) {
             throw new Exception\RuntimeException(sprintf(
                 'Unable to determine entity identifier for object of type "%s"; no fields matching "%s"',
-                $object::class,
+                get_debug_type($object),
                 $entityIdentifierName
             ));
         }
 
-        /** @psalm-var array<string,mixed> $data */
         /** @var string|null $id */
         $id = $entityIdentifierName ? $data[$entityIdentifierName] : null;
 
@@ -140,7 +139,7 @@ class ResourceFactory
         if (! $metadata->hasRoute()) {
             throw new Exception\RuntimeException(sprintf(
                 'Unable to create a self link for resource of type "%s"; metadata does not contain a route or a href',
-                $object::class
+                get_debug_type($object)
             ));
         }
 

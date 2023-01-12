@@ -9,6 +9,7 @@ use Laminas\Hydrator\ExtractionInterface;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\Hydrator\HydratorPluginManagerInterface;
 
+use function get_debug_type;
 use function is_string;
 use function sprintf;
 use function strtolower;
@@ -51,7 +52,7 @@ class EntityHydratorManager
                 self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
-                $hydrators::class
+                get_debug_type($hydrators)
             ));
         }
         $this->hydrators   = $hydrators;

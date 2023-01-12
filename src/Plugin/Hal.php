@@ -43,6 +43,7 @@ use Traversable;
 use function array_key_exists;
 use function array_merge;
 use function count;
+use function get_debug_type;
 use function intval;
 use function is_array;
 use function is_object;
@@ -132,7 +133,7 @@ class Hal extends AbstractHelper implements
                 self::class,
                 HydratorPluginManagerInterface::class,
                 HydratorPluginManager::class,
-                $hydrators::class,
+                get_debug_type($hydrators),
             ));
         }
     }
@@ -768,7 +769,7 @@ class Hal extends AbstractHelper implements
         }
 
         $events = $this->getEventManager();
-        /** @var array<array-key, mixed>|object $eventParams */
+        /** @var ArrayObject<string, mixed> $eventParams */
         $eventParams = $events->prepareArgs([
             'route'    => $route,
             'id'       => $id,
@@ -1053,15 +1054,15 @@ class Hal extends AbstractHelper implements
 
         /** @var mixed $entity */
         foreach ($halCollection->getCollection() as $entity) {
-            /** @psalm-var array<string,mixed> $eventParams */
-            $eventParams = [
+            /** @psalm-var ArrayObject<string, mixed> $eventParams */
+            $eventParams = new ArrayObject([
                 'collection'   => $halCollection,
                 'entity'       => $entity,
                 'resource'     => $entity,
                 'route'        => $entityRoute,
                 'routeParams'  => $entityRouteParams,
                 'routeOptions' => $entityRouteOptions,
-            ];
+            ]);
             $events->trigger('renderCollection.resource', $this, $eventParams);
             $events->trigger('renderCollection.entity', $this, $eventParams);
 
