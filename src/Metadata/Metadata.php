@@ -206,13 +206,15 @@ class Metadata
                 ));
             }
         }
-        /** @psalm-var string $legacyIdentifierName */
-        if ($legacyIdentifierName && (! isset($this->routeIdentifierName) || ! $this->routeIdentifierName)) {
-            $this->setRouteIdentifierName($legacyIdentifierName);
-        }
 
-        if ($legacyIdentifierName && (! isset($this->entityIdentifierName) || ! $this->entityIdentifierName)) {
-            $this->setEntityIdentifierName($legacyIdentifierName);
+        if (is_string($legacyIdentifierName)) {
+            if (! isset($this->routeIdentifierName) || ! $this->routeIdentifierName) {
+                $this->setRouteIdentifierName($legacyIdentifierName);
+            }
+
+            if (! isset($this->entityIdentifierName) || ! $this->entityIdentifierName) {
+                $this->setEntityIdentifierName($legacyIdentifierName);
+            }
         }
     }
 
@@ -485,11 +487,12 @@ class Metadata
     /**
      * Set the flag indicating collection status
      *
+     * @param bool $flag
      * @return self
      */
-    public function setIsCollection(bool $flag)
+    public function setIsCollection($flag)
     {
-        $this->isCollection = $flag;
+        $this->isCollection = (bool) $flag;
         return $this;
     }
 

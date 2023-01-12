@@ -174,8 +174,7 @@ class MetadataMap
             return $this->map[$class];
         }
 
-        $options           = $this->map[$class];
-        $this->map[$class] = new Metadata($class, $options, $this->getHydratorManager());
+        $this->map[$class] = new Metadata($class, $this->map[$class], $this->getHydratorManager());
         return $this->map[$class];
     }
 }

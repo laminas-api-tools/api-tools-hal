@@ -14,10 +14,12 @@ use Laminas\Paginator\Paginator;
 use Traversable;
 
 use function array_merge;
-use function call_user_func_array;
 use function get_debug_type;
+use function is_array;
 use function is_callable;
+use function is_string;
 use function sprintf;
+use function str_contains;
 
 class ResourceFactory
 {
@@ -154,10 +156,14 @@ class ResourceFactory
                 $param = $param->bindTo($object);
             }
 
-            // pass the object for callbacks
+            // invoke callables with the object
             if (is_callable($param)) {
+                // @todo remove when minimum supported PHP version is bumped to 8.1 or greater
+                $callback = is_array($param) || (is_string($param) && str_contains($param, '::'))
+                    ? Closure::fromCallable($param)
+                    : $param;
                 /** @var mixed $value */
-                $value        = call_user_func_array($param, [$object]);
+                $value        = $callback($object);
                 $params[$key] = $value;
             }
         }

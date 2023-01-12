@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace LaminasTest\ApiTools\Hal\Factory;
 
+// phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
+// phpcs:enable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Laminas\ApiTools\Hal\Factory\MetadataMapFactory;
 use Laminas\ApiTools\Hal\Metadata\Metadata;
 use Laminas\ApiTools\Hal\Metadata\MetadataMap;

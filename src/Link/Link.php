@@ -79,8 +79,7 @@ class Link implements LinkInterface
             ));
         }
 
-        $relation = $spec['rel'];
-        $link     = new static($relation);
+        $link = new static($spec['rel']);
 
         if (
             isset($spec['props'])

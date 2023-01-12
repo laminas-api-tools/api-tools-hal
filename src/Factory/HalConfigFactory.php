@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Laminas\ApiTools\Hal\Factory;
 
 use ArrayAccess;
+// phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
+
+// phpcs:enable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 
 use function is_array;
 

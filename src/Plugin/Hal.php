@@ -156,16 +156,16 @@ class Hal extends AbstractHelper implements
      *
      * @return self
      */
-    public function setEventManager(EventManagerInterface $eventManager)
+    public function setEventManager(EventManagerInterface $events)
     {
-        $eventManager->setIdentifiers([
+        $events->setIdentifiers([
             self::class,
             static::class,
         ]);
 
-        $this->events = $eventManager;
+        $this->events = $events;
 
-        $eventManager->attach('getIdFromEntity', function (EventInterface $e) {
+        $events->attach('getIdFromEntity', function (EventInterface $e) {
             $entity = $e->getParam('entity');
 
             // Found id in array
@@ -694,9 +694,8 @@ class Hal extends AbstractHelper implements
         if (! is_array($entity)) {
             $entity = $this->getEntityExtractor()->extract($entity);
         }
-        /**
-         * @var mixed $value
-         */
+
+        /** @var mixed $value */
         foreach ($entity as $key => $value) {
             if (is_object($value) && $metadataMap->has($value)) {
                 /** @psalm-suppress PossiblyFalseArgument */
@@ -1163,10 +1162,7 @@ class Hal extends AbstractHelper implements
             'resource' => $entity,
         ];
 
-        /**
-         * @param mixed $r
-         */
-        $callback = function ($r): bool {
+        $callback = function (mixed $r): bool {
             return null !== $r && false !== $r;
         };
 

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Factory;
 
+// phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
+// phpcs:enable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Laminas\ApiTools\Hal\Metadata;
 use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;

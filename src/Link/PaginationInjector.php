@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Link;
 
+use Countable;
 use Laminas\ApiTools\ApiProblem\ApiProblem;
 use Laminas\ApiTools\Hal\Collection;
 use Laminas\Paginator\Paginator;
 use Laminas\Stdlib\ArrayUtils;
 
 use function count;
+use function is_array;
 
 class PaginationInjector implements PaginationInjectorInterface
 {
@@ -76,10 +78,13 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function injectLastLink(Collection $halCollection): void
     {
-        /** @var Paginator $collection */
         $collection = $halCollection->getCollection();
-        $page       = $collection->count();
-        $link       = $this->createPaginationLink('last', $halCollection, $page);
+        $page       = match (true) {
+            $collection instanceof Countable => $collection->count(),
+            is_array($collection) => count($collection),
+            default => 1,
+        };
+        $link = $this->createPaginationLink('last', $halCollection, $page);
         $halCollection->getLinks()->add($link);
     }
 
@@ -99,8 +104,12 @@ class PaginationInjector implements PaginationInjectorInterface
         $page = $halCollection->getPage();
         /** @var Paginator $collection */
         $collection = $halCollection->getCollection();
-        $pageCount  = $collection->count();
-        $next       = $page < $pageCount ? $page + 1 : false;
+        $pageCount  = match (true) {
+            $collection instanceof Countable => $collection->count(),
+            is_array($collection) => count($collection),
+            default => $page,
+        };
+        $next = $page < $pageCount ? $page + 1 : false;
 
         if ($next) {
             $link = $this->createPaginationLink('next', $halCollection, $next);
