@@ -51,6 +51,12 @@
             </errorLevel>
         </MissingClosureParamType>
 
+        <ParamNameMismatch>
+            <errorLevel type="suppress">
+                <file name="src/Plugin/Hal.php"/>
+            </errorLevel>
+        </ParamNameMismatch>
+
         <MixedArrayAssignment>
             <errorLevel type="suppress">
                 <file name="src/Plugin/Hal.php"/>
