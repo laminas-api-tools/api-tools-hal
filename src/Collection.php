@@ -103,6 +103,7 @@ class Collection implements Link\LinkCollectionAwareInterface
      */
     public function __construct($collection, $entityRoute = null, $entityRouteParams = null, $entityRouteOptions = null)
     {
+        /** @psalm-suppress DocblockTypeContradiction */
         if (! is_array($collection) && ! $collection instanceof Traversable && ! $collection instanceof Paginator) {
             throw new InvalidCollectionException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
@@ -111,6 +112,7 @@ class Collection implements Link\LinkCollectionAwareInterface
             ));
         }
 
+        /** @psalm-suppress PossiblyInvalidPropertyAssignmentValue */
         $this->collection = $collection;
 
         if (null !== $entityRoute) {

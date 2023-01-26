@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Factory;
 
-// phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
+// phpcs:ignore WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
-// phpcs:enable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Laminas\ApiTools\Hal\Exception;
 use Laminas\ApiTools\Hal\Extractor\LinkCollectionExtractor;
 use Laminas\ApiTools\Hal\Link;
@@ -19,6 +18,7 @@ use Laminas\Hydrator\HydratorPluginManager;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
+use function assert;
 use function sprintf;
 
 class HalViewHelperFactory
@@ -33,29 +33,29 @@ class HalViewHelperFactory
             ? $container->getServiceLocator()
             : $container;
 
-        /** @var RendererOptions $rendererOptions */
         $rendererOptions = $container->get(RendererOptions::class);
-        /** @var MetadataMap $metadataMap */
+        assert($rendererOptions instanceof RendererOptions);
         $metadataMap = $container->get('Laminas\ApiTools\Hal\MetadataMap');
+        assert($metadataMap instanceof MetadataMap);
 
-        /** @var HydratorPluginManager $hydrators */
         $hydrators = $metadataMap->getHydratorManager();
+        assert($hydrators instanceof HydratorPluginManager);
 
         $helper = new Plugin\Hal($hydrators);
 
         if ($container->has('EventManager')) {
-            /** @var EventManagerInterface $eventManager */
             $eventManager = $container->get('EventManager');
+            assert($eventManager instanceof EventManagerInterface);
             $helper->setEventManager($eventManager);
         }
 
         $helper->setMetadataMap($metadataMap);
-        /** @var Link\LinkUrlBuilder $linkUrlBuilder */
         $linkUrlBuilder = $container->get(Link\LinkUrlBuilder::class);
+        assert($linkUrlBuilder instanceof Link\LinkUrlBuilder);
         $helper->setLinkUrlBuilder($linkUrlBuilder);
 
-        /** @var LinkCollectionExtractor $linkCollectionExtractor */
         $linkCollectionExtractor = $container->get(LinkCollectionExtractor::class);
+        assert($linkCollectionExtractor instanceof LinkCollectionExtractor);
         $helper->setLinkCollectionExtractor($linkCollectionExtractor);
 
         $defaultHydrator = $rendererOptions->getDefaultHydrator();
@@ -67,8 +67,8 @@ class HalViewHelperFactory
                 ));
             }
 
-            /** @var HydratorInterface $hydrator */
             $hydrator = $hydrators->get($defaultHydrator);
+            assert($hydrator instanceof HydratorInterface);
             $helper->setDefaultHydrator($hydrator);
         }
 

@@ -80,7 +80,7 @@ class Link implements LinkInterface
         }
 
         $link = new static($spec['rel']);
-
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (
             isset($spec['props'])
             && is_array($spec['props'])
@@ -96,7 +96,7 @@ class Link implements LinkInterface
             $link->setUrl($url);
             return $link;
         }
-
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (isset($spec['href']) && is_string($spec['href'])) {
             $link->href = $spec['href'];
             return $link;
@@ -108,7 +108,7 @@ class Link implements LinkInterface
                 $link->setRoute($routeInfo);
                 return $link;
             }
-
+            /** @psalm-suppress DocblockTypeContradiction */
             if (! is_array($routeInfo)) {
                 throw new Exception\InvalidArgumentException(sprintf(
                     '%s requires that the specification array\'s "route" element be a string or array; received "%s"',
@@ -130,6 +130,7 @@ class Link implements LinkInterface
             $options = isset($routeInfo['options']) && is_array($routeInfo['options'])
                 ? $routeInfo['options']
                 : [];
+            /** @psalm-suppress RedundantCastGivenDocblockType */
             $link->setRoute((string) $name, $params, $options);
             return $link;
         }

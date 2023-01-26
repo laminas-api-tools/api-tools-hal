@@ -109,6 +109,7 @@ class HalJsonRenderer extends JsonRenderer
             /** @psalm-var Entity $entity */
             $entity  = $nameOrModel->getPayload();
             $payload = $helper->renderEntity($entity);
+            /** @psalm-suppress InvalidArgument */
             return parent::render($payload);
         }
 

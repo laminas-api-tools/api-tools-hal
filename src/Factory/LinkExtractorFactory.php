@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Factory;
 
-// phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
+// phpcs:ignore WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
-// phpcs:enable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Laminas\ApiTools\Hal\Extractor\LinkExtractor;
 use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
 use Laminas\ServiceManager\ServiceLocatorInterface;

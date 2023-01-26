@@ -155,6 +155,7 @@ class Hal extends AbstractHelper implements
      * Set the event manager instance
      *
      * @return self
+     * @psalm-suppress ParamNameMismatch
      */
     public function setEventManager(EventManagerInterface $events)
     {
@@ -698,7 +699,7 @@ class Hal extends AbstractHelper implements
         /** @var mixed $value */
         foreach ($entity as $key => $value) {
             if (is_object($value) && $metadataMap->has($value)) {
-                /** @psalm-suppress PossiblyFalseArgument */
+                /** @psalm-suppress PossiblyFalseArgument,ArgumentTypeCoercion */
                 $value = $this->getResourceFactory()->createEntityFromMetadata(
                     $value,
                     $metadataMap->get($value),
@@ -850,6 +851,7 @@ class Hal extends AbstractHelper implements
      */
     public function createEntityFromMetadata($object, Metadata $metadata, $renderEmbeddedEntities = true)
     {
+        /** @psalm-suppress ArgumentTypeCoercion */
         return $this->getResourceFactory()->createEntityFromMetadata(
             $object,
             $metadata,
@@ -892,7 +894,7 @@ class Hal extends AbstractHelper implements
         $metadataMap = $this->getMetadataMap();
 
         if (is_object($entity) && $metadataMap->has($entity)) {
-            /** @psalm-suppress PossiblyFalseArgument */
+            /** @psalm-suppress PossiblyFalseArgument,ArgumentTypeCoercion */
             $halEntity = $this->getResourceFactory()->createEntityFromMetadata(
                 $entity,
                 $metadataMap->get($entity)
@@ -938,6 +940,7 @@ class Hal extends AbstractHelper implements
             $collection = new Collection($collection);
         }
         $metadata = $metadataMap->get($collection);
+        /** @psalm-suppress RedundantConditionGivenDocblockType */
         if (! $metadata || ($metadata && $metadata->getForceSelfLink())) {
             $this->injectSelfLink($collection, $route);
         }
@@ -1068,8 +1071,9 @@ class Hal extends AbstractHelper implements
             /** @var object $entity */
             $entity = $eventParams['entity'];
 
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
             if (is_object($entity) && $metadataMap->has($entity)) {
-                /** @psalm-suppress PossiblyFalseArgument */
+                /** @psalm-suppress PossiblyFalseArgument,ArgumentTypeCoercion */
                 $entity = $this->getResourceFactory()->createEntityFromMetadata($entity, $metadataMap->get($entity));
             }
 
@@ -1079,6 +1083,7 @@ class Hal extends AbstractHelper implements
                 continue;
             }
 
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
             if (! is_array($entity)) {
                 $entity = $this->getEntityExtractor()->extract($entity);
             }
@@ -1086,7 +1091,7 @@ class Hal extends AbstractHelper implements
             /** @var mixed $value */
             foreach ($entity as $key => $value) {
                 if (is_object($value) && $metadataMap->has($value)) {
-                    /** @psalm-suppress PossiblyFalseArgument */
+                    /** @psalm-suppress PossiblyFalseArgument,ArgumentTypeCoercion */
                     $value = $this->getResourceFactory()->createEntityFromMetadata($value, $metadataMap->get($value));
                 }
 

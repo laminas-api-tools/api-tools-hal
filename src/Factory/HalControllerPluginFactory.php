@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Factory;
 
-// phpcs:disable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
+// phpcs:ignore WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
-// phpcs:enable WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Laminas\ApiTools\Hal\Plugin\Hal;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\FactoryInterface;
@@ -34,6 +33,7 @@ class HalControllerPluginFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         if ($serviceLocator instanceof AbstractPluginManager) {
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
             $serviceLocator = $serviceLocator->getServiceLocator() ?: $serviceLocator;
         }
         /** @psalm-var Hal */

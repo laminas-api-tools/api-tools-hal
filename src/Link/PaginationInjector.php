@@ -9,6 +9,7 @@ use Laminas\ApiTools\ApiProblem\ApiProblem;
 use Laminas\ApiTools\Hal\Collection;
 use Laminas\Paginator\Paginator;
 use Laminas\Stdlib\ArrayUtils;
+use Traversable;
 
 use function count;
 use function is_array;
@@ -78,12 +79,7 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function injectLastLink(Collection $halCollection): void
     {
-        $collection = $halCollection->getCollection();
-        $page       = match (true) {
-            $collection instanceof Countable => $collection->count(),
-            is_array($collection) => count($collection),
-            default => 1,
-        };
+        $page = $this->countCollection($halCollection->getCollection());
         $link = $this->createPaginationLink('last', $halCollection, $page);
         $halCollection->getLinks()->add($link);
     }
@@ -101,15 +97,9 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function injectNextLink(Collection $halCollection): void
     {
-        $page = $halCollection->getPage();
-        /** @var Paginator $collection */
-        $collection = $halCollection->getCollection();
-        $pageCount  = match (true) {
-            $collection instanceof Countable => $collection->count(),
-            is_array($collection) => count($collection),
-            default => $page,
-        };
-        $next = $page < $pageCount ? $page + 1 : false;
+        $page      = $halCollection->getPage();
+        $pageCount = $this->countCollection($halCollection->getCollection());
+        $next      = $page < $pageCount ? $page + 1 : false;
 
         if ($next) {
             $link = $this->createPaginationLink('next', $halCollection, $next);
@@ -137,5 +127,15 @@ class PaginationInjector implements PaginationInjectorInterface
                 'options' => $options,
             ],
         ]);
+    }
+
+    /** @param array<mixed>|Traversable|Paginator $collection */
+    private function countCollection(mixed $collection): int
+    {
+        return match (true) {
+            $collection instanceof Countable => $collection->count(),
+            is_array($collection) => count($collection),
+            default => 1,
+        };
     }
 }
