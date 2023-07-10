@@ -13,6 +13,7 @@ use Laminas\ApiTools\Hal\Link\Link;
 use Laminas\ApiTools\Hal\View\HalJsonModel;
 use Laminas\ApiTools\Hal\View\HalJsonRenderer;
 use Laminas\ApiTools\Hal\View\HalJsonStrategy;
+use Laminas\Http\Header\HeaderInterface;
 use Laminas\Http\Response;
 use Laminas\View\ViewEvent;
 use PHPUnit\Framework\TestCase;
@@ -81,13 +82,13 @@ class HalJsonStrategyTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, array<array-key, mixed>>
      */
     public function halObjects()
     {
         $entity = new Entity([
             'foo' => 'bar',
-        ], 'identifier', 'route');
+        ], 'identifier');
         $link   = new Link('self');
         $link->setRoute('resource/route')->setRouteParams(['id' => 'identifier']);
         $entity->getLinks()->add($link);
@@ -104,7 +105,7 @@ class HalJsonStrategyTest extends TestCase
 
     /**
      * @dataProvider halObjects
-     * @param array $hal
+     * @param array<string, array<array-key, mixed>> $hal
      */
     public function testInjectResponseSetsContentTypeHeaderToHalForHalModel($hal): void
     {
@@ -116,7 +117,7 @@ class HalJsonStrategyTest extends TestCase
         $this->strategy->injectResponse($this->event);
         $headers = $this->response->getHeaders();
         self::assertTrue($headers->has('Content-Type'));
-        $header = $headers->get('Content-Type');
+        $this->assertInstanceOf(HeaderInterface::class, $header = $headers->get('Content-Type'));
         self::assertEquals('application/hal+json', $header->getFieldValue());
     }
 
@@ -131,7 +132,7 @@ class HalJsonStrategyTest extends TestCase
         $this->strategy->injectResponse($this->event);
         $headers = $this->response->getHeaders();
         self::assertTrue($headers->has('Content-Type'));
-        $header = $headers->get('Content-Type');
+        $this->assertInstanceOf(HeaderInterface::class, $header = $headers->get('Content-Type'));
         self::assertEquals('application/problem+json', $header->getFieldValue());
     }
 }

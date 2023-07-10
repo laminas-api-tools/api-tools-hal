@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LaminasTest\ApiTools\Hal;
 
+use ArrayAccess;
 use Laminas\ApiTools\Hal\Collection;
 use Laminas\ApiTools\Hal\Entity;
 use Laminas\ApiTools\Hal\EntityHydratorManager;
@@ -24,10 +25,10 @@ class ResourceFactoryTest extends TestCase
      */
     public function testInjectsLinksFromMetadataWhenCreatingEntity(): void
     {
-        $object = new HalPluginTestAsset\Entity('foo', 'Foo');
+        $object = new Plugin\TestAsset\Entity('foo', 'Foo');
 
         $metadata = new MetadataMap([
-            HalPluginTestAsset\Entity::class => [
+            Plugin\TestAsset\Entity::class => [
                 'hydrator'   => ObjectProperty::class,
                 'route_name' => 'hostname/resource',
                 'links'      => [
@@ -48,7 +49,7 @@ class ResourceFactoryTest extends TestCase
 
         $resourceFactory = $this->getResourceFactory($metadata);
 
-        $entityMetadata = $metadata->get(HalPluginTestAsset\Entity::class);
+        $entityMetadata = $metadata->get(Plugin\TestAsset\Entity::class);
         $this->assertInstanceOf(Metadata::class, $entityMetadata, 'Did not match entity to metadata?');
 
         $entity = $resourceFactory->createEntityFromMetadata($object, $entityMetadata);
@@ -59,12 +60,12 @@ class ResourceFactoryTest extends TestCase
         self::assertTrue($links->has('children'));
 
         $describedby = $links->get('describedby');
-        self::assertTrue($describedby->hasUrl());
-        self::assertEquals('http://example.com/api/help/resource', $describedby->getUrl());
+        self::assertTrue($describedby?->hasUrl());
+        self::assertEquals('http://example.com/api/help/resource', $describedby?->getUrl());
 
         $children = $links->get('children');
-        self::assertTrue($children->hasRoute());
-        self::assertEquals('resource/children', $children->getRoute());
+        self::assertTrue($children?->hasRoute());
+        self::assertEquals('resource/children', $children?->getRoute());
     }
 
     /**
@@ -79,19 +80,19 @@ class ResourceFactoryTest extends TestCase
      */
     public function testRouteParamsAllowsCallable(): void
     {
-        $object = new HalPluginTestAsset\Entity('foo', 'Foo');
+        $object = new Plugin\TestAsset\Entity('foo', 'Foo');
 
         $entityDefiningCallback = new TestAsset\EntityDefiningCallback($this, $object);
 
         $test = $this;
 
         $metadata = new MetadataMap([
-            HalPluginTestAsset\Entity::class => [
+            Plugin\TestAsset\Entity::class => [
                 'hydrator'     => ObjectProperty::class,
                 'route_name'   => 'hostname/resource',
                 'route_params' => [
                     'test-1' => [$entityDefiningCallback, 'callback'],
-                    'test-2' => function ($expected) use ($object, $test) {
+                    'test-2' => function (Plugin\TestAsset\Entity $expected) use ($object, $test) {
                         $test->assertSame($expected, $object);
                         $test->assertSame($object, $this);
 
@@ -103,7 +104,7 @@ class ResourceFactoryTest extends TestCase
 
         $resourceFactory = $this->getResourceFactory($metadata);
 
-        $entityMetadata = $metadata->get(HalPluginTestAsset\Entity::class);
+        $entityMetadata = $metadata->get(Plugin\TestAsset\Entity::class);
         $this->assertInstanceOf(Metadata::class, $entityMetadata, 'Did not match entity to metadata?');
 
         $entity = $resourceFactory->createEntityFromMetadata($object, $entityMetadata);
@@ -113,8 +114,9 @@ class ResourceFactoryTest extends TestCase
         $links = $entity->getLinks();
         self::assertTrue($links->has('self'));
 
-        $self   = $links->get('self');
-        $params = $self->getRouteParams();
+        $self = $links->get('self');
+        /** @var ArrayAccess|array<array-key, mixed> $params */
+        $params = $self?->getRouteParams() ?? [];
 
         self::assertArrayHasKey('test-1', $params);
         self::assertEquals('callback-param', $params['test-1']);
@@ -160,8 +162,8 @@ class ResourceFactoryTest extends TestCase
         $links = $collection->getLinks();
         self::assertTrue($links->has('describedby'));
         $link = $links->get('describedby');
-        self::assertTrue($link->hasUrl());
-        self::assertEquals('http://example.com/api/help/collection', $link->getUrl());
+        self::assertTrue($link?->hasUrl());
+        self::assertEquals('http://example.com/api/help/collection', $link?->getUrl());
     }
 
     private function getResourceFactory(MetadataMap $metadata): ResourceFactory

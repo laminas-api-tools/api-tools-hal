@@ -27,13 +27,16 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
     }
 
     /**
-     * @param null|array|Entity|Collection $resource
-     * @param string|array $route
+     * @param null|array|Entity|Collection|LinkCollectionAwareInterface $resource
+     * @psalm-param string|array{
+     *     name:string,params:string|array<array-key,mixed>,options:string|array<array-key,mixed>
+     * } $route
      * @param string $routeIdentifier
      * @return Link
      */
     private function createSelfLink($resource, $route, $routeIdentifier)
     {
+        /** @psalm-var array|Collection|Entity|null $resource */
         // build route
         if (! is_array($route)) {
             $route = ['name' => (string) $route];
@@ -47,11 +50,18 @@ class SelfLinkInjector implements SelfLinkInjectorInterface
             $route['options'] = $routeOptions;
         }
 
-        // build link
+        /** @psalm-var array{
+         *  rel: string|array<array-key,string>,
+         *  props?: array<array-key,mixed>,
+         *  href?: string,
+         *  route?:string|array{name:string,params:string|array<array-key,mixed>,options:string|array<array-key,mixed>},
+         *  url?: string
+         * } $spec */
         $spec = [
             'rel'   => 'self',
             'route' => $route,
         ];
+
         return Link::factory($spec);
     }
 

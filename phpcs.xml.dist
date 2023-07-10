@@ -20,12 +20,13 @@
     <!-- Include all rules from Laminas Coding Standard -->
     <rule ref="LaminasCodingStandard"/>
 
-    <rule ref="WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid">
-        <exclude-pattern>src/Plugin/Hal.php</exclude-pattern>
-        <exclude-pattern>test/ResourceFactoryTest.php</exclude-pattern>
-    </rule>
+    <rule ref="WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid"/>
 
     <rule ref="WebimpressCodingStandard.PHP.CorrectClassNameCase.InvalidInPhpDocs">
         <exclude-pattern>src/Plugin/Hal.php</exclude-pattern>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Variables.UselessVariable.UselessVariable">
+        <exclude-pattern>src/View/HalJsonRenderer.php</exclude-pattern>
+        <exclude-pattern>src/Metadata/MetadataMap.php</exclude-pattern>
     </rule>
 </ruleset>

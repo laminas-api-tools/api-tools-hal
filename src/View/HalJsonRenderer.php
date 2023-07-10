@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\View;
 
+use ArrayAccess;
 use Laminas\ApiTools\ApiProblem\ApiProblem;
 use Laminas\ApiTools\ApiProblem\View\ApiProblemModel;
 use Laminas\ApiTools\ApiProblem\View\ApiProblemRenderer;
+use Laminas\ApiTools\Hal\Collection;
+use Laminas\ApiTools\Hal\Entity;
+use Laminas\ApiTools\Hal\Plugin\Hal;
 use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ModelInterface;
 use Laminas\View\Renderer\JsonRenderer;
 use Laminas\View\ViewEvent;
 
@@ -23,10 +28,10 @@ class HalJsonRenderer extends JsonRenderer
     /** @var ApiProblemRenderer */
     protected $apiProblemRenderer;
 
-    /** @var HelperPluginManager */
+    /** @var HelperPluginManager|null */
     protected $helpers;
 
-    /** @var ViewEvent */
+    /** @var ViewEvent|null */
     protected $viewEvent;
 
     public function __construct(ApiProblemRenderer $apiProblemRenderer)
@@ -63,14 +68,15 @@ class HalJsonRenderer extends JsonRenderer
     public function getHelperPluginManager()
     {
         if (! $this->helpers instanceof HelperPluginManager) {
-            $this->setHelperPluginManager(new HelperPluginManager());
+            $this->setHelperPluginManager($helpers = new HelperPluginManager());
+            return $helpers;
         }
 
         return $this->helpers;
     }
 
     /**
-     * @return ViewEvent
+     * @return ViewEvent|null
      */
     public function getViewEvent()
     {
@@ -87,28 +93,37 @@ class HalJsonRenderer extends JsonRenderer
      * If not, it passes control to the parent to render.
      *
      * @param  mixed $nameOrModel
-     * @param  mixed $values
+     * @param  null|array|ArrayAccess $values
      * @return string
      */
     public function render($nameOrModel, $values = null)
     {
         if (! $nameOrModel instanceof HalJsonModel) {
+            /** @psalm-var ModelInterface|string $nameOrModel */
             return parent::render($nameOrModel, $values);
         }
 
         if ($nameOrModel->isEntity()) {
-            $helper  = $this->helpers->get('Hal');
-            $payload = $helper->renderEntity($nameOrModel->getPayload());
+            /** @psalm-var Hal $helper */
+            $helper = $this->getHelperPluginManager()->get('Hal');
+            /** @psalm-var Entity $entity */
+            $entity  = $nameOrModel->getPayload();
+            $payload = $helper->renderEntity($entity);
+            /** @psalm-suppress InvalidArgument */
             return parent::render($payload);
         }
 
         if ($nameOrModel->isCollection()) {
-            $helper  = $this->helpers->get('Hal');
-            $payload = $helper->renderCollection($nameOrModel->getPayload());
+            /** @var Hal $helper */
+            $helper = $this->getHelperPluginManager()->get('Hal');
+            /** @var Collection $collection */
+            $collection = $nameOrModel->getPayload();
+            $payload    = $helper->renderCollection($collection);
 
             if ($payload instanceof ApiProblem) {
                 return $this->renderApiProblem($payload);
             }
+            /** @psalm-suppress InvalidArgument to be discussed */
             return parent::render($payload);
         }
 
@@ -130,7 +145,7 @@ class HalJsonRenderer extends JsonRenderer
     {
         $model = new ApiProblemModel($problem);
         $event = $this->getViewEvent();
-        if ($event) {
+        if ($event instanceof ViewEvent) {
             $event->setModel($model);
         }
 

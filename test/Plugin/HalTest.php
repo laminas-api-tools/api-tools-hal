@@ -19,7 +19,9 @@ use Laminas\ApiTools\Hal\Metadata\Metadata;
 use Laminas\ApiTools\Hal\Metadata\MetadataMap;
 use Laminas\ApiTools\Hal\Plugin\Hal as HalHelper;
 use Laminas\EventManager\Event;
+use Laminas\EventManager\EventInterface;
 use Laminas\Hydrator;
+use Laminas\Hydrator\ExtractionInterface;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Mvc\Router\Exception as V2RouterException;
@@ -68,6 +70,9 @@ class HalTest extends TestCase
 
     /** @var UrlHelper */
     protected $urlHelper;
+
+    /** @var AbstractRestfulController */
+    protected $controller;
 
     public function setUp(): void
     {
@@ -152,6 +157,7 @@ class HalTest extends TestCase
         $plugin->setLinkCollectionExtractor($linkCollectionExtractor);
     }
 
+    /** @psalm-return class-string */
     public function getArraySerializableHydratorClass(): string
     {
         return class_exists(Hydrator\ArraySerializableHydrator::class)
@@ -159,6 +165,7 @@ class HalTest extends TestCase
             : Hydrator\ArraySerializable::class;
     }
 
+    /** @psalm-return class-string */
     public function getObjectPropertyHydratorClass(): string
     {
         return class_exists(Hydrator\ObjectPropertyHydrator::class)
@@ -795,12 +802,12 @@ class HalTest extends TestCase
         self::assertTrue($links->has('children'), 'Missing children link');
 
         $describedby = $links->get('describedby');
-        self::assertTrue($describedby->hasUrl());
-        self::assertEquals('http://example.com/api/help/resource', $describedby->getUrl());
+        self::assertTrue($describedby?->hasUrl());
+        self::assertEquals('http://example.com/api/help/resource', $describedby?->getUrl());
 
         $children = $links->get('children');
-        self::assertTrue($children->hasRoute());
-        self::assertEquals('resource/children', $children->getRoute());
+        self::assertTrue($children?->hasRoute());
+        self::assertEquals('resource/children', $children?->getRoute());
     }
 
     /**
@@ -819,7 +826,7 @@ class HalTest extends TestCase
         $self->setRoute('hostname/users', ['id' => 'user']);
         $entity->getLinks()->add($self);
 
-        $this->plugin->getEventManager()->attach('renderEntity', function ($e) {
+        $this->plugin->getEventManager()->attach('renderEntity', function (EventInterface $e) {
             $entity = $e->getParam('entity');
             $entity->getLinks()->get('self')->setRouteParams(['id' => 'matthew']);
         });
@@ -846,7 +853,7 @@ class HalTest extends TestCase
         $collection->getLinks()->add($self);
         $collection->setCollectionName('resources');
 
-        $this->plugin->getEventManager()->attach('renderCollection', function ($e) {
+        $this->plugin->getEventManager()->attach('renderCollection', function (EventInterface $e) {
             $collection = $e->getParam('collection');
             $collection->setAttributes(['injected' => true]);
         });
@@ -855,7 +862,7 @@ class HalTest extends TestCase
         self::assertArrayHasKey('injected', $rendered);
         self::assertTrue($rendered['injected']);
 
-        $this->plugin->getEventManager()->attach('renderCollection.post', function ($e) {
+        $this->plugin->getEventManager()->attach('renderCollection.post', function (EventInterface $e) {
             $collection = $e->getParam('collection');
             $payload    = $e->getParam('payload');
 
@@ -948,7 +955,7 @@ class HalTest extends TestCase
             'query' => [
                 'version' => 2,
             ],
-        ], $self->getRouteOptions());
+        ], $self?->getRouteOptions());
     }
 
     public function testRenderingCollectionUsesCollectionNameFromMetadataMap(): void
@@ -1020,6 +1027,7 @@ class HalTest extends TestCase
         $collection->setPage(3);
         $collection->setPageSize(10);
 
+        /** @var array<string,int> $rendered */
         $rendered = $this->plugin->renderCollection($collection);
         $expected = [
             '_links',
@@ -1111,7 +1119,7 @@ class HalTest extends TestCase
 
         $links = $hal->getLinks();
         self::assertTrue($links->has('self'));
-        $link   = $links->get('self');
+        $this->assertInstanceOf(Link::class, $link = $links->get('self'));
         $params = $link->getRouteParams();
         self::assertEquals([], $params);
     }
@@ -1289,6 +1297,7 @@ class HalTest extends TestCase
         self::assertEquals($expectedResult, $result);
     }
 
+    /** @return array<array<mixed>> */
     public function renderCollectionWithMaxDepthProvider(): array
     {
         return [
@@ -1646,7 +1655,7 @@ class HalTest extends TestCase
 
     /**
      * @param string $relation
-     * @param object $entity
+     * @param array<string,mixed> $entity
      */
     public function assertEntityHasRelationalLink($relation, $entity): void
     {
@@ -1664,7 +1673,7 @@ class HalTest extends TestCase
     /**
      * @param string $match
      * @param string $relation
-     * @param object $entity
+     * @param array<string,mixed> $entity
      */
     public function assertRelationalLinkEquals($match, $relation, $entity): void
     {
@@ -1724,9 +1733,11 @@ class HalTest extends TestCase
     public function testCanSerializeHydratableEntity(): void
     {
         $hydratorClass = $this->getArraySerializableHydratorClass();
+        /** @var ExtractionInterface $hydrator */
+        $hydrator = new $hydratorClass();
         $this->plugin->addHydrator(
             HalTestAsset\ArraySerializable::class,
-            new $hydratorClass()
+            $hydrator
         );
 
         $item  = new Entity(new HalTestAsset\ArraySerializable(), 'identifier');
@@ -1745,9 +1756,9 @@ class HalTest extends TestCase
     public function testUsesDefaultHydratorIfAvailable(): void
     {
         $hydratorClass = $this->getArraySerializableHydratorClass();
-        $this->plugin->setDefaultHydrator(
-            new $hydratorClass()
-        );
+        /** @var ExtractionInterface $hydrator */
+        $hydrator = new $hydratorClass();
+        $this->plugin->setDefaultHydrator($hydrator);
 
         $item  = new Entity(new HalTestAsset\ArraySerializable(), 'identifier');
         $links = $item->getLinks();
@@ -1791,6 +1802,7 @@ class HalTest extends TestCase
         self::assertCount(100, $result['_embedded']['items']);
 
         foreach ($result['_embedded']['items'] as $key => $item) {
+            /** @var int $key */
             $id = $key + 1;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
@@ -1839,6 +1851,7 @@ class HalTest extends TestCase
         self::assertCount(5, $result['_embedded']['items']);
 
         foreach ($result['_embedded']['items'] as $key => $item) {
+            /** @var int $key */
             $id = $key + 11;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);
@@ -1849,6 +1862,7 @@ class HalTest extends TestCase
         }
     }
 
+    /** @return array<int, array{0: int}> */
     public function invalidPages(): array
     {
         return [
@@ -1987,6 +2001,7 @@ class HalTest extends TestCase
         self::assertArrayHasKey('_embedded', $result);
         $embedded = $result['_embedded'];
         self::assertArrayHasKey('user', $embedded);
+        /** @var array<int|string,mixed> $user */
         $user = $embedded['user'];
         $this->assertRelationalLinkContains('/user/matthew', 'self', $user);
 
@@ -2035,7 +2050,7 @@ class HalTest extends TestCase
             self::assertArrayHasKey('_embedded', $item);
             $embedded = $item['_embedded'];
             self::assertArrayHasKey('user', $embedded);
-
+            /** @var array<int|string,mixed> $user */
             $user = $embedded['user'];
             $this->assertRelationalLinkContains('/user/matthew', 'self', $user);
 
@@ -2088,7 +2103,7 @@ class HalTest extends TestCase
             self::assertArrayHasKey('_embedded', $item, var_export($item, true));
             $embedded = $item['_embedded'];
             self::assertArrayHasKey('user', $embedded);
-
+            /** @var array<int|string,mixed> $user */
             $user = $embedded['user'];
             $this->assertRelationalLinkContains('/user/matthew', 'self', $user);
 
@@ -2101,7 +2116,7 @@ class HalTest extends TestCase
 
     public function testAllowsSpecifyingAlternateCallbackForReturningEntityId(): void
     {
-        $this->plugin->getEventManager()->attach('getIdFromEntity', function ($e) {
+        $this->plugin->getEventManager()->attach('getIdFromEntity', function (EventInterface $e) {
             $entity = $e->getParam('entity');
 
             if (! is_array($entity)) {
@@ -2143,6 +2158,9 @@ class HalTest extends TestCase
         self::assertCount(100, $result['_embedded']['items']);
 
         foreach ($result['_embedded']['items'] as $key => $item) {
+            /** @var int $key */
+            /** @var array<string,mixed> $item */
+
             $id = $key + 1;
 
             $this->assertRelationalLinkEquals('http://localhost.localdomain/resource/' . $id, 'self', $item);

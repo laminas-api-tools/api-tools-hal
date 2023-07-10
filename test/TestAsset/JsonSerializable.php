@@ -9,9 +9,9 @@ use Laminas\Stdlib\JsonSerializable as JsonSerializableInterface;
 class JsonSerializable implements JsonSerializableInterface
 {
     /**
-     * @return array
+     * @return array<string,string>
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return ['foo' => 'bar'];
     }

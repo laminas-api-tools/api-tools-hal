@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Link;
 
+use Countable;
 use Laminas\ApiTools\ApiProblem\ApiProblem;
 use Laminas\ApiTools\Hal\Collection;
 use Laminas\Paginator\Paginator;
 use Laminas\Stdlib\ArrayUtils;
+use Traversable;
 
 use function count;
+use function is_array;
 
 class PaginationInjector implements PaginationInjectorInterface
 {
@@ -43,6 +46,7 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function configureCollection(Collection $halCollection): void
     {
+        /** @var Paginator $collection */
         $collection = $halCollection->getCollection();
         $page       = $halCollection->getPage();
         $pageSize   = $halCollection->getPageSize();
@@ -75,7 +79,7 @@ class PaginationInjector implements PaginationInjectorInterface
 
     private function injectLastLink(Collection $halCollection): void
     {
-        $page = $halCollection->getCollection()->count();
+        $page = $this->countCollection($halCollection->getCollection());
         $link = $this->createPaginationLink('last', $halCollection, $page);
         $halCollection->getLinks()->add($link);
     }
@@ -94,7 +98,7 @@ class PaginationInjector implements PaginationInjectorInterface
     private function injectNextLink(Collection $halCollection): void
     {
         $page      = $halCollection->getPage();
-        $pageCount = $halCollection->getCollection()->count();
+        $pageCount = $this->countCollection($halCollection->getCollection());
         $next      = $page < $pageCount ? $page + 1 : false;
 
         if ($next) {
@@ -123,5 +127,15 @@ class PaginationInjector implements PaginationInjectorInterface
                 'options' => $options,
             ],
         ]);
+    }
+
+    /** @param array<mixed>|Traversable|Paginator $collection */
+    private function countCollection(mixed $collection): int
+    {
+        return match (true) {
+            $collection instanceof Countable => $collection->count(),
+            is_array($collection) => count($collection),
+            default => 1,
+        };
     }
 }

@@ -30,7 +30,7 @@ class HalJsonRendererTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string,array<array-key,mixed>>
      */
     public function nonHalJsonModels()
     {
@@ -65,6 +65,7 @@ class HalJsonRendererTest extends TestCase
 
         $helperPluginManager = $this->getHelperPluginManager();
 
+        /** @var MockObject $halPlugin */
         $halPlugin = $helperPluginManager->get('Hal');
         $halPlugin
             ->expects($this->once())
@@ -91,6 +92,7 @@ class HalJsonRendererTest extends TestCase
 
         $helperPluginManager = $this->getHelperPluginManager();
 
+        /** @var MockObject $halPlugin */
         $halPlugin = $helperPluginManager->get('Hal');
         $halPlugin
             ->expects($this->once())
@@ -114,6 +116,7 @@ class HalJsonRendererTest extends TestCase
 
         $helperPluginManager = $this->getHelperPluginManager();
 
+        /** @var MockObject $halPlugin */
         $halPlugin = $helperPluginManager->get('Hal');
         $halPlugin
             ->expects($this->once())
@@ -139,6 +142,7 @@ class HalJsonRendererTest extends TestCase
      */
     private function getHelperPluginManager()
     {
+        /** @var MockObject|HelperPluginManager $helperPluginManager */
         $helperPluginManager = $this->createMock(HelperPluginManager::class);
         $halPlugin           = $this->createMock(HalPlugin::class);
 

@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Factory;
 
+// phpcs:ignore WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Laminas\ApiTools\Hal\Metadata;
 use Laminas\Hydrator\HydratorPluginManager;
-use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
-use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 use function is_array;
 
 class MetadataMapFactory
 {
     /**
-     * Create an object
-     *
      * @return Metadata\MetadataMap
-     * @throws ServiceNotFoundException If unable to resolve the service.
-     * @throws ServiceNotCreatedException If an exception is raised when
-     *     creating a service.
-     * @throws ContainerException If any other error occurs.
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __invoke(ContainerInterface $container)
     {

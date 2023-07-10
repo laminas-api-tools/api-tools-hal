@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Laminas\ApiTools\Hal\Factory;
 
 use ArrayAccess;
+// phpcs:ignore WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
 
 use function is_array;
@@ -16,6 +17,7 @@ class HalConfigFactory
      */
     public function __invoke(ContainerInterface $container)
     {
+        /** @var array<string,mixed> $config */
         $config = $container->has('config')
             ? $container->get('config')
             : [];

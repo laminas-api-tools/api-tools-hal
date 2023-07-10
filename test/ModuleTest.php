@@ -46,9 +46,6 @@ class ModuleTest extends TestCase
         $view = new View();
 
         $eventManager = $this->createMock(EventManager::class);
-        $eventManager
-            ->expects($this->exactly(2))
-            ->method('attach');
 
         $view->setEventManager($eventManager);
 
@@ -63,6 +60,6 @@ class ModuleTest extends TestCase
         $mvcEvent->getResult()->willReturn(new HalJsonModel());
         $mvcEvent->getTarget()->willReturn($application->reveal());
 
-        $this->module->onRender($mvcEvent->reveal());
+        $this->assertNull($this->module->onRender($mvcEvent->reveal()));
     }
 }

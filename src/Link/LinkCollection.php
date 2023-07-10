@@ -28,7 +28,7 @@ use function sprintf;
  */
 class LinkCollection implements Countable, IteratorAggregate
 {
-    /** @var array */
+    /** @var array<mixed> */
     protected $links = [];
 
     /**
@@ -127,14 +127,17 @@ class LinkCollection implements Countable, IteratorAggregate
      * Retrieve a link relation
      *
      * @param  string $relation
-     * @return LinkInterface|Link|array|null
+     * @return LinkInterface|Link|array<mixed>|null
      */
     public function get($relation)
     {
         if (! $this->has($relation)) {
             return null;
         }
-        return $this->links[$relation];
+        /** @psalm-var LinkInterface|Link|array<mixed>|null $value */
+        $value = $this->links[$relation];
+
+        return $value;
     }
 
     /**

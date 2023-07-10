@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Laminas\ApiTools\Hal\Factory;
 
+// phpcs:ignore WebimpressCodingStandard.PHP.CorrectClassNameCase.Invalid
 use Interop\Container\ContainerInterface;
 use Laminas\ApiTools\Hal\Link\LinkUrlBuilder;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\ServerUrl;
+use Laminas\View\Helper\Url;
+
+use function assert;
 
 class LinkUrlBuilderFactory
 {
@@ -21,13 +25,15 @@ class LinkUrlBuilderFactory
 
         $viewHelperManager = $container->get('ViewHelperManager');
 
-        /** @var ServerUrl $serverUrlHelper */
         $serverUrlHelper = $viewHelperManager->get('ServerUrl');
+        assert($serverUrlHelper instanceof ServerUrl);
+
         if (isset($halConfig['options']['use_proxy'])) {
             $serverUrlHelper->setUseProxy($halConfig['options']['use_proxy']);
         }
 
         $urlHelper = $viewHelperManager->get('Url');
+        assert($urlHelper instanceof Url);
 
         return new LinkUrlBuilder($serverUrlHelper, $urlHelper);
     }

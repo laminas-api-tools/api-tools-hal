@@ -11,12 +11,11 @@ use Laminas\Paginator\Paginator;
 use Laminas\Stdlib\ArrayUtils;
 use Traversable;
 
-use function get_class;
+use function get_debug_type;
 use function gettype;
 use function is_array;
 use function is_int;
 use function is_numeric;
-use function is_object;
 use function sprintf;
 use function trigger_error;
 
@@ -36,7 +35,7 @@ class Collection implements Link\LinkCollectionAwareInterface
      */
     protected $attributes = [];
 
-    /** @var array|Traversable|Paginator */
+    /** @var Paginator|Traversable|array<array-key, mixed> */
     protected $collection;
 
     /**
@@ -96,7 +95,7 @@ class Collection implements Link\LinkCollectionAwareInterface
     protected $entityRouteParams = [];
 
     /**
-     * @param  array|Traversable|Paginator $collection
+     * @param  Paginator|Traversable|array<array-key, mixed> $collection
      * @param  string $entityRoute
      * @param  array|Traversable $entityRouteParams
      * @param  array|Traversable $entityRouteOptions
@@ -104,14 +103,16 @@ class Collection implements Link\LinkCollectionAwareInterface
      */
     public function __construct($collection, $entityRoute = null, $entityRouteParams = null, $entityRouteOptions = null)
     {
-        if (! is_array($collection) && ! $collection instanceof Traversable) {
+        /** @psalm-suppress DocblockTypeContradiction */
+        if (! is_array($collection) && ! $collection instanceof Traversable && ! $collection instanceof Paginator) {
             throw new InvalidCollectionException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($collection) ? get_class($collection) : gettype($collection)
+                get_debug_type($collection)
             ));
         }
 
+        /** @psalm-suppress PossiblyInvalidPropertyAssignmentValue */
         $this->collection = $collection;
 
         if (null !== $entityRoute) {
@@ -189,7 +190,7 @@ class Collection implements Link\LinkCollectionAwareInterface
             throw new InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($options) ? get_class($options) : gettype($options)
+                get_debug_type($options)
             ));
         }
         $this->collectionRouteOptions = $options;
@@ -212,7 +213,7 @@ class Collection implements Link\LinkCollectionAwareInterface
             throw new InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($params) ? get_class($params) : gettype($params)
+                get_debug_type($params)
             ));
         }
         $this->collectionRouteParams = $params;
@@ -377,7 +378,7 @@ class Collection implements Link\LinkCollectionAwareInterface
             throw new InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($options) ? get_class($options) : gettype($options)
+                get_debug_type($options)
             ));
         }
         $this->entityRouteOptions = $options;
@@ -421,7 +422,7 @@ class Collection implements Link\LinkCollectionAwareInterface
             throw new InvalidArgumentException(sprintf(
                 '%s expects an array or Traversable; received "%s"',
                 __METHOD__,
-                is_object($params) ? get_class($params) : gettype($params)
+                get_debug_type($params)
             ));
         }
         $this->entityRouteParams = $params;

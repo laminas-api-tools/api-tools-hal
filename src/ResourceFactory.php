@@ -6,7 +6,7 @@ namespace Laminas\ApiTools\Hal;
 
 use Closure;
 use Laminas\ApiTools\Hal\Exception;
-use laminas\apitools\hal\extractor\entityextractor;
+use Laminas\ApiTools\Hal\Extractor\EntityExtractor;
 use Laminas\ApiTools\Hal\Link\Link;
 use Laminas\ApiTools\Hal\Link\LinkCollection;
 use Laminas\ApiTools\Hal\Metadata\Metadata;
@@ -14,20 +14,22 @@ use Laminas\Paginator\Paginator;
 use Traversable;
 
 use function array_merge;
-use function call_user_func_array;
-use function get_class;
+use function get_debug_type;
+use function is_array;
 use function is_callable;
+use function is_string;
 use function sprintf;
+use function str_contains;
 
 class ResourceFactory
 {
     /** @var EntityHydratorManager */
     protected $entityHydratorManager;
 
-    /** @var entityextractor */
+    /** @var EntityExtractor */
     protected $entityExtractor;
 
-    public function __construct(EntityHydratorManager $entityHydratorManager, entityextractor $entityExtractor)
+    public function __construct(EntityHydratorManager $entityHydratorManager, EntityExtractor $entityExtractor)
     {
         $this->entityHydratorManager = $entityHydratorManager;
         $this->entityExtractor       = $entityExtractor;
@@ -36,7 +38,7 @@ class ResourceFactory
     /**
      * Create a entity and/or collection based on a metadata map
      *
-     * @param  object|array|Traversable|Paginator $object
+     * @param  Paginator<int, mixed>|Traversable|array<array-key, mixed> $object
      * @param  bool $renderEmbeddedEntities
      * @return Entity|Collection
      * @throws Exception\RuntimeException
@@ -47,17 +49,19 @@ class ResourceFactory
             return $this->createCollectionFromMetadata($object, $metadata);
         }
 
+        /** @psalm-var array<string,mixed> $data */
         $data = $this->entityExtractor->extract($object);
 
         $entityIdentifierName = $metadata->getEntityIdentifierName();
         if ($entityIdentifierName && ! isset($data[$entityIdentifierName])) {
             throw new Exception\RuntimeException(sprintf(
                 'Unable to determine entity identifier for object of type "%s"; no fields matching "%s"',
-                get_class($object),
+                get_debug_type($object),
                 $entityIdentifierName
             ));
         }
 
+        /** @var string|null $id */
         $id = $entityIdentifierName ? $data[$entityIdentifierName] : null;
 
         if (! $renderEmbeddedEntities) {
@@ -114,7 +118,7 @@ class ResourceFactory
     /**
      * Creates a link object, given metadata and a resource
      *
-     * @param  object $object
+     * @param  Paginator<int, mixed>|iterable<array-key|mixed, mixed>|object $object
      * @param  null|string $id
      * @param  null|string $routeIdentifierName
      * @param  string $relation
@@ -137,22 +141,30 @@ class ResourceFactory
         if (! $metadata->hasRoute()) {
             throw new Exception\RuntimeException(sprintf(
                 'Unable to create a self link for resource of type "%s"; metadata does not contain a route or a href',
-                get_class($object)
+                get_debug_type($object)
             ));
         }
 
         $params = $metadata->getRouteParams();
 
         // process any callbacks
+        /** @var mixed $param */
         foreach ($params as $key => $param) {
             // bind to the object
             if ($param instanceof Closure) {
+                /** @psalm-var object $object */
                 $param = $param->bindTo($object);
             }
 
-            // pass the object for callbacks
+            // invoke callables with the object
             if (is_callable($param)) {
-                $params[$key] = call_user_func_array($param, [$object]);
+                // @todo remove when minimum supported PHP version is bumped to 8.1 or greater
+                $callback = is_array($param) || (is_string($param) && str_contains($param, '::'))
+                    ? Closure::fromCallable($param)
+                    : $param;
+                /** @var mixed $value */
+                $value        = $callback($object);
+                $params[$key] = $value;
             }
         }
 

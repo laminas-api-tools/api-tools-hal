@@ -10,10 +10,10 @@ class Entity
     /** @var string */
     public $name;
 
-    /** @var array */
+    /** @var mixed */
     public $first_child;
 
-    /** @var array */
+    /** @var mixed */
     public $second_child;
 
     /** @var string */

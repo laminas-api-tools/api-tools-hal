@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace LaminasTest\ApiTools\Hal\Plugin\TestAsset;
 
 use JsonSerializable;
-use ReturnTypeWillChange;
 
 class JsonSerializableEntity extends Entity implements JsonSerializable
 {
     /**
-     * @return array
+     * @return array<string,string>
      */
-    #[ReturnTypeWillChange]
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
